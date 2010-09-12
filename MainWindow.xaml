@@ -7,9 +7,9 @@
         <Button Content="Load Audio File" HorizontalAlignment="Left" Margin="12,0,0,12" Name="button1" Width="108" Height="23" VerticalAlignment="Bottom" Click="button1_Click" />
         <Border BorderBrush="Silver" BorderThickness="1" Name="border1" Margin="12,12,12,41">
             <ScrollViewer Name="scrollViewer1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
-                <wc:WaveView Name="waveView" 
-                             ParentViewportHorizontalOffset="{Binding ElementName=scrollViewer1, Path=HorizontalOffset}"
-                             ParentViewportWidth="{Binding ElementName=scrollViewer1, Path=ViewportWidth}"/>
+                <wc:WaveView Name="waveView" SnapsToDevicePixels="true" 
+                             ParentViewportHorizontalOffset="{Binding Path=HorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}"
+                             ParentViewportWidth="{Binding Path=ViewportWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}"/>
             </ScrollViewer>
         </Border>
     </Grid>
