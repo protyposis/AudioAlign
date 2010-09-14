@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using NAudio.Wave;
+using AudioAlign.Audio;
 
 namespace AudioAlign {
     /// <summary>
@@ -37,8 +37,8 @@ namespace AudioAlign {
             if (result == true) {
                 // Open document
                 string filename = dlg.FileName;
-                WaveStream waveStream = new WaveFileReader(filename);
-                waveView.WaveStream = waveStream;
+                IAudioStream16 audioStream = AudioStreamFactory.FromFilename(filename);
+                waveView.AudioStream = audioStream;
             }
         }
     }

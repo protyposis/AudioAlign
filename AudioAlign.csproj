@@ -36,8 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAudio">
-      <HintPath>..\..\lib\NAudio-1-3\Binaries\NAudio.dll</HintPath>
+    <Reference Include="AudioAlign.Audio">
+      <HintPath>..\AudioAlign.Audio\bin\Debug\AudioAlign.Audio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
