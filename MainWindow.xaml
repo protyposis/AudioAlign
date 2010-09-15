@@ -3,6 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wc="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
         Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="434" Width="650">
+    <Window.Resources>
+        <wc:LogTransformConverter x:Key="LogTransformer"/>
+    </Window.Resources>
+    
     <Grid>
         <Button Content="Load Audio File" HorizontalAlignment="Left" Margin="12,0,0,12" Name="button1" Width="108" Height="23" VerticalAlignment="Bottom" Click="button1_Click" />
         <Border BorderBrush="Silver" BorderThickness="1" Name="border1" Margin="12,12,12,41">
@@ -13,11 +17,11 @@
                            ViewportSize="{Binding ElementName=waveView, Path=ActualWidth}"/>
                 <wc:WaveView Name="waveView" SnapsToDevicePixels="true"
                              VirtualHorizontalOffset="{Binding ElementName=scrollBar1, Path=Value}" WaveformBackground="White" 
-                             ZoomFactor="{Binding ElementName=slider1, Path=Value}" ClipToBounds="True" />
+                             ZoomFactor="{Binding ElementName=slider1, Path=Value, Converter={StaticResource LogTransformer}, ConverterParameter='-50 50 0.01 50'}" ClipToBounds="True" />
             </DockPanel>
         </Border>
-        <Slider Margin="175,0,12,12" Name="slider1" Height="23" VerticalAlignment="Bottom" Minimum="0.01" Maximum="50" Value="1" 
-                TickPlacement="BottomRight" TickFrequency="1" SmallChange="0.01" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" />
+        <Slider Margin="175,0,12,12" Name="slider1" Height="23" VerticalAlignment="Bottom" Maximum="50" Value="0" 
+                TickPlacement="BottomRight" TickFrequency="5" SmallChange="0.01" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="-50" />
         <Label Content="Zoom:" Margin="126,0,0,8" Height="28" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="43" />
     </Grid>
 </Window>
