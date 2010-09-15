@@ -12,7 +12,7 @@
                            Maximum="{Binding ElementName=waveView, Path=VirtualWidth}"
                            ViewportSize="{Binding ElementName=waveView, Path=ActualWidth}"/>
                 <wc:WaveView Name="waveView" SnapsToDevicePixels="true" 
-                             VirtualHorizontalOffset="{Binding ElementName=scrollBar1, Path=Value}" WaveformBackground="SkyBlue" />
+                             VirtualHorizontalOffset="{Binding ElementName=scrollBar1, Path=Value}" WaveformBackground="White" />
             </DockPanel>
         </Border>
     </Grid>
