@@ -101,9 +101,6 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AudioAlign.Audio">
-      <HintPath>..\AudioAlign.Audio\bin\Debug\AudioAlign.Audio.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -161,6 +158,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AudioAlign.Audio\AudioAlign.Audio.csproj">
+      <Project>{E868D91E-C5CF-46E4-BE2F-F95353ACB5E2}</Project>
+      <Name>AudioAlign.Audio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AudioAlign.WaveControls\AudioAlign.WaveControls.csproj">
       <Project>{FD0C6CC5-B509-4441-9AA2-E8B34BAD9F95}</Project>
       <Name>AudioAlign.WaveControls</Name>
