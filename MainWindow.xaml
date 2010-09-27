@@ -13,15 +13,16 @@
             <DockPanel Height="auto" Name="dockPanel1" Width="auto" Background="LightGray">
                 <ScrollBar Name="scrollBar1" Orientation="Horizontal" SmallChange="1" LargeChange="200" DockPanel.Dock="Bottom"
                            Minimum="0"
-                           Maximum="{Binding ElementName=waveView, Path=VirtualWidth}"
-                           ViewportSize="{Binding ElementName=waveView, Path=ActualWidth}"/>
+                           Maximum="{Binding ElementName=waveView, Path=TrackLength}"
+                           ViewportSize="{Binding ElementName=waveView, Path=ViewportWidth}"/>
                 <wc:WaveView Name="waveView" SnapsToDevicePixels="true"
-                             VirtualHorizontalOffset="{Binding ElementName=scrollBar1, Path=Value}" WaveformBackground="White" 
-                             ZoomFactor="{Binding ElementName=slider1, Path=Value, Converter={StaticResource LogTransformer}, ConverterParameter='-50 50 0.01 50'}" ClipToBounds="True" />
+                             ViewportOffset="{Binding ElementName=scrollBar1, Path=Value}" WaveformBackground="White" 
+                             ViewportWidth="{Binding ElementName=slider1, Path=Value}"
+                             ClipToBounds="True" />
             </DockPanel>
         </Border>
-        <Slider Margin="175,0,12,12" Name="slider1" Height="23" VerticalAlignment="Bottom" Maximum="50" Value="0" 
-                TickPlacement="BottomRight" TickFrequency="5" SmallChange="0.01" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="-50" />
+        <Slider Margin="175,0,12,12" Name="slider1" Height="23" VerticalAlignment="Bottom" Maximum="{Binding ElementName=waveView, Path=TrackLength}" Value="100" 
+                TickPlacement="BottomRight" TickFrequency="5" SmallChange="1" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="1" />
         <Label Content="Zoom:" Margin="126,0,0,8" Height="28" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="43" />
     </Grid>
 </Window>
