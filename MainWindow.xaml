@@ -26,7 +26,7 @@
         <Label Content="TrackOffset:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,36" Name="label1" VerticalAlignment="Bottom" />
         <Label Content="TrackLength:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,7" Name="label2" VerticalAlignment="Bottom" />
         <Slider Height="23" Margin="134,0,12,41" Name="trackOffsetSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="{Binding ElementName=waveView, Path=TrackLength}" AutoToolTipPlacement="TopLeft" LargeChange="20" />
-        <Slider Height="23" Margin="134,0,12,12" Name="trackLengthSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="1000000000" AutoToolTipPlacement="TopLeft" LargeChange="20" />
+        <Slider Height="23" Margin="134,0,12,12" Name="trackLengthSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="100000000000" AutoToolTipPlacement="TopLeft" LargeChange="20" />
         <CheckBox Content="Antialiased" HorizontalAlignment="Left" Margin="134,0,0,117" Name="antialiased" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=Antialiased}" />
         <CheckBox Content="DebugMode" HorizontalAlignment="Left" Margin="215,0,0,117" Name="debugMode" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=DebugMode}" />
         <CheckBox Content="ClipToBounds" HorizontalAlignment="Left" Margin="305,0,0,117" Name="clipToBounds" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=ClipToBounds}" />
