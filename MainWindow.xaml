@@ -3,9 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wc="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
         Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="535" Width="650">
-    <Window.Resources>
-        <wc:LogTransformConverter x:Key="LogTransformer"/>
-    </Window.Resources>
     
     <Grid>
         <Button Content="Load Audio File" HorizontalAlignment="Left" Margin="12,0,0,114" Name="button1" Width="108" Height="23" VerticalAlignment="Bottom" Click="button1_Click" />
@@ -17,18 +14,18 @@
                            ViewportSize="{Binding ElementName=waveView, Path=ViewportWidth}"/>
                 <wc:WaveView Name="waveView" SnapsToDevicePixels="true"
                              ViewportOffset="{Binding ElementName=scrollBar1, Path=Value}" WaveformBackground="White" 
-                             ViewportWidth="{Binding ElementName=trackZoomSlider, Path=Value, Mode=TwoWay}"
+                             ViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}"
                              TrackOffset="{Binding ElementName=trackOffsetSlider, Path=Value}"
                              TrackLength="{Binding ElementName=trackLengthSlider, Path=Value, Mode=TwoWay}"
                              ClipToBounds="True" />
             </DockPanel>
         </Border>
-        <Slider Margin="134,0,13,80" Name="trackZoomSlider" Height="23" VerticalAlignment="Bottom" Maximum="{Binding ElementName=waveView, Path=TrackLength}" Value="2000" 
-                TickPlacement="BottomRight" TickFrequency="5" SmallChange="1" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="1" LargeChange="20" />
-        <Label Content="Zoom:" Margin="12,0,0,75" Height="28" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="43" />
-        <Label Content="TrackOffset:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,41" Name="label1" VerticalAlignment="Bottom" />
-        <Label Content="TrackLength:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,12" Name="label2" VerticalAlignment="Bottom" />
-        <Slider Height="23" Margin="134,0,12,46" Name="trackOffsetSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="{Binding ElementName=waveView, Path=TrackLength}" AutoToolTipPlacement="TopLeft" LargeChange="20" />
-        <Slider Height="23" Margin="134,0,13,17" Name="trackLengthSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="1000000000" AutoToolTipPlacement="TopLeft" LargeChange="20" />
+        <wc:LogSlider Margin="134,0,12,70" Name="trackZoomSlider" Height="23" VerticalAlignment="Bottom" Maximum="{Binding ElementName=waveView, Path=TrackLength}" Value="2000" 
+                      SmallChange="1" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="2000" LargeChange="20" />
+        <Label Content="Zoom:" Margin="12,0,0,65" Height="28" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="43" />
+        <Label Content="TrackOffset:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,36" Name="label1" VerticalAlignment="Bottom" />
+        <Label Content="TrackLength:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,7" Name="label2" VerticalAlignment="Bottom" />
+        <Slider Height="23" Margin="134,0,12,41" Name="trackOffsetSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="{Binding ElementName=waveView, Path=TrackLength}" AutoToolTipPlacement="TopLeft" LargeChange="20" />
+        <Slider Height="23" Margin="134,0,12,12" Name="trackLengthSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="1000000000" AutoToolTipPlacement="TopLeft" LargeChange="20" />
     </Grid>
 </Window>
