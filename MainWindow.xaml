@@ -33,6 +33,6 @@
         <CheckBox Content="Antialiased" HorizontalAlignment="Left" Margin="134,0,0,117" Name="antialiased" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=Antialiased}" />
         <CheckBox Content="DebugMode" HorizontalAlignment="Left" Margin="215,0,0,117" Name="debugMode" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=DebugMode}" />
         <CheckBox Content="ClipToBounds" HorizontalAlignment="Left" Margin="305,0,0,117" Name="clipToBounds" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=ClipToBounds}" />
-        <CheckBox Content="SnapToDevicePixels" HorizontalAlignment="Left" Margin="401,0,0,117" Name="snapToDevicePixels" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=SnapToDevicePixels}" />
+        <CheckBox Content="SnapsToDevicePixels" HorizontalAlignment="Left" Margin="401,0,0,117" Name="snapToDevicePixels" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=SnapsToDevicePixels}" />
     </Grid>
 </Window>
