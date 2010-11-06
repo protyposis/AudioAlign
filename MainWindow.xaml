@@ -8,7 +8,7 @@
         <Button Content="Load Audio File" HorizontalAlignment="Left" Margin="12,0,0,114" Name="button1" Width="108" Height="23" VerticalAlignment="Bottom" Click="button1_Click" />
         <Border BorderBrush="Silver" BorderThickness="1" Name="border1" Margin="12,12,12,143">
             <DockPanel Height="auto" Name="dockPanel1" Width="auto" Background="LightGray">
-                <wc:TimeScale DockPanel.Dock="Top" Height="20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch"
+                <wc:TimeScale DockPanel.Dock="Top" Height="30" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch"
                               ViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
                               ViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}" />
                 <ScrollBar Name="scrollBar1" Orientation="Horizontal" SmallChange="50" LargeChange="500" DockPanel.Dock="Bottom"
