@@ -37,8 +37,7 @@ namespace AudioAlign {
             if (result == true) {
                 // Open document
                 string filename = dlg.FileName;
-                IAudioStream16 audioStream = AudioStreamFactory.FromFilename(filename);
-                waveView.AudioStream = new VisualizingAudioStream16(audioStream);
+                waveView.AudioStream = AudioStreamFactory.FromFilenameForGUI(filename);
             }
         }
     }
