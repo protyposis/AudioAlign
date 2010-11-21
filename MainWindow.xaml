@@ -9,15 +9,15 @@
         <Border BorderBrush="Silver" BorderThickness="1" Name="border1" Margin="12,12,12,143">
             <DockPanel Height="auto" Name="dockPanel1" Width="auto" Background="LightGray">
                 <wc:TimeScale DockPanel.Dock="Top" Height="30" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch"
-                              ViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
-                              ViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}" />
+                              VirtualViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
+                              VirtualViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}" />
                 <ScrollBar Name="scrollBar1" Orientation="Horizontal" SmallChange="50" LargeChange="500" DockPanel.Dock="Bottom"
                            Minimum="0"
                            Maximum="{Binding ElementName=waveView, Path=TrackScrollLength}"
                            ViewportSize="{Binding ElementName=waveView, Path=ViewportWidth}"/>
                 <wc:WaveView Name="waveView" SnapsToDevicePixels="True"
-                             ViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
-                             ViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}"
+                             VirtualViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
+                             VirtualViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}"
                              TrackOffset="{Binding ElementName=trackOffsetSlider, Path=Value}"
                              TrackLength="{Binding ElementName=trackLengthSlider, Path=Value, Mode=TwoWay}"
                              ClipToBounds="True" WaveformFill="LightSkyBlue" WaveformLine="SteelBlue" WaveformSamplePoint="SteelBlue" />
