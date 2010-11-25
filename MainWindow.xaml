@@ -14,7 +14,7 @@
                 <ScrollBar Name="scrollBar1" Orientation="Horizontal" SmallChange="50" LargeChange="500" DockPanel.Dock="Bottom"
                            Minimum="0"
                            Maximum="{Binding ElementName=waveView, Path=TrackScrollLength}"
-                           ViewportSize="{Binding ElementName=waveView, Path=ViewportWidth}"/>
+                           ViewportSize="{Binding ElementName=waveView, Path=VirtualViewportWidth}"/>
                 <wc:WaveView Name="waveView" SnapsToDevicePixels="True"
                              VirtualViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
                              VirtualViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}"
