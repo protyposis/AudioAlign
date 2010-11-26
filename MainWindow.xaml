@@ -1,38 +1,8 @@
-﻿<Window x:Class="AudioAlign.MainWindow"
+﻿<Window x:Class="AudioAlign.Test.WaveViewControl.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:wc="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
-        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="535" Width="650">
-    
+        Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button Content="Load Audio File" HorizontalAlignment="Left" Margin="12,0,0,114" Name="button1" Width="108" Height="23" VerticalAlignment="Bottom" Click="button1_Click" />
-        <Border BorderBrush="Silver" BorderThickness="1" Name="border1" Margin="12,12,12,143">
-            <DockPanel Height="auto" Name="dockPanel1" Width="auto" Background="LightGray">
-                <wc:TimeScale DockPanel.Dock="Top" Height="30" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch"
-                              VirtualViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
-                              VirtualViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}" />
-                <ScrollBar Name="scrollBar1" Orientation="Horizontal" SmallChange="50" LargeChange="500" DockPanel.Dock="Bottom"
-                           Minimum="0"
-                           Maximum="{Binding ElementName=waveView, Path=TrackScrollLength}"
-                           ViewportSize="{Binding ElementName=waveView, Path=VirtualViewportWidth}"/>
-                <wc:WaveView Name="waveView" SnapsToDevicePixels="True"
-                             VirtualViewportOffset="{Binding ElementName=scrollBar1, Path=Value}"
-                             VirtualViewportWidth="{Binding ElementName=trackZoomSlider, Path=LogValue, Mode=TwoWay}"
-                             TrackOffset="{Binding ElementName=trackOffsetSlider, Path=Value}"
-                             TrackLength="{Binding ElementName=trackLengthSlider, Path=Value, Mode=TwoWay}"
-                             ClipToBounds="True" WaveformFill="LightSkyBlue" WaveformLine="SteelBlue" WaveformSamplePoint="SteelBlue" />
-            </DockPanel>
-        </Border>
-        <wc:LogSlider Margin="134,0,12,70" Name="trackZoomSlider" Height="23" VerticalAlignment="Bottom" Maximum="{Binding ElementName=waveView, Path=TrackLength}" Value="2000" 
-                      SmallChange="1" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="2000" LargeChange="20" />
-        <Label Content="Zoom:" Margin="12,0,0,65" Height="28" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="43" />
-        <Label Content="TrackOffset:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,36" Name="label1" VerticalAlignment="Bottom" />
-        <Label Content="TrackLength:" Height="28" HorizontalAlignment="Left" Margin="12,0,0,7" Name="label2" VerticalAlignment="Bottom" />
-        <Slider Height="23" Margin="134,0,12,41" Name="trackOffsetSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="{Binding ElementName=waveView, Path=TrackLength}" AutoToolTipPlacement="TopLeft" LargeChange="20" />
-        <Slider Height="23" Margin="134,0,12,12" Name="trackLengthSlider" VerticalAlignment="Bottom" Minimum="0" Maximum="100000000000" AutoToolTipPlacement="TopLeft" LargeChange="20" />
-        <CheckBox Content="Antialiased" HorizontalAlignment="Left" Margin="134,0,0,117" Name="antialiased" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=Antialiased}" />
-        <CheckBox Content="DebugMode" HorizontalAlignment="Left" Margin="215,0,0,117" Name="debugMode" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=DebugMode}" />
-        <CheckBox Content="ClipToBounds" HorizontalAlignment="Left" Margin="305,0,0,117" Name="clipToBounds" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=ClipToBounds}" />
-        <CheckBox Content="SnapsToDevicePixels" HorizontalAlignment="Left" Margin="401,0,0,117" Name="snapToDevicePixels" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=waveView, Path=SnapsToDevicePixels}" />
+
     </Grid>
 </Window>
