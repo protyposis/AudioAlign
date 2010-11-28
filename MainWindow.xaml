@@ -1,19 +1,24 @@
 ﻿<Window x:Class="AudioAlign.Test.MultitrackControls.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="535" Width="892" Background="{StaticResource WindowBackgroundBrush}" xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls">
+        Title="MainWindow" Height="535" Width="892" FontSize="11" Background="{StaticResource WindowBackgroundBrush}" xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls">
     <Window.Resources>
         <my:TimeSpanConverter x:Key="TimeSpanConverter"/>
     </Window.Resources>
     <Grid>
         <Button Content="Add Waveform" Margin="0,0,12,12" Name="btnAddWaveform" Height="23" VerticalAlignment="Bottom" Click="btnAddWaveform_Click" HorizontalAlignment="Right" Width="101" />
         <my:MultiTrackViewer Margin="12,12,12,106" Name="multiTrackViewer1" VirtualViewportWidth="{Binding ElementName=slider1, Path=LogValue, Mode=TwoWay}" VirtualViewportOffset="{Binding ElementName=logSlider1, Path=Value, Mode=TwoWay}" />
-        <my:LogSlider Height="23" HorizontalAlignment="Left" Margin="12,0,0,48" Name="slider1" VerticalAlignment="Bottom" Width="477" Maximum="100000000000" Minimum="1" />
+        <my:LogSlider Height="23" HorizontalAlignment="Left" Margin="12,0,0,48" Name="slider1" VerticalAlignment="Bottom" Width="477" Maximum="100000000000" Minimum="1">
+            <my:LogSlider.Style>
+                <Style TargetType="{x:Type my:LogSlider}" BasedOn="{StaticResource {x:Type Slider}}"/>
+            </my:LogSlider.Style>
+        </my:LogSlider>
         <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="0,0,12,82" Name="label2" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="146" ToolTip="Caret" FontFamily="Segoe UI" />
         <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="12,0,0,82" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
         <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="361,0,363,82" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
         <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth}" ContentStringFormat="VirtualViewportWidth: {0}" HorizontalAlignment="Left" Margin="495,0,0,43" Name="label3" Width="241" Height="28" VerticalAlignment="Bottom" />
         <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset}" ContentStringFormat="VirtualViewportOffset: {0}" HorizontalAlignment="Left" Margin="495,0,0,15" Name="label4" Width="241" Height="28" VerticalAlignment="Bottom" />
         <Slider HorizontalAlignment="Left" Margin="12,0,0,20" Maximum="100000000000" Minimum="0" Name="logSlider1" Width="477" Height="23" VerticalAlignment="Bottom" Value="0" />
+        <ScrollBar Height="69" HorizontalAlignment="Left" Margin="691,412,0,0" Name="scrollBar1" VerticalAlignment="Top" Width="29" Orientation="Horizontal" IsEnabled="False" />
     </Grid>
 </Window>
