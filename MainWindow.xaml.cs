@@ -44,7 +44,7 @@ namespace AudioAlign.Test.MultitrackControls {
                 //WaveView waveView = new WaveView();
                 //waveView.AudioStream = AudioStreamFactory.FromAudioTrackForGUI(audioTrack);
                 //multiTrackPanel.Children.Add(waveView);
-                multiTrackViewer1.Items.Add(AudioStreamFactory.FromAudioTrackForGUI(audioTrack));
+                multiTrackViewer1.Items.Add(audioTrack);
             }
         }
     }
