@@ -34,20 +34,15 @@ namespace AudioAlign {
         }
 
         private void btnAddWaveform_Click(object sender, RoutedEventArgs e) {
-            // http://msdn.microsoft.com/en-us/library/aa969773.aspx
-            // Configure open file dialog box
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FileName = "audio"; // Default file name
-            dlg.DefaultExt = ".wav"; // Default file extension
-            dlg.Filter = "Wave files (.wav)|*.wav"; // Filter files by extension
+            dlg.DefaultExt = ".wav";
+            dlg.Filter = "Wave files|*.wav";
+            dlg.Multiselect = true;
 
-            // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-
-            // Process open file dialog box results
-            if (result == true) {
-                // Open document
-                AddFile(dlg.FileName);
+            if (dlg.ShowDialog() == true) {
+                foreach (string fileName in dlg.FileNames) {
+                    AddFile(fileName);
+                }
             }
         }
 
@@ -95,6 +90,10 @@ namespace AudioAlign {
                     multiTrackViewer1.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         new DispatcherOperationCallback(delegate {
                             multiTrackViewer1.VirtualCaretOffset = e2.Value.Ticks;
+                            // autoscroll
+                            if (multiTrackViewer1.VirtualViewportInterval.To <= multiTrackViewer1.VirtualCaretOffset) {
+                                multiTrackViewer1.VirtualViewportOffset = multiTrackViewer1.VirtualCaretOffset;
+                            }
                             return null;
                     }), null);
                 });

@@ -9,6 +9,9 @@
     <Window.Resources>
         <my:TimeSpanConverter x:Key="TimeSpanConverter"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="Space" Command="MediaCommands.Play" />
+    </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -29,7 +32,7 @@
             <Button Content="Pause" Command="MediaCommands.Pause" Height="23" HorizontalAlignment="Right" Margin="0,0,133,12" Name="button2" VerticalAlignment="Bottom" Width="75" />
         </Grid>
         <Grid Grid.Column="1">
-            <GroupBox Header="Master Control" Width="120" Margin="12">
+            <GroupBox Header="Audio Master" Width="120" Margin="12">
                 <Grid>
                     <Grid Margin="6,19,0,6" HorizontalAlignment="Left" Width="30">
                         <Grid.RowDefinitions>
