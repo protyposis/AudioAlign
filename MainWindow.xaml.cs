@@ -79,10 +79,14 @@ namespace AudioAlign {
 
             player.VolumeAnnounced += new EventHandler<Audio.NAudio.StreamVolumeEventArgs>(
                 delegate(object sender2, Audio.NAudio.StreamVolumeEventArgs e2) {
-                    if (e2.MaxSampleValues.Length >= 2) {
-                        stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
-                        stereoVUMeter1.AmplitudeRight = e2.MaxSampleValues[1];
-                    }
+                    multiTrackViewer1.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                        new DispatcherOperationCallback(delegate {
+                            if (e2.MaxSampleValues.Length >= 2) {
+                                stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
+                                stereoVUMeter1.AmplitudeRight = e2.MaxSampleValues[1];
+                            }
+                        return null;
+                    }), null);
                 });
 
             player.CurrentTimeChanged += new EventHandler<ValueEventArgs<TimeSpan>>(
@@ -100,7 +104,12 @@ namespace AudioAlign {
 
             player.PlaybackStateChanged += new EventHandler(
                 delegate(object sender2, EventArgs e2) {
-                    CommandManager.InvalidateRequerySuggested();
+                    multiTrackViewer1.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                        new DispatcherOperationCallback(delegate {
+                        // CommandManager must be called on the GUI-thread, else it won't do anything
+                        CommandManager.InvalidateRequerySuggested();
+                        return null;
+                    }), null);
                 });
 
             volumeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(
