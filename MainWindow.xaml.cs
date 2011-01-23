@@ -17,6 +17,7 @@ using AudioAlign.WaveControls;
 using AudioAlign.Audio;
 using System.Diagnostics;
 using System.Windows.Threading;
+using AudioAlign.Audio.TaskMonitor;
 
 namespace AudioAlign {
     /// <summary>
@@ -64,57 +65,82 @@ namespace AudioAlign {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            // INIT COMMAND BINDINGS
             CommandBinding playBinding = new CommandBinding(MediaCommands.Play);
             CommandBindings.Add(playBinding);
+            playBinding.CanExecute += new CanExecuteRoutedEventHandler(playCommandBinding_CanExecute);
+            playBinding.Executed += new ExecutedRoutedEventHandler(playCommandBinding_Executed);
 
             CommandBinding pauseBinding = new CommandBinding(MediaCommands.Pause);
             CommandBindings.Add(pauseBinding);
-
-            player = new MultitrackPlayer(trackList);
-
-            playBinding.CanExecute += new CanExecuteRoutedEventHandler(playCommandBinding_CanExecute);
-            playBinding.Executed += new ExecutedRoutedEventHandler(playCommandBinding_Executed);
             pauseBinding.CanExecute += new CanExecuteRoutedEventHandler(pauseCommandBinding_CanExecute);
             pauseBinding.Executed += new ExecutedRoutedEventHandler(pauseCommandBinding_Executed);
 
+            CommandBinding playToggleBinding = new CommandBinding(Commands.PlayToggle);
+            CommandBindings.Add(playToggleBinding);
+            playToggleBinding.Executed += new ExecutedRoutedEventHandler(playToggleBinding_Executed);
+
+
+            // INIT PLAYER
+            player = new MultitrackPlayer(trackList);
+
             player.VolumeAnnounced += new EventHandler<Audio.NAudio.StreamVolumeEventArgs>(
                 delegate(object sender2, Audio.NAudio.StreamVolumeEventArgs e2) {
-                    multiTrackViewer1.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                        new DispatcherOperationCallback(delegate {
-                            if (e2.MaxSampleValues.Length >= 2) {
-                                stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
-                                stereoVUMeter1.AmplitudeRight = e2.MaxSampleValues[1];
-                            }
-                        return null;
-                    }), null);
+                    multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
+                        if (e2.MaxSampleValues.Length >= 2) {
+                            stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
+                            stereoVUMeter1.AmplitudeRight = e2.MaxSampleValues[1];
+                        }
+                    });
                 });
 
             player.CurrentTimeChanged += new EventHandler<ValueEventArgs<TimeSpan>>(
                 delegate(object sender2, ValueEventArgs<TimeSpan> e2) {
-                    multiTrackViewer1.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                        new DispatcherOperationCallback(delegate {
-                            multiTrackViewer1.VirtualCaretOffset = e2.Value.Ticks;
-                            // autoscroll
-                            if (multiTrackViewer1.VirtualViewportInterval.To <= multiTrackViewer1.VirtualCaretOffset) {
-                                multiTrackViewer1.VirtualViewportOffset = multiTrackViewer1.VirtualCaretOffset;
-                            }
-                            return null;
-                    }), null);
+                    multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
+                        multiTrackViewer1.VirtualCaretOffset = e2.Value.Ticks;
+                        // autoscroll
+                        if (multiTrackViewer1.VirtualViewportInterval.To <= multiTrackViewer1.VirtualCaretOffset) {
+                            multiTrackViewer1.VirtualViewportOffset = multiTrackViewer1.VirtualCaretOffset;
+                        }
+                    });
                 });
 
             player.PlaybackStateChanged += new EventHandler(
                 delegate(object sender2, EventArgs e2) {
-                    multiTrackViewer1.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                        new DispatcherOperationCallback(delegate {
+                    multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
                         // CommandManager must be called on the GUI-thread, else it won't do anything
                         CommandManager.InvalidateRequerySuggested();
-                        return null;
-                    }), null);
+                    });
                 });
 
             volumeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(
                 delegate(object sender2, RoutedPropertyChangedEventArgs<double> e2) {
                     player.Volume = (float)e2.NewValue;
+                });
+
+
+            // INIT PROGRESSBAR
+            progressBar1.IsEnabled = false;
+            ProgressMonitor.Instance.ProcessingStarted += new EventHandler(
+                delegate(object sender2, EventArgs e2) {
+                    progressBar1.Dispatcher.BeginInvoke((Action)delegate {
+                        progressBar1.IsEnabled = true;
+                    });
+                });
+
+            ProgressMonitor.Instance.ProcessingProgressChanged += new EventHandler<ValueEventArgs<float>>(
+                delegate(object sender2, ValueEventArgs<float> e2) {
+                    progressBar1.Dispatcher.BeginInvoke((Action)delegate {
+                        progressBar1.Value = e2.Value;
+                    });
+                });
+
+            ProgressMonitor.Instance.ProcessingFinished += new EventHandler(
+                delegate(object sender2, EventArgs e2) {
+                    progressBar1.Dispatcher.BeginInvoke((Action)delegate {
+                        progressBar1.Value = 0;
+                        progressBar1.IsEnabled = false;
+                    });
                 });
         }
 
@@ -139,6 +165,15 @@ namespace AudioAlign {
 
         private void pauseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e) {
             player.Pause();
+        }
+
+        private void playToggleBinding_Executed(object sender, ExecutedRoutedEventArgs e) {
+            if (player.CanPlay) {
+                playCommandBinding_Executed(sender, e);
+            }
+            else if (player.CanPause) {
+                pauseCommandBinding_Executed(sender, e);
+            }
         }
     }
 }

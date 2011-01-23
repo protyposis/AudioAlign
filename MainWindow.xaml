@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
+        xmlns:local="clr-namespace:AudioAlign"
         Title="AudioAlign" Height="602" Width="1179" FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" 
         Icon="{StaticResource IconWave}"
@@ -10,24 +11,28 @@
         <my:TimeSpanConverter x:Key="TimeSpanConverter"/>
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Key="Space" Command="MediaCommands.Play" />
+        <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
     </Window.InputBindings>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid>
             <Button Content="Add Waveform" Margin="0,0,12,12" Name="btnAddWaveform" Height="23" VerticalAlignment="Bottom" Click="btnAddWaveform_Click" HorizontalAlignment="Right" Width="101" />
-            <my:MultiTrackViewer Margin="12,12,12,106" Name="multiTrackViewer1" VirtualViewportWidth="{Binding ElementName=viewportWidthSlider, Path=LogValue, Mode=TwoWay}" VirtualViewportOffset="{Binding ElementName=virtualOffsetSlider, Path=Value, Mode=TwoWay}" AllowDrop="True" Drop="multiTrackViewer1_Drop" />
-            <my:LogSlider Height="23" HorizontalAlignment="Left" Margin="12,0,0,48" Name="viewportWidthSlider" VerticalAlignment="Bottom" Width="477" Maximum="100000000000" Minimum="1" LogValue="10000000000"/>
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="16,0,0,74" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="361,0,363,74" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth}" ContentStringFormat="VirtualViewportWidth: {0}" HorizontalAlignment="Left" Margin="495,0,0,43" Name="label3" Width="241" Height="28" VerticalAlignment="Bottom" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset}" ContentStringFormat="VirtualViewportOffset: {0}" HorizontalAlignment="Left" Margin="495,0,0,15" Name="label4" Width="241" Height="28" VerticalAlignment="Bottom" />
-            <Slider HorizontalAlignment="Left" Margin="12,0,0,20" Maximum="100000000000" Minimum="0" Name="virtualOffsetSlider" Width="477" Height="23" VerticalAlignment="Bottom" Value="0" />
-            <CheckBox Content="Debug" HorizontalAlignment="Right" Margin="0,0,12,43" Name="debugMode" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" />
-            <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,82" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
+            <my:MultiTrackViewer Margin="12,12,12,70" Name="multiTrackViewer1" VirtualViewportWidth="{Binding ElementName=viewportWidthSlider, Path=LogValue, Mode=TwoWay}" VirtualViewportOffset="{Binding ElementName=virtualOffsetSlider, Path=Value, Mode=TwoWay}" AllowDrop="True" Drop="multiTrackViewer1_Drop" />
+            <my:LogSlider Height="23" HorizontalAlignment="Left" Margin="12,0,0,8" Name="viewportWidthSlider" VerticalAlignment="Bottom" Width="115" Maximum="100000000000" Minimum="1" LogValue="10000000000"/>
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="16,0,0,36" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="361,0,363,36" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth}" ContentStringFormat="VVW: {0}" HorizontalAlignment="Left" Margin="133,0,0,13" Name="label3" Width="112" Height="18" VerticalAlignment="Bottom" />
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset}" ContentStringFormat="VVO: {0}" HorizontalAlignment="Left" Margin="372,0,0,13" Name="label4" Width="112" Height="18" VerticalAlignment="Bottom" />
+            <Slider HorizontalAlignment="Left" Margin="251,0,0,8" Maximum="100000000000" Minimum="0" Name="virtualOffsetSlider" Width="115" Height="23" VerticalAlignment="Bottom" Value="0" />
+            <CheckBox Content="Debug" HorizontalAlignment="Right" Margin="0,0,306,15" Name="debugMode" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" />
+            <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,44" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
             <Button Content="Play" Command="MediaCommands.Play" Height="23" HorizontalAlignment="Right" Margin="0,0,214,12" Name="button1" VerticalAlignment="Bottom" Width="75" />
             <Button Content="Pause" Command="MediaCommands.Pause" Height="23" HorizontalAlignment="Right" Margin="0,0,133,12" Name="button2" VerticalAlignment="Bottom" Width="75" />
         </Grid>
@@ -46,5 +51,10 @@
                 </Grid>
             </GroupBox>
         </Grid>
+        <StatusBar Grid.Row="1" Grid.ColumnSpan="2" Height="23" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
+            <StatusBarItem>
+                <ProgressBar Height="14" HorizontalAlignment="Left" Name="progressBar1" VerticalAlignment="Bottom" Width="300" />
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
