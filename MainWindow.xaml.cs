@@ -142,6 +142,19 @@ namespace AudioAlign {
                         progressBar1.IsEnabled = false;
                     });
                 });
+
+
+            // INIT RANDOM STUFF
+            multiTrackViewer1.KeyUp += new KeyEventHandler(delegate(object sender2, KeyEventArgs e2) {
+                if (e2.Key == Key.Delete) {
+                    AudioTrack audioTrack = multiTrackViewer1.SelectedItem as AudioTrack;
+                    if (audioTrack != null) {
+                        multiTrackViewer1.Items.Remove(audioTrack);
+                        trackList.Remove(audioTrack);
+                    }
+                    e2.Handled = true;
+                }
+            });
         }
 
         private void Window_Closed(object sender, EventArgs e) {

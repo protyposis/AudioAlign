@@ -15,6 +15,7 @@
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -22,17 +23,19 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Grid>
-            <Button Content="Add Waveform" Margin="0,0,12,12" Name="btnAddWaveform" Height="23" VerticalAlignment="Bottom" Click="btnAddWaveform_Click" HorizontalAlignment="Right" Width="101" />
-            <my:MultiTrackViewer Margin="12,12,12,70" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="16,0,0,36" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="361,0,363,36" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
-            <CheckBox Content="Debug" HorizontalAlignment="Right" Margin="0,0,306,15" Name="debugMode" Height="16" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" />
-            <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,44" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
-            <Button Content="Play" Command="MediaCommands.Play" Height="23" HorizontalAlignment="Right" Margin="0,0,214,12" Name="button1" VerticalAlignment="Bottom" Width="75" />
-            <Button Content="Pause" Command="MediaCommands.Pause" Height="23" HorizontalAlignment="Right" Margin="0,0,133,12" Name="button2" VerticalAlignment="Bottom" Width="75" />
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Add Waveform" Name="btnAddWaveform" VerticalAlignment="Bottom" Click="btnAddWaveform_Click" HorizontalAlignment="Right" Width="101" Margin="5" />
+            <CheckBox Content="Debug" HorizontalAlignment="Right" Name="debugMode" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Margin="5" />
+            <Button Content="Play" Command="MediaCommands.Play" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="5" />
+            <Button Content="Pause" Command="MediaCommands.Pause" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="5" />
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <my:MultiTrackViewer Margin="12,12,12,33" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" />
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="16,0,0,1" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="361,0,363,1" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
+            <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,9" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="1">
             <GroupBox Header="Audio Master" Width="120" Margin="12">
                 <Grid>
                     <Grid Margin="6,19,0,6" HorizontalAlignment="Left" Width="30">
@@ -47,7 +50,7 @@
                 </Grid>
             </GroupBox>
         </Grid>
-        <StatusBar Grid.Row="1" Grid.ColumnSpan="2" Height="23" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Height="23" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
             <StatusBarItem>
                 <ProgressBar Height="14" HorizontalAlignment="Left" Name="progressBar1" VerticalAlignment="Bottom" Width="300" />
             </StatusBarItem>
