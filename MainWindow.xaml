@@ -36,6 +36,10 @@
             <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,9" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height=".3*"/>
+            </Grid.RowDefinitions>
             <GroupBox Header="Audio Master" Width="120" Margin="12">
                 <Grid>
                     <Grid Margin="6,19,0,6" HorizontalAlignment="Left" Width="30">
@@ -48,6 +52,9 @@
                     </Grid>
                     <my:StereoVUMeter HorizontalAlignment="Left" Margin="43,6,0,6" Name="stereoVUMeter1" Width="63" />
                 </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="1" Header="Spectrum" Width="120" Margin="12,0,12,12">
+                <my:Graph Name="spectrumGraph" Background="Black" Mode="Decibel" Minimum="-150" Margin="0,3,0,0" />
             </GroupBox>
         </Grid>
         <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Height="23" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">

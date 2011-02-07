@@ -155,6 +155,20 @@ namespace AudioAlign {
                     e2.Handled = true;
                 }
             });
+
+
+            // INIT FFT
+            FFTAnalyzer fftAnalyzer = new FFTAnalyzer(1024);
+            WindowFunction fftWindow = WindowUtil.GetFunction(WindowType.BlackmanHarris, 1024);
+            fftAnalyzer.WindowFunction = fftWindow;
+            fftAnalyzer.WindowAnalyzed +=new EventHandler<ValueEventArgs<float[]>>(delegate(object sender2, ValueEventArgs<float[]> e2) {
+                spectrumGraph.Dispatcher.BeginInvoke((Action)delegate {
+                    spectrumGraph.Values = e2.Value;
+                });
+            });
+            player.SamplesMonitored += new EventHandler<ValueEventArgs<float[][]>>(delegate(object sender2, ValueEventArgs<float[][]> e2) {
+                fftAnalyzer.PutSamples(e2.Value[0]);
+            });
         }
 
         private void Window_Closed(object sender, EventArgs e) {
