@@ -86,8 +86,8 @@ namespace AudioAlign {
             // INIT PLAYER
             player = new MultitrackPlayer(trackList);
 
-            player.VolumeAnnounced += new EventHandler<Audio.NAudio.StreamVolumeEventArgs>(
-                delegate(object sender2, Audio.NAudio.StreamVolumeEventArgs e2) {
+            player.VolumeAnnounced += new EventHandler<AudioAlign.Audio.Streams.StreamVolumeEventArgs>(
+                delegate(object sender2, AudioAlign.Audio.Streams.StreamVolumeEventArgs e2) {
                     multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
                         if (e2.MaxSampleValues.Length >= 2) {
                             stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
