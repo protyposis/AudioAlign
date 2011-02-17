@@ -18,6 +18,8 @@ using AudioAlign.Audio;
 using System.Diagnostics;
 using System.Windows.Threading;
 using AudioAlign.Audio.TaskMonitor;
+using AudioAlign.Audio.Matching;
+using NAudio.Wave;
 
 namespace AudioAlign {
     /// <summary>
@@ -201,6 +203,22 @@ namespace AudioAlign {
             else if (player.CanPause) {
                 pauseCommandBinding_Executed(sender, e);
             }
+        }
+
+        private void btnCrossCorrelation_Click(object sender, RoutedEventArgs e) {
+            CrossCorrelation cc = new CrossCorrelation();
+            WaveOffsetStream s1 = new WaveOffsetStream(new WaveFileReader(trackList[0].FileInfo.FullName));
+            s1.SourceOffset = trackList[0].Offset;
+            WaveOffsetStream s2 = new WaveOffsetStream(new WaveFileReader(trackList[1].FileInfo.FullName));
+            s2.SourceOffset = trackList[1].Offset;
+
+            WaveStream ws1 = new WaveChannel32(s1);
+            WaveStream ws2 = new WaveChannel32(s2);
+
+            long secfactor = 1000 * 1000 * 10;
+            Interval i = new Interval(35 * secfactor, (long)(0.1d * secfactor) + 35 * secfactor);
+
+            cc.CalculateAsync(ws1, i, ws2, i);
         }
     }
 }

@@ -28,6 +28,7 @@
             <CheckBox Content="Debug" HorizontalAlignment="Right" Name="debugMode" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Margin="5" />
             <Button Content="Play" Command="MediaCommands.Play" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="5" />
             <Button Content="Pause" Command="MediaCommands.Pause" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="5" />
+            <Button Content="Cross-Correlation Test (first 2 tracks)" Name="btnCrossCorrelation" Width="203" Click="btnCrossCorrelation_Click" Margin="5" />
         </StackPanel>
         <Grid Grid.Row="1">
             <my:MultiTrackViewer Margin="12,12,12,33" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" />

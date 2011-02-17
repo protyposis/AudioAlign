@@ -171,9 +171,9 @@
       <Project>{E868D91E-C5CF-46E4-BE2F-F95353ACB5E2}</Project>
       <Name>AudioAlign.Audio</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.Test.MultitrackControls\AudioAlign.Test.MultitrackControls.csproj">
-      <Project>{0A18E477-2141-4B32-ABFD-E23EF534FC93}</Project>
-      <Name>AudioAlign.Test.MultitrackControls</Name>
+    <ProjectReference Include="..\AudioAlign.LibSampleRate\AudioAlign.LibSampleRate.csproj">
+      <Project>{CC813B15-06BB-4334-96C6-DD252BE37D1B}</Project>
+      <Name>AudioAlign.LibSampleRate</Name>
     </ProjectReference>
     <ProjectReference Include="..\AudioAlign.WaveControls\AudioAlign.WaveControls.csproj">
       <Project>{FD0C6CC5-B509-4441-9AA2-E8B34BAD9F95}</Project>
