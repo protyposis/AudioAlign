@@ -23,26 +23,28 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="Add Waveform" Name="btnAddWaveform" VerticalAlignment="Bottom" Click="btnAddWaveform_Click" HorizontalAlignment="Right" Width="101" Margin="5" />
-            <CheckBox Content="Debug" HorizontalAlignment="Right" Name="debugMode" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Margin="5" />
-            <Button Content="Play" Command="MediaCommands.Play" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="5" />
-            <Button Content="Pause" Command="MediaCommands.Pause" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="5" />
-            <Button Content="Cross-Correlation Test (first 2 tracks)" Name="btnCrossCorrelation" Width="203" Click="btnCrossCorrelation_Click" Margin="5" />
-            <Button Content="Refresh MTV AdornerLayer" Name="btnRefreshMTVAdorner" Width="165" Margin="5" Click="btnRefreshMTVAdorner_Click" />
-        </StackPanel>
+        <Border Padding="6 6 6 0">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Add Waveform" Name="btnAddWaveform" Click="btnAddWaveform_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <Button Content="Play" Command="MediaCommands.Play" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <Button Content="Pause" Command="MediaCommands.Pause" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <Button Content="Cross-Correlation Test (first 2 tracks)" Name="btnCrossCorrelation" Click="btnCrossCorrelation_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <Button Content="Refresh MTV AdornerLayer" Name="btnRefreshMTVAdorner" Click="btnRefreshMTVAdorner_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <CheckBox Content="Debug" VerticalAlignment="Center" Name="debugMode" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+            </StackPanel>
+        </Border>
         <Grid Grid.Row="1">
-            <my:MultiTrackViewer Margin="12,12,12,33" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="16,0,0,1" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="28" Margin="361,0,363,1" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
-            <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,9" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
+            <my:MultiTrackViewer Margin="6,6,6,23" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="20" Margin="16,0,0,3" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
+            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="20" Margin="361,0,363,3" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
+            <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,6,3" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height=".3*"/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Audio Master" Width="120" Margin="12">
+            <GroupBox Header="Audio Master" Width="120" Margin="0,6,6,6">
                 <Grid>
                     <Grid Margin="6,19,0,6" HorizontalAlignment="Left" Width="30">
                         <Grid.RowDefinitions>
@@ -55,7 +57,7 @@
                     <my:StereoVUMeter HorizontalAlignment="Left" Margin="43,6,0,6" Name="stereoVUMeter1" Width="63" />
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Row="1" Header="Spectrum" Width="120" Margin="12,0,12,12">
+            <GroupBox Grid.Row="1" Header="Spectrum" Width="120" Margin="0,0,6,6">
                 <my:Graph Name="spectrumGraph" Background="Black" Mode="Decibel" Minimum="-150" Margin="0,3,0,0" />
             </GroupBox>
         </Grid>

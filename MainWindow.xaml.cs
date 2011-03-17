@@ -34,6 +34,7 @@ namespace AudioAlign {
             InitializeComponent();
 
             trackList = new TrackList<AudioTrack>();
+            Button test = btnAddWaveform;
         }
 
         private void btnAddWaveform_Click(object sender, RoutedEventArgs e) {
