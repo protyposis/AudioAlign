@@ -220,5 +220,9 @@ namespace AudioAlign {
 
             cc.CalculateAsync(ws1, i, ws2, i);
         }
+
+        private void btnRefreshMTVAdorner_Click(object sender, RoutedEventArgs e) {
+            multiTrackViewer1.RefreshAdornerLayer();
+        }
     }
 }
