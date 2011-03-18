@@ -30,6 +30,7 @@
                 <Button Content="Pause" Command="MediaCommands.Pause" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Cross-Correlation Test (first 2 tracks)" Name="btnCrossCorrelation" Click="btnCrossCorrelation_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Refresh MTV AdornerLayer" Name="btnRefreshMTVAdorner" Click="btnRefreshMTVAdorner_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <Button Content="Find Matches" Name="btnFindMatches" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnFindMatches_Click" />
                 <CheckBox Content="Debug" VerticalAlignment="Center" Name="debugMode" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
             </StackPanel>
         </Border>
@@ -63,9 +64,14 @@
                 <my:Graph Name="spectrumGraph" Background="Black" Mode="Decibel" Minimum="-150" Margin="0,3,0,0" />
             </GroupBox>
         </Grid>
-        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Height="23" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Height="24" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
             <StatusBarItem>
-                <ProgressBar Height="14" HorizontalAlignment="Left" Name="progressBar1" VerticalAlignment="Bottom" Width="300" />
+                <Grid Height="16" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300">
+                    <ProgressBar Name="progressBar1" />
+                    <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="2,0">
+                        <TextBlock Name="progressBar1Label" TextTrimming="CharacterEllipsis" />
+                    </Label>
+                </Grid>
             </StatusBarItem>
             <StatusBarItem>
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth}" ContentStringFormat="VVW: {0}" Width="130" />

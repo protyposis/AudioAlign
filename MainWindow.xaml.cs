@@ -20,6 +20,9 @@ using System.Windows.Threading;
 using AudioAlign.Audio.TaskMonitor;
 using AudioAlign.Audio.Matching;
 using NAudio.Wave;
+using AudioAlign.Audio.Matching.HaitsmaKalker2002;
+using AudioAlign.Audio.Streams;
+using System.Threading.Tasks;
 
 namespace AudioAlign {
     /// <summary>
@@ -128,6 +131,7 @@ namespace AudioAlign {
                 delegate(object sender2, EventArgs e2) {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.IsEnabled = true;
+                        progressBar1Label.Text = ProgressMonitor.Instance.StatusMessage;
                     });
                 });
 
@@ -135,6 +139,7 @@ namespace AudioAlign {
                 delegate(object sender2, ValueEventArgs<float> e2) {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.Value = e2.Value;
+                        progressBar1Label.Text = ProgressMonitor.Instance.StatusMessage;
                     });
                 });
 
@@ -143,6 +148,7 @@ namespace AudioAlign {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.Value = 0;
                         progressBar1.IsEnabled = false;
+                        progressBar1Label.Text = "";
                     });
                 });
 
@@ -224,6 +230,45 @@ namespace AudioAlign {
 
         private void btnRefreshMTVAdorner_Click(object sender, RoutedEventArgs e) {
             multiTrackViewer1.RefreshAdornerLayer();
+        }
+
+        private void btnFindMatches_Click(object sender, RoutedEventArgs e) {
+            // create fingerprint store
+            FingerprintStore store = new FingerprintStore();
+
+            // calculate fingerprints / matches after processing of all tracks has finished
+            ProgressMonitor.Instance.ProcessingFinished += new EventHandler(delegate(object sender2, EventArgs e2) {
+                List<Match> matches = store.FindAllMatches();
+                multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
+                    multiTrackViewer1.Matches.Clear();
+                    Debug.WriteLine(matches.Count + " matches found");
+                    foreach (Match match in matches) {
+                        multiTrackViewer1.Matches.Add(match);
+                    }
+                });
+            });
+
+            // calculate subfingerprints
+            foreach (AudioTrack audioTrackFE in trackList) {
+                // local reference is needed for the async task to reference
+                // the right object, instead of always the last one in the list (see: http://stackoverflow.com/questions/2925303/foreach-loop-and-tasks)
+                AudioTrack audioTrack = audioTrackFE; 
+                
+                Task.Factory.StartNew(() => {
+                    ProgressReporter progressReporter = ProgressMonitor.Instance.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
+
+                    FingerprintGenerator fpg = new FingerprintGenerator(audioTrack);
+                    int subFingerprintsCalculated = 0;
+                    fpg.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
+                        subFingerprintsCalculated++;
+                        progressReporter.ReportProgress((double)e2.Timestamp.Ticks / audioTrack.Length.Ticks * 100);
+                        store.Add(e2.AudioTrack, e2.SubFingerprint, e2.Timestamp);
+                    });
+                    fpg.Generate();
+
+                    ProgressMonitor.Instance.EndTask(progressReporter);
+                });
+            }
         }
     }
 }
