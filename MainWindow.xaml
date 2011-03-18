@@ -21,9 +21,9 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="120" MinWidth="120"/>
         </Grid.ColumnDefinitions>
-        <Border Padding="6 6 6 0">
+        <Border Padding="6 6 6 0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal">
                 <Button Content="Add Waveform" Name="btnAddWaveform" Click="btnAddWaveform_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Play" Command="MediaCommands.Play" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
@@ -34,17 +34,18 @@
             </StackPanel>
         </Border>
         <Grid Grid.Row="1">
-            <my:MultiTrackViewer Margin="6,6,6,23" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
+            <my:MultiTrackViewer Margin="6,6,3,23" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
             <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="20" Margin="16,0,0,3" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
             <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="20" Margin="361,0,363,3" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
             <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,6,3" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
         </Grid>
+        <GridSplitter Width="1" Grid.Column="0" Grid.Row="1" Background="Transparent" />
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height=".3*"/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Audio Master" Width="120" Margin="0,6,6,6">
+            <GroupBox Header="Audio Master" Margin="3,6,6,3">
                 <Grid>
                     <Grid Margin="6,19,0,6" HorizontalAlignment="Left" Width="30">
                         <Grid.RowDefinitions>
@@ -54,10 +55,11 @@
                         <my:ExtendedSlider AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="3" Maximum="4" Name="volumeSlider" Orientation="Vertical" SmallChange="0.01" TickFrequency="0.1" TickPlacement="Both" Value="1" Width="30" LargeChange="0.1" DefaultValue="1" />
                         <Label Grid.Row="1" Name="decibelLabel" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding ElementName=volumeSlider, Path=Value, FallbackValue=dB, Converter={StaticResource LinearDecibelConverter}}" ContentStringFormat="{}{0:0.0}" FontSize="9" Padding="0" HorizontalAlignment="Center"/>
                     </Grid>
-                    <my:StereoVUMeter HorizontalAlignment="Left" Margin="43,6,0,6" Name="stereoVUMeter1" Width="63" />
+                    <my:StereoVUMeter Margin="43,6,6,6" Name="stereoVUMeter1" />
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Row="1" Header="Spectrum" Width="120" Margin="0,0,6,6">
+            <GridSplitter Height="1" Background="Transparent" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+            <GroupBox Grid.Row="1" Header="Spectrum" Margin="3,3,6,6">
                 <my:Graph Name="spectrumGraph" Background="Black" Mode="Decibel" Minimum="-150" Margin="0,3,0,0" />
             </GroupBox>
         </Grid>
