@@ -238,7 +238,7 @@ namespace AudioAlign {
 
             // calculate fingerprints / matches after processing of all tracks has finished
             ProgressMonitor.Instance.ProcessingFinished += new EventHandler(delegate(object sender2, EventArgs e2) {
-                List<Match> matches = store.FindAllMatches();
+                List<Match> matches = store.FindAllMatchingMatches();
                 multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
                     multiTrackViewer1.Matches.Clear();
                     Debug.WriteLine(matches.Count + " matches found");

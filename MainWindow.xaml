@@ -68,7 +68,7 @@
             <StatusBarItem>
                 <Grid Height="16" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300">
                     <ProgressBar Name="progressBar1" />
-                    <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="2,0">
+                    <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="2,0" FontSize="11" Foreground="Black">
                         <TextBlock Name="progressBar1Label" TextTrimming="CharacterEllipsis" />
                     </Label>
                 </Grid>
