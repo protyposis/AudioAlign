@@ -255,6 +255,7 @@ namespace AudioAlign {
                 AudioTrack audioTrack = audioTrackFE; 
                 
                 Task.Factory.StartNew(() => {
+                    DateTime startTime = DateTime.Now;
                     ProgressReporter progressReporter = ProgressMonitor.Instance.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
 
                     FingerprintGenerator fpg = new FingerprintGenerator(audioTrack);
@@ -267,6 +268,7 @@ namespace AudioAlign {
                     fpg.Generate();
 
                     ProgressMonitor.Instance.EndTask(progressReporter);
+                    Debug.WriteLine("subfingerprint generation finished - " + (DateTime.Now - startTime));
                 });
             }
         }
