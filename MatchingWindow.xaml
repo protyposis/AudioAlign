@@ -1,0 +1,52 @@
+﻿<Window x:Class="AudioAlign.MatchingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Match &amp; Align" Height="418" Width="660" 
+        FontSize="11" 
+        Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+    <Grid>
+        <Grid Margin="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Margin="0,0,0,3">
+                <Button Name="scanTracksButton" Content="Scan Tracks" Height="23" Width="75" Click="scanTracksButton_Click" />
+                <Grid Margin="6,0,0,0">
+                    <ProgressBar Name="progressBar" />
+                    <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="6,0" FontSize="11">
+                        <TextBlock Name="progressBarLabel" TextTrimming="CharacterEllipsis" />
+                    </Label>
+                </Grid>
+            </DockPanel>
+            <GroupBox Grid.Row="1" Header="Matching Points" Margin="0,4">
+                <DataGrid Name="matchGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" 
+                          HeadersVisibility="Column" Margin="0,3,0,0">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Track A" Binding="{Binding Track1.Name}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Track B" Binding="{Binding Track2.Name}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Track A Position" Binding="{Binding Track1Time}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Track B Position" Binding="{Binding Track2Time}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Similarity" Binding="{Binding Similarity}" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+            <GroupBox Grid.Row="2" Header="Alignment" Margin="0,3,0,0">
+                <Grid Height="73">
+                    <RadioButton Content="best" Height="16" Margin="106,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="bestMatchRadioButton" />
+                    <RadioButton Content="last" Height="16" Margin="199,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="lastMatchRadioButton" />
+                    <RadioButton Content="average" Height="16" Margin="243,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="averageMatchRadioButton" />
+                    <RadioButton Content="windowed average" Height="16" Margin="308,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="windowedAverageMatchRadioButton" />
+                    <RadioButton Content="all" Height="16" Margin="426,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="allMatchRadioButton" />
+                    <Button Name="alignTracksButton" Content="Align Tracks" Height="23" Width="75" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="alignTracksButton_Click" />
+                    <TextBox Height="23" Name="windowedAverageWindowSize" Margin="106,26,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Text="300" />
+                    <RadioButton Content="first" Height="16" HorizontalAlignment="Left" Margin="154,6,0,0" VerticalAlignment="Top" Name="firstMatchRadioButton" />
+                    <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label1" VerticalAlignment="Top" />
+                    <Label Content="Window Size (secs):" Height="28" HorizontalAlignment="Left" Margin="6,29,0,0" Name="label2" VerticalAlignment="Top" />
+                    <CheckBox Content="post-process matching points (cross-correlation)" Height="16" HorizontalAlignment="Left" Margin="6,52,0,0" Name="checkBox1" VerticalAlignment="Top" />
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
