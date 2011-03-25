@@ -32,6 +32,7 @@ namespace AudioAlign {
 
         private TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
+        private MatchingWindow matchingWindow;
 
         public MainWindow() {
             InitializeComponent();
@@ -213,19 +214,15 @@ namespace AudioAlign {
         }
 
         private void btnCrossCorrelation_Click(object sender, RoutedEventArgs e) {
-            CrossCorrelation cc = new CrossCorrelation();
-            WaveOffsetStream s1 = new WaveOffsetStream(new WaveFileReader(trackList[0].FileInfo.FullName));
-            s1.SourceOffset = trackList[0].Offset;
-            WaveOffsetStream s2 = new WaveOffsetStream(new WaveFileReader(trackList[1].FileInfo.FullName));
-            s2.SourceOffset = trackList[1].Offset;
-
-            WaveStream ws1 = new WaveChannel32(s1);
-            WaveStream ws2 = new WaveChannel32(s2);
+            OffsetStream s1 = new OffsetStream(new IeeeStream(trackList[0].CreateAudioStream()));
+            s1.Offset = TimeUtil.TimeSpanToBytes(trackList[0].Offset, s1.Properties);
+            OffsetStream s2 = new OffsetStream(new IeeeStream(trackList[1].CreateAudioStream()));
+            s2.Offset = TimeUtil.TimeSpanToBytes(trackList[1].Offset, s1.Properties);
 
             long secfactor = 1000 * 1000 * 10;
-            Interval i = new Interval(35 * secfactor, (long)(0.1d * secfactor) + 35 * secfactor);
+            Interval i = new Interval(35 * secfactor, (long)(1d * secfactor) + 35 * secfactor);
 
-            cc.CalculateAsync(ws1, i, ws2, i);
+            CrossCorrelation.CalculateAsync(s1, i, s2, i);
         }
 
         private void btnRefreshMTVAdorner_Click(object sender, RoutedEventArgs e) {
@@ -233,7 +230,14 @@ namespace AudioAlign {
         }
 
         private void btnFindMatches_Click(object sender, RoutedEventArgs e) {
-            new MatchingWindow(trackList, multiTrackViewer1).Show();
+            if (matchingWindow == null || !matchingWindow.IsLoaded) {
+                matchingWindow = new MatchingWindow(trackList, multiTrackViewer1);
+                matchingWindow.Show();
+            }
+            else {
+                matchingWindow.Activate();
+            }
+            
         }
     }
 }

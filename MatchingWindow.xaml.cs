@@ -18,6 +18,7 @@ using AudioAlign.Audio.Project;
 using AudioAlign.Audio.Matching;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 
 namespace AudioAlign {
     /// <summary>
@@ -39,25 +40,55 @@ namespace AudioAlign {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            // GLASS EFFECT BACKGROUND
+            // http://msdn.microsoft.com/en-us/library/ms748975.aspx
+            try {
+                // Obtain the window handle for WPF application
+                IntPtr mainWindowPtr = new WindowInteropHelper(this).Handle;
+                HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
+                mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+
+                // Set Margins
+                NonClientRegionAPI.MARGINS margins = new NonClientRegionAPI.MARGINS();
+                margins.cxLeftWidth = -1;
+                margins.cxRightWidth = -1;
+                margins.cyTopHeight = -1;
+                margins.cyBottomHeight = -1;
+
+                int hr = NonClientRegionAPI.DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
+                Background = Brushes.Transparent;
+                //
+                if (hr < 0) {
+                    //DwmExtendFrameIntoClientArea Failed
+                }
+            }
+            // If not Vista, paint background white.
+            catch (DllNotFoundException) {
+                //Application.Current.MainWindow.Background = Brushes.White;
+            }
+
             // INIT PROGRESSBAR
             progressBar.IsEnabled = false;
-            //ProgressMonitor.Instance.ProcessingStarted += Instance_ProcessingStarted;
+            ProgressMonitor.Instance.ProcessingStarted += Instance_ProcessingStarted;
             //ProgressMonitor.Instance.ProcessingProgressChanged += Instance_ProcessingProgressChanged;
-            //ProgressMonitor.Instance.ProcessingFinished += Instance_ProcessingFinished;
+            ProgressMonitor.Instance.ProcessingFinished += Instance_ProcessingFinished;
             bestMatchRadioButton.IsChecked = true;
+
+            matchGrid.ItemsSource = multiTrackViewer.Matches;
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e) {
             ProgressMonitor.Instance.ProcessingStarted -= Instance_ProcessingStarted;
             ProgressMonitor.Instance.ProcessingProgressChanged -= Instance_ProcessingProgressChanged;
             ProgressMonitor.Instance.ProcessingFinished -= Instance_ProcessingFinished;
-            multiTrackViewer.Matches.Clear();
+            multiTrackViewer.SelectedMatch = null;
         }
 
         private void Instance_ProcessingStarted(object sender, EventArgs e) {
             progressBar.Dispatcher.BeginInvoke((Action)delegate {
                 progressBar.IsEnabled = true;
-                progressBarLabel.Text = ProgressMonitor.Instance.StatusMessage;
+                progressBar.IsIndeterminate = true;
+                //progressBarLabel.Text = ProgressMonitor.Instance.StatusMessage;
             });
         }
 
@@ -72,6 +103,7 @@ namespace AudioAlign {
             progressBar.Dispatcher.BeginInvoke((Action)delegate {
                 progressBar.Value = 0;
                 progressBar.IsEnabled = false;
+                progressBar.IsIndeterminate = false;
                 progressBarLabel.Text = "";
             });
         }
@@ -109,19 +141,20 @@ namespace AudioAlign {
                 // all running generator tasks have finished
                 multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
                     // calculate fingerprints / matches after processing of all tracks has finished
-                    List<Match> matches = fingerprintStore.FindAllMatchingMatches();
-                    multiTrackViewer.Matches.Clear();
-                    Debug.WriteLine(matches.Count + " matches found");
-                    foreach (Match match in matches) {
-                        multiTrackViewer.Matches.Add(match);
-                    }
-                    matchGrid.ItemsSource = matches;
+                    ClearAllMatches();
+                    FindAllDirectMatches();
                 });
             }
         }
 
         private void alignTracksButton_Click(object sender, RoutedEventArgs e) {
-            List<Match> matches = fingerprintStore.FindAllMatchingMatches();
+            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
+
+            if (matches.Count == 0) {
+                Debug.WriteLine("no matches available");
+                return;
+            }
+
             Dictionary<AudioTrack, List<Match>> mapping = new Dictionary<AudioTrack, List<Match>>();
 
             foreach (AudioTrack audioTrack in trackList) {
@@ -180,6 +213,24 @@ namespace AudioAlign {
                     Debug.WriteLine("first match: " + firstMatch);
                 }
             }
+            else if ((bool)midMatchRadioButton.IsChecked) {
+                foreach (AudioTrack audioTrack in mapping.Keys) {
+                    if (audioTrack == trackList[0]) {
+                        continue;
+                    }
+                    IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderBy(m => m.Track1Time);
+                    Match midMatch = sortedMatches.ElementAt(sortedMatches.Count() / 2);
+                    if (midMatch.Track1.Offset.Ticks + midMatch.Track1Time.Ticks < midMatch.Track2.Offset.Ticks + midMatch.Track2Time.Ticks) {
+                        // align track 1
+                        midMatch.Track1.Offset = new TimeSpan(midMatch.Track2.Offset.Ticks + midMatch.Track2Time.Ticks - midMatch.Track1Time.Ticks);
+                    }
+                    else {
+                        // align track 2
+                        midMatch.Track2.Offset = new TimeSpan(midMatch.Track1.Offset.Ticks + midMatch.Track1Time.Ticks - midMatch.Track2Time.Ticks);
+                    }
+                    Debug.WriteLine("mid match: " + midMatch);
+                }
+            }
             else if ((bool)lastMatchRadioButton.IsChecked) {
                 foreach (AudioTrack audioTrack in mapping.Keys) {
                     if (audioTrack == trackList[0]) {
@@ -207,6 +258,61 @@ namespace AudioAlign {
             else if ((bool)allMatchRadioButton.IsChecked) {
                 //
             }
+        }
+
+        private void crossCorrelateButton_Click(object sender, RoutedEventArgs e) {
+            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
+            long secfactor = 1000 * 1000 * 10;
+
+            foreach (Match matchFE in matches) {
+                Match match = matchFE; // needed as reference for async task
+                Task.Factory.StartNew(() => {
+                    TimeSpan offset = CrossCorrelation.Calculate(match.Track1.CreateAudioStream(), new Interval(match.Track1Time.Ticks, match.Track1Time.Ticks + secfactor / 2),
+                        match.Track2.CreateAudioStream(), new Interval(match.Track2Time.Ticks, match.Track2Time.Ticks + secfactor / 2));
+
+                    Debug.WriteLine("CC: " + match + ": " + offset);
+                });
+            }
+        }
+
+        private void matchGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            multiTrackViewer.SelectedMatch = matchGrid.SelectedItem as Match;
+        }
+
+        private void clearMatchesButton_Click(object sender, RoutedEventArgs e) {
+            ClearAllMatches();
+        }
+
+        private void findMatchingMatchesButton_Click(object sender, RoutedEventArgs e) {
+            FindAllDirectMatches();
+        }
+
+        private void ClearAllMatches() {
+            multiTrackViewer.Matches.Clear();
+        }
+
+        private void FindAllDirectMatches() {
+            List<Match> matches = fingerprintStore.FindAllMatchingMatches();
+            Debug.WriteLine(matches.Count + " matches found");
+            foreach (Match match in matches) {
+                multiTrackViewer.Matches.Add(match);
+            }
+        }
+
+        private void FindAllSoftMatches() {
+            List<Match> matches = fingerprintStore.FindAllMatches();
+            Debug.WriteLine(matches.Count + " matches found");
+            foreach (Match match in matches) {
+                multiTrackViewer.Matches.Add(match);
+            }
+        }
+
+        private void findSoftMatchesButton_Click(object sender, RoutedEventArgs e) {
+            FindAllSoftMatches();
+        }
+
+        private void findPossibleMatchesButton_Click(object sender, RoutedEventArgs e) {
+            fingerprintStore.FindAllMatches(3, true);
         }
     }
 }
