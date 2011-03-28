@@ -41,6 +41,7 @@
                         <Button Name="findMatchingMatchesButton" Content="Find All Direct Matches" Height="23" Width="125" Margin="0,0,3,0" Click="findMatchingMatchesButton_Click" />
                         <Button Name="findSoftMatchesButton" Content="Find All Soft Matches" Height="23" Width="125" Margin="0,0,3,0" Click="findSoftMatchesButton_Click" />
                         <Button Name="findPossibleMatchesButton" Content="Find Possible Matches" Height="23" Width="125" Margin="0,0,3,0" Click="findPossibleMatchesButton_Click" />
+                        <Button Content="Cross-Correlate Matches" Height="23" Margin="0,0,78,0" Name="crossCorrelateButton" Width="135" Click="crossCorrelateButton_Click" />
                     </StackPanel>
                 </Grid>
             </GroupBox>
@@ -57,7 +58,6 @@
                     <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label1" VerticalAlignment="Top" />
                     <Label Content="Window Size (secs):" Height="28" HorizontalAlignment="Left" Margin="6,29,0,0" Name="label2" VerticalAlignment="Top" />
                     <CheckBox Content="post-process matching points (cross-correlation)" Height="16" HorizontalAlignment="Left" Margin="6,52,0,0" Name="checkBox1" VerticalAlignment="Top" />
-                    <Button Content="Cross-Correlate Matches" Height="23" HorizontalAlignment="Right" Margin="0,0,78,0" Name="crossCorrelateButton" VerticalAlignment="Bottom" Width="135" Click="crossCorrelateButton_Click" />
                     <Label Content="(*) dynamic resampling" Height="15" HorizontalAlignment="Left" Margin="526,6,0,0" Name="label3" VerticalAlignment="Top" />
                     <RadioButton Content="mid" Height="16" HorizontalAlignment="Left" Margin="199,6,0,0" Name="midMatchRadioButton" VerticalAlignment="Top" />
                 </Grid>

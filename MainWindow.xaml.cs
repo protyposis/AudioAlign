@@ -183,6 +183,9 @@ namespace AudioAlign {
 
         private void Window_Closed(object sender, EventArgs e) {
             player.Dispose();
+            if (matchingWindow != null) {
+                matchingWindow.Close();
+            }
         }
 
         private void playCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e) {

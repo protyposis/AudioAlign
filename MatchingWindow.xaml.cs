@@ -111,6 +111,7 @@ namespace AudioAlign {
         private void scanTracksButton_Click(object sender, RoutedEventArgs e) {
             // calculate subfingerprints
             numTasksRunning = trackList.Count;
+            fingerprintStore.Clear();
             foreach (AudioTrack audioTrackFE in trackList) {
                 // local reference is needed for the async task to reference
                 // the right object, instead of always the last one in the list (see: http://stackoverflow.com/questions/2925303/foreach-loop-and-tasks)
@@ -179,7 +180,7 @@ namespace AudioAlign {
 
             if ((bool)bestMatchRadioButton.IsChecked) {
                 foreach (AudioTrack audioTrack in mapping.Keys) {
-                    if (audioTrack == trackList[0]) {
+                    if (audioTrack == trackList[0] || mapping[audioTrack].Count == 0) {
                         continue;
                     }
                     IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderByDescending(m => m.Similarity);
