@@ -112,29 +112,24 @@ namespace AudioAlign {
             // calculate subfingerprints
             numTasksRunning = trackList.Count;
             fingerprintStore.Clear();
-            foreach (AudioTrack audioTrackFE in trackList) {
-                // local reference is needed for the async task to reference
-                // the right object, instead of always the last one in the list (see: http://stackoverflow.com/questions/2925303/foreach-loop-and-tasks)
-                AudioTrack audioTrack = audioTrackFE;
 
-                Task.Factory.StartNew(() => {
-                    DateTime startTime = DateTime.Now;
-                    ProgressReporter progressReporter = ProgressMonitor.Instance.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
+            Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, audioTrack => {
+                DateTime startTime = DateTime.Now;
+                ProgressReporter progressReporter = ProgressMonitor.Instance.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
 
-                    FingerprintGenerator fpg = new FingerprintGenerator(audioTrack);
-                    int subFingerprintsCalculated = 0;
-                    fpg.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
-                        subFingerprintsCalculated++;
-                        progressReporter.ReportProgress((double)e2.Timestamp.Ticks / audioTrack.Length.Ticks * 100);
-                        fingerprintStore.Add(e2.AudioTrack, e2.SubFingerprint, e2.Timestamp);
-                    });
-                    fpg.Completed += new EventHandler(FingerprintGenerator_Completed);
-                    fpg.Generate();
+                FingerprintGenerator fpg = new FingerprintGenerator(audioTrack, 3, true);
+                int subFingerprintsCalculated = 0;
+                fpg.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
+                    subFingerprintsCalculated++;
+                    progressReporter.ReportProgress((double)e2.Timestamp.Ticks / audioTrack.Length.Ticks * 100);
+                    fingerprintStore.Add(e2.AudioTrack, e2.SubFingerprint, e2.Timestamp, e2.IsVariation);
+                });
+                fpg.Completed += new EventHandler(FingerprintGenerator_Completed);
+                fpg.Generate();
 
-                    ProgressMonitor.Instance.EndTask(progressReporter);
-                    Debug.WriteLine("subfingerprint generation finished - " + (DateTime.Now - startTime));
-                }, TaskCreationOptions.LongRunning);
-            }
+                ProgressMonitor.Instance.EndTask(progressReporter);
+                Debug.WriteLine("subfingerprint generation finished - " + (DateTime.Now - startTime));
+            }));
         }
 
         private void FingerprintGenerator_Completed(object sender, EventArgs e) {
