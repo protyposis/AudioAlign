@@ -47,19 +47,19 @@
             </GroupBox>
             <GroupBox Grid.Row="2" Header="Alignment" Margin="0,3,0,0">
                 <Grid Height="73">
-                    <RadioButton Content="best" Height="16" Margin="106,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="bestMatchRadioButton" />
-                    <RadioButton Content="last" Height="16" Margin="245,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="lastMatchRadioButton" />
-                    <RadioButton Content="average" Height="16" Margin="289,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="averageMatchRadioButton" />
-                    <RadioButton Content="windowed average *" Height="16" Margin="354,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="windowedAverageMatchRadioButton" />
-                    <RadioButton Content="all *" Height="16" Margin="480,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="allMatchRadioButton" />
+                    <RadioButton Content="best" Height="16" Margin="43,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="bestMatchRadioButton" />
+                    <RadioButton Content="last" Height="16" Margin="182,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="lastMatchRadioButton" />
+                    <RadioButton Content="average" Height="16" Margin="226,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="averageMatchRadioButton" />
+                    <RadioButton Content="all *" Height="16" Margin="291,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="allMatchRadioButton" />
                     <Button Name="alignTracksButton" Content="Align Tracks" Height="23" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="alignTracksButton_Click" />
                     <TextBox Height="23" Name="windowedAverageWindowSize" Margin="106,26,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Text="300" />
-                    <RadioButton Content="first" Height="16" HorizontalAlignment="Left" Margin="154,6,0,0" VerticalAlignment="Top" Name="firstMatchRadioButton" />
+                    <RadioButton Content="first" Height="16" HorizontalAlignment="Left" Margin="91,6,0,0" VerticalAlignment="Top" Name="firstMatchRadioButton" />
                     <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label1" VerticalAlignment="Top" />
                     <Label Content="Window Size (secs):" Height="28" HorizontalAlignment="Left" Margin="6,29,0,0" Name="label2" VerticalAlignment="Top" />
                     <CheckBox Content="post-process matching points (cross-correlation)" Height="16" HorizontalAlignment="Left" Margin="6,52,0,0" Name="checkBox1" VerticalAlignment="Top" />
-                    <Label Content="(*) dynamic resampling" Height="15" HorizontalAlignment="Left" Margin="526,6,0,0" Name="label3" VerticalAlignment="Top" />
-                    <RadioButton Content="mid" Height="16" HorizontalAlignment="Left" Margin="199,6,0,0" Name="midMatchRadioButton" VerticalAlignment="Top" />
+                    <Label Content="(*) entails dynamic resampling" Height="15" HorizontalAlignment="Left" Margin="440,6,0,0" Name="label3" VerticalAlignment="Top" />
+                    <RadioButton Content="mid" Height="16" HorizontalAlignment="Left" Margin="136,6,0,0" Name="midMatchRadioButton" VerticalAlignment="Top" />
+                    <CheckBox Content="windowed *" Height="16" HorizontalAlignment="Left" Margin="337,6,0,0" Name="windowedModeCheckBox" VerticalAlignment="Top" />
                 </Grid>
             </GroupBox>
         </Grid>

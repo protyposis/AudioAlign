@@ -248,9 +248,6 @@ namespace AudioAlign {
             else if ((bool)averageMatchRadioButton.IsChecked) {
                 //
             }
-            else if ((bool)windowedAverageMatchRadioButton.IsChecked) {
-                //
-            }
             else if ((bool)allMatchRadioButton.IsChecked) {
                 //
             }
