@@ -189,6 +189,9 @@ namespace AudioAlign {
                         bestMatch.Track2.Offset = new TimeSpan(bestMatch.Track1.Offset.Ticks + bestMatch.Track1Time.Ticks - bestMatch.Track2Time.Ticks);
                     }
                     Debug.WriteLine("best match: " + bestMatch);
+                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                        CrossCorrelation.Adjust(bestMatch);
+                    }
                 }
             }
             else if ((bool)firstMatchRadioButton.IsChecked) {
@@ -207,6 +210,9 @@ namespace AudioAlign {
                         firstMatch.Track2.Offset = new TimeSpan(firstMatch.Track1.Offset.Ticks + firstMatch.Track1Time.Ticks - firstMatch.Track2Time.Ticks);
                     }
                     Debug.WriteLine("first match: " + firstMatch);
+                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                        CrossCorrelation.Adjust(firstMatch);
+                    }
                 }
             }
             else if ((bool)midMatchRadioButton.IsChecked) {
@@ -225,6 +231,9 @@ namespace AudioAlign {
                         midMatch.Track2.Offset = new TimeSpan(midMatch.Track1.Offset.Ticks + midMatch.Track1Time.Ticks - midMatch.Track2Time.Ticks);
                     }
                     Debug.WriteLine("mid match: " + midMatch);
+                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                        CrossCorrelation.Adjust(midMatch);
+                    }
                 }
             }
             else if ((bool)lastMatchRadioButton.IsChecked) {
@@ -243,6 +252,9 @@ namespace AudioAlign {
                         lastMatch.Track2.Offset = new TimeSpan(lastMatch.Track1.Offset.Ticks + lastMatch.Track1Time.Ticks - lastMatch.Track2Time.Ticks);
                     }
                     Debug.WriteLine("last match: " + lastMatch);
+                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                        CrossCorrelation.Adjust(lastMatch);
+                    }
                 }
             }
             else if ((bool)averageMatchRadioButton.IsChecked) {
@@ -306,6 +318,10 @@ namespace AudioAlign {
 
         private void findPossibleMatchesButton_Click(object sender, RoutedEventArgs e) {
             fingerprintStore.FindAllMatches(3, true);
+        }
+
+        private void clearStoreButton_Click(object sender, RoutedEventArgs e) {
+            fingerprintStore.Clear();
         }
     }
 }

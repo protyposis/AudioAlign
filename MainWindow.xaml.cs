@@ -133,6 +133,8 @@ namespace AudioAlign {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.IsEnabled = true;
                         progressBar1Label.Text = ProgressMonitor.Instance.StatusMessage;
+                        win7TaskBar.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+                        win7TaskBar.ProgressValue = 0;
                     });
                 });
 
@@ -140,6 +142,7 @@ namespace AudioAlign {
                 delegate(object sender2, ValueEventArgs<float> e2) {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.Value = e2.Value;
+                        win7TaskBar.ProgressValue = e2.Value / 100;
                         progressBar1Label.Text = ProgressMonitor.Instance.StatusMessage;
                     });
                 });
@@ -150,6 +153,7 @@ namespace AudioAlign {
                         progressBar1.Value = 0;
                         progressBar1.IsEnabled = false;
                         progressBar1Label.Text = "";
+                        win7TaskBar.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                     });
                 });
 
@@ -216,19 +220,7 @@ namespace AudioAlign {
             }
         }
 
-        private void btnCrossCorrelation_Click(object sender, RoutedEventArgs e) {
-            OffsetStream s1 = new OffsetStream(new IeeeStream(trackList[0].CreateAudioStream()));
-            s1.Offset = TimeUtil.TimeSpanToBytes(trackList[0].Offset, s1.Properties);
-            OffsetStream s2 = new OffsetStream(new IeeeStream(trackList[1].CreateAudioStream()));
-            s2.Offset = TimeUtil.TimeSpanToBytes(trackList[1].Offset, s1.Properties);
-
-            long secfactor = 1000 * 1000 * 10;
-            Interval i = new Interval(35 * secfactor, (long)(1d * secfactor) + 35 * secfactor);
-
-            CrossCorrelation.CalculateAsync(s1, i, s2, i);
-        }
-
-        private void btnRefreshMTVAdorner_Click(object sender, RoutedEventArgs e) {
+        private void btnRefresh_Click(object sender, RoutedEventArgs e) {
             multiTrackViewer1.RefreshAdornerLayer();
         }
 

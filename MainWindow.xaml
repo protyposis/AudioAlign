@@ -13,6 +13,9 @@
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
     </Window.InputBindings>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="win7TaskBar" ProgressState="None"/>
+    </Window.TaskbarItemInfo>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -28,8 +31,7 @@
                 <Button Content="Add Waveform" Name="btnAddWaveform" Click="btnAddWaveform_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Play" Command="MediaCommands.Play" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Pause" Command="MediaCommands.Pause" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
-                <Button Content="Cross-Correlation Test (first 2 tracks)" Name="btnCrossCorrelation" Click="btnCrossCorrelation_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
-                <Button Content="Refresh MTV AdornerLayer" Name="btnRefreshMTVAdorner" Click="btnRefreshMTVAdorner_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <Button Content="Refresh" Name="btnRefresh" Click="btnRefresh_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnFindMatches_Click" />
                 <CheckBox Content="Debug" VerticalAlignment="Center" Name="debugMode" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
             </StackPanel>
