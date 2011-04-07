@@ -61,6 +61,7 @@
                     <Label Content="(*) entails dynamic resampling" Height="15" HorizontalAlignment="Left" Margin="440,6,0,0" Name="label3" VerticalAlignment="Top" />
                     <RadioButton Content="mid" Height="16" HorizontalAlignment="Left" Margin="136,6,0,0" Name="midMatchRadioButton" VerticalAlignment="Top" />
                     <CheckBox Content="windowed *" Height="16" HorizontalAlignment="Left" Margin="337,6,0,0" Name="windowedModeCheckBox" VerticalAlignment="Top" IsEnabled="False" />
+                    <CheckBox Content="remove unused matching points" Height="16" HorizontalAlignment="Left" Margin="268,52,0,0" Name="removeUnusedMatchingPointsCheckBox" VerticalAlignment="Top" IsChecked="True" />
                 </Grid>
             </GroupBox>
         </Grid>

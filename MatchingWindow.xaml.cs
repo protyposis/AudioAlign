@@ -145,6 +145,7 @@ namespace AudioAlign {
 
         private void alignTracksButton_Click(object sender, RoutedEventArgs e) {
             List<Match> matches = new List<Match>(multiTrackViewer.Matches);
+            List<Match> selectedMatches = new List<Match>();
 
             if (matches.Count == 0) {
                 Debug.WriteLine("no matches available");
@@ -163,15 +164,7 @@ namespace AudioAlign {
                         audioTrackMatches.Add(match);
                     }
                 }
-                //matches.RemoveAll(m => audioTrackMatches.Contains(m));
-                //if (audioTrackMatches.Count == 0) {
-                //    mapping.Remove(audioTrack);
-                //}
             }
-
-            //if (matches.Count != 0) {
-            //    throw new Exception(matches.Count + "unmapped match(es) left");
-            //}
 
             if ((bool)bestMatchRadioButton.IsChecked) {
                 foreach (AudioTrack audioTrack in mapping.Keys) {
@@ -180,18 +173,8 @@ namespace AudioAlign {
                     }
                     IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderByDescending(m => m.Similarity);
                     Match bestMatch = sortedMatches.First();
-                    if (bestMatch.Track1.Offset.Ticks + bestMatch.Track1Time.Ticks < bestMatch.Track2.Offset.Ticks + bestMatch.Track2Time.Ticks) {
-                        // align track 1
-                        bestMatch.Track1.Offset = new TimeSpan(bestMatch.Track2.Offset.Ticks + bestMatch.Track2Time.Ticks - bestMatch.Track1Time.Ticks);
-                    }
-                    else {
-                        // align track 2
-                        bestMatch.Track2.Offset = new TimeSpan(bestMatch.Track1.Offset.Ticks + bestMatch.Track1Time.Ticks - bestMatch.Track2Time.Ticks);
-                    }
                     Debug.WriteLine("best match: " + bestMatch);
-                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
-                        CrossCorrelation.Adjust(bestMatch);
-                    }
+                    selectedMatches.Add(bestMatch);
                 }
             }
             else if ((bool)firstMatchRadioButton.IsChecked) {
@@ -201,18 +184,8 @@ namespace AudioAlign {
                     }
                     IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderBy(m => m.Track1Time);
                     Match firstMatch = sortedMatches.First();
-                    if (firstMatch.Track1.Offset.Ticks + firstMatch.Track1Time.Ticks < firstMatch.Track2.Offset.Ticks + firstMatch.Track2Time.Ticks) {
-                        // align track 1
-                        firstMatch.Track1.Offset = new TimeSpan(firstMatch.Track2.Offset.Ticks + firstMatch.Track2Time.Ticks - firstMatch.Track1Time.Ticks);
-                    }
-                    else {
-                        // align track 2
-                        firstMatch.Track2.Offset = new TimeSpan(firstMatch.Track1.Offset.Ticks + firstMatch.Track1Time.Ticks - firstMatch.Track2Time.Ticks);
-                    }
                     Debug.WriteLine("first match: " + firstMatch);
-                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
-                        CrossCorrelation.Adjust(firstMatch);
-                    }
+                    selectedMatches.Add(firstMatch);
                 }
             }
             else if ((bool)midMatchRadioButton.IsChecked) {
@@ -222,18 +195,8 @@ namespace AudioAlign {
                     }
                     IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderBy(m => m.Track1Time);
                     Match midMatch = sortedMatches.ElementAt(sortedMatches.Count() / 2);
-                    if (midMatch.Track1.Offset.Ticks + midMatch.Track1Time.Ticks < midMatch.Track2.Offset.Ticks + midMatch.Track2Time.Ticks) {
-                        // align track 1
-                        midMatch.Track1.Offset = new TimeSpan(midMatch.Track2.Offset.Ticks + midMatch.Track2Time.Ticks - midMatch.Track1Time.Ticks);
-                    }
-                    else {
-                        // align track 2
-                        midMatch.Track2.Offset = new TimeSpan(midMatch.Track1.Offset.Ticks + midMatch.Track1Time.Ticks - midMatch.Track2Time.Ticks);
-                    }
                     Debug.WriteLine("mid match: " + midMatch);
-                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
-                        CrossCorrelation.Adjust(midMatch);
-                    }
+                    selectedMatches.Add(midMatch);
                 }
             }
             else if ((bool)lastMatchRadioButton.IsChecked) {
@@ -243,18 +206,8 @@ namespace AudioAlign {
                     }
                     IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderBy(m => m.Track1Time);
                     Match lastMatch = sortedMatches.Last();
-                    if (lastMatch.Track1.Offset.Ticks + lastMatch.Track1Time.Ticks < lastMatch.Track2.Offset.Ticks + lastMatch.Track2Time.Ticks) {
-                        // align track 1
-                        lastMatch.Track1.Offset = new TimeSpan(lastMatch.Track2.Offset.Ticks + lastMatch.Track2Time.Ticks - lastMatch.Track1Time.Ticks);
-                    }
-                    else {
-                        // align track 2
-                        lastMatch.Track2.Offset = new TimeSpan(lastMatch.Track1.Offset.Ticks + lastMatch.Track1Time.Ticks - lastMatch.Track2Time.Ticks);
-                    }
                     Debug.WriteLine("last match: " + lastMatch);
-                    if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
-                        CrossCorrelation.Adjust(lastMatch);
-                    }
+                    selectedMatches.Add(lastMatch);
                 }
             }
             else if ((bool)averageMatchRadioButton.IsChecked) {
@@ -262,6 +215,26 @@ namespace AudioAlign {
             }
             else if ((bool)allMatchRadioButton.IsChecked) {
                 //
+            }
+
+            foreach (Match selectedMatch in selectedMatches) {
+                if (selectedMatch.Track1.Offset.Ticks + selectedMatch.Track1Time.Ticks < selectedMatch.Track2.Offset.Ticks + selectedMatch.Track2Time.Ticks) {
+                    // align track 1
+                    selectedMatch.Track1.Offset = new TimeSpan(selectedMatch.Track2.Offset.Ticks + selectedMatch.Track2Time.Ticks - selectedMatch.Track1Time.Ticks);
+                }
+                else {
+                    // align track 2
+                    selectedMatch.Track2.Offset = new TimeSpan(selectedMatch.Track1.Offset.Ticks + selectedMatch.Track1Time.Ticks - selectedMatch.Track2Time.Ticks);
+                }
+                if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                    CrossCorrelation.Adjust(selectedMatch);
+                }
+            }
+            if ((bool)removeUnusedMatchingPointsCheckBox.IsChecked) {
+                multiTrackViewer.Matches.Clear();
+                foreach (Match selectedMatch in selectedMatches) {
+                    multiTrackViewer.Matches.Add(selectedMatch);
+                }
             }
         }
 
