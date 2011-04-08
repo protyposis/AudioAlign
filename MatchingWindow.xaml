@@ -39,9 +39,9 @@
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,3,0,0">
                         <Button Name="clearMatchesButton" Content="Clear Matches" Height="23" Width="85" Margin="0,0,3,0" Click="clearMatchesButton_Click" />
                         <Button Name="clearStoreButton" Content="Clear Store" Height="23" Width="85" Margin="0,0,3,0" Click="clearStoreButton_Click" />
-                        <Button Name="findMatchingMatchesButton" Content="Find All Direct Matches" Height="23" Width="125" Margin="0,0,3,0" Click="findMatchingMatchesButton_Click" />
-                        <Button Name="findSoftMatchesButton" Content="Find All Soft Matches" Height="23" Width="125" Margin="0,0,3,0" Click="findSoftMatchesButton_Click" />
-                        <Button Name="findPossibleMatchesButton" Content="Find Possible Matches" Height="23" Width="125" Margin="0,0,3,0" Click="findPossibleMatchesButton_Click" />
+                        <Button Name="findMatchingMatchesButton" Content="Find Direct Matches" Height="23" Width="110" Margin="0,0,3,0" Click="findMatchingMatchesButton_Click" />
+                        <Button Name="findSoftMatchesButton" Content="Find Soft Matches" Height="23" Width="110" Margin="0,0,3,0" Click="findSoftMatchesButton_Click" />
+                        <Button Name="findPossibleMatchesButton" Content="Analyze" Height="23" Width="65" Margin="0,0,3,0" Click="findPossibleMatchesButton_Click" />
                         <Button Content="Cross-Correlate Matches" Height="23" Margin="0,0,78,0" Name="crossCorrelateButton" Width="135" Click="crossCorrelateButton_Click" />
                     </StackPanel>
                 </Grid>

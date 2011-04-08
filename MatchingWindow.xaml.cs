@@ -272,6 +272,8 @@ namespace AudioAlign {
         private void FindAllDirectMatches() {
             List<Match> matches = fingerprintStore.FindAllMatchingMatches();
             Debug.WriteLine(matches.Count + " matches found");
+            matches = FingerprintStore.FilterDuplicateMatches(matches);
+            Debug.WriteLine(matches.Count + " matches found (filtered)");
             foreach (Match match in matches) {
                 multiTrackViewer.Matches.Add(match);
             }
@@ -280,6 +282,8 @@ namespace AudioAlign {
         private void FindAllSoftMatches() {
             List<Match> matches = fingerprintStore.FindAllMatches();
             Debug.WriteLine(matches.Count + " matches found");
+            matches = FingerprintStore.FilterDuplicateMatches(matches);
+            Debug.WriteLine(matches.Count + " matches found (filtered)");
             foreach (Match match in matches) {
                 multiTrackViewer.Matches.Add(match);
             }
