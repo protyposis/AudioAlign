@@ -27,7 +27,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <DataGrid Name="matchGrid" Margin="0,3,0,0" SelectionUnit="FullRow" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" 
-                          HeadersVisibility="Column" CanUserAddRows="False" SelectionChanged="matchGrid_SelectionChanged">
+                          HeadersVisibility="Column" CanUserAddRows="False" SelectionChanged="matchGrid_SelectionChanged" MouseDoubleClick="matchGrid_MouseDoubleClick">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Track A" Binding="{Binding Track1.Name}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Track B" Binding="{Binding Track2.Name}" IsReadOnly="True"/>

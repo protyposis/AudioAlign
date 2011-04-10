@@ -227,7 +227,22 @@ namespace AudioAlign {
                     selectedMatch.Track2.Offset = new TimeSpan(selectedMatch.Track1.Offset.Ticks + selectedMatch.Track1Time.Ticks - selectedMatch.Track2Time.Ticks);
                 }
                 if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                    bool swap = false;
+                    foreach (AudioTrack audioTrack in trackList) {
+                        if (audioTrack == selectedMatch.Track1) {
+                            break;
+                        } else if(audioTrack == selectedMatch.Track2) {
+                            swap = true;
+                            break;
+                        }
+                    }
+                    if (swap) {
+                        selectedMatch.SwapTracks();
+                    }
                     CrossCorrelation.Adjust(selectedMatch);
+                    if (swap) {
+                        selectedMatch.SwapTracks();
+                    }
                 }
             }
             if ((bool)removeUnusedMatchingPointsCheckBox.IsChecked) {
@@ -299,6 +314,16 @@ namespace AudioAlign {
 
         private void clearStoreButton_Click(object sender, RoutedEventArgs e) {
             fingerprintStore.Clear();
+        }
+
+        private void matchGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            Match match = matchGrid.SelectedItem as Match;
+            if(match != null) {
+                TimeSpan t1 = match.Track1.Offset + match.Track1Time;
+                TimeSpan t2 = match.Track2.Offset + match.Track2Time;
+                TimeSpan diff = t1 - t2;
+                multiTrackViewer.Display(t1 - new TimeSpan(diff.Ticks / 2), true);
+            }
         }
     }
 }
