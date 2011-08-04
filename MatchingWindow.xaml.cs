@@ -309,7 +309,7 @@ namespace AudioAlign {
         }
 
         private void findPossibleMatchesButton_Click(object sender, RoutedEventArgs e) {
-            fingerprintStore.FindAllMatches(3, true);
+            fingerprintStore.FindAllMatches(3, 0.35f);
         }
 
         private void clearStoreButton_Click(object sender, RoutedEventArgs e) {
