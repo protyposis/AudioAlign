@@ -175,13 +175,13 @@ namespace AudioAlign {
             FFTAnalyzer fftAnalyzer = new FFTAnalyzer(1024);
             WindowFunction fftWindow = WindowUtil.GetFunction(WindowType.BlackmanHarris, 1024);
             fftAnalyzer.WindowFunction = fftWindow;
-            fftAnalyzer.WindowAnalyzed +=new EventHandler<ValueEventArgs<float[]>>(delegate(object sender2, ValueEventArgs<float[]> e2) {
+            fftAnalyzer.WindowAnalyzed += new EventHandler<ValueEventArgs<float[]>>(delegate(object sender2, ValueEventArgs<float[]> e2) {
                 spectrumGraph.Dispatcher.BeginInvoke((Action)delegate {
                     spectrumGraph.Values = e2.Value;
                 });
             });
-            player.SamplesMonitored += new EventHandler<ValueEventArgs<float[][]>>(delegate(object sender2, ValueEventArgs<float[][]> e2) {
-                fftAnalyzer.PutSamples(e2.Value[0]);
+            player.SamplesMonitored += new EventHandler<StreamDataMonitorEventArgs>(delegate(object sender2, StreamDataMonitorEventArgs e2) {
+                fftAnalyzer.PutSamples(AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length)[0]);
             });
         }
 
