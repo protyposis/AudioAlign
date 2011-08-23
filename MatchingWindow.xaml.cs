@@ -26,6 +26,7 @@ namespace AudioAlign {
     /// </summary>
     public partial class MatchingWindow : Window {
 
+        private ProgressMonitor progressMonitor;
         private FingerprintStore fingerprintStore;
         private TrackList<AudioTrack> trackList;
         private MultiTrackViewer multiTrackViewer;
@@ -34,6 +35,7 @@ namespace AudioAlign {
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             InitializeComponent();
+            progressMonitor = new ProgressMonitor();
             this.fingerprintStore = new FingerprintStore();
             this.trackList = trackList;
             this.multiTrackViewer = multiTrackViewer;
@@ -69,33 +71,35 @@ namespace AudioAlign {
 
             // INIT PROGRESSBAR
             progressBar.IsEnabled = false;
-            ProgressMonitor.Instance.ProcessingStarted += Instance_ProcessingStarted;
-            //ProgressMonitor.Instance.ProcessingProgressChanged += Instance_ProcessingProgressChanged;
-            ProgressMonitor.Instance.ProcessingFinished += Instance_ProcessingFinished;
+            progressMonitor.ProcessingStarted += Instance_ProcessingStarted;
+            progressMonitor.ProcessingProgressChanged += Instance_ProcessingProgressChanged;
+            progressMonitor.ProcessingFinished += Instance_ProcessingFinished;
+            ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
             bestMatchRadioButton.IsChecked = true;
 
             matchGrid.ItemsSource = multiTrackViewer.Matches;
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e) {
-            ProgressMonitor.Instance.ProcessingStarted -= Instance_ProcessingStarted;
-            ProgressMonitor.Instance.ProcessingProgressChanged -= Instance_ProcessingProgressChanged;
-            ProgressMonitor.Instance.ProcessingFinished -= Instance_ProcessingFinished;
+            ProgressMonitor.GlobalInstance.RemoveChild(progressMonitor);
+            progressMonitor.ProcessingStarted -= Instance_ProcessingStarted;
+            progressMonitor.ProcessingProgressChanged -= Instance_ProcessingProgressChanged;
+            progressMonitor.ProcessingFinished -= Instance_ProcessingFinished;
             multiTrackViewer.SelectedMatch = null;
         }
 
         private void Instance_ProcessingStarted(object sender, EventArgs e) {
             progressBar.Dispatcher.BeginInvoke((Action)delegate {
                 progressBar.IsEnabled = true;
-                progressBar.IsIndeterminate = true;
-                //progressBarLabel.Text = ProgressMonitor.Instance.StatusMessage;
+                //progressBar.IsIndeterminate = true;
+                progressBarLabel.Text = progressMonitor.StatusMessage;
             });
         }
 
         private void Instance_ProcessingProgressChanged(object sender, ValueEventArgs<float> e) {
             progressBar.Dispatcher.BeginInvoke((Action)delegate {
                 progressBar.Value = e.Value;
-                progressBarLabel.Text = ProgressMonitor.Instance.StatusMessage;
+                progressBarLabel.Text = progressMonitor.StatusMessage;
             });
         }
 
@@ -103,7 +107,7 @@ namespace AudioAlign {
             progressBar.Dispatcher.BeginInvoke((Action)delegate {
                 progressBar.Value = 0;
                 progressBar.IsEnabled = false;
-                progressBar.IsIndeterminate = false;
+                //progressBar.IsIndeterminate = false;
                 progressBarLabel.Text = "";
             });
         }
@@ -115,7 +119,7 @@ namespace AudioAlign {
 
             Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, audioTrack => {
                 DateTime startTime = DateTime.Now;
-                ProgressReporter progressReporter = ProgressMonitor.Instance.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
+                ProgressReporter progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
 
                 FingerprintGenerator fpg = new FingerprintGenerator(audioTrack, 3, true);
                 int subFingerprintsCalculated = 0;
@@ -127,7 +131,7 @@ namespace AudioAlign {
                 fpg.Completed += new EventHandler(FingerprintGenerator_Completed);
                 fpg.Generate();
 
-                ProgressMonitor.Instance.EndTask(progressReporter);
+                progressMonitor.EndTask(progressReporter);
                 Debug.WriteLine("subfingerprint generation finished - " + (DateTime.Now - startTime));
             }));
         }

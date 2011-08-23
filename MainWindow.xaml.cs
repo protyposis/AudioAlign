@@ -128,26 +128,26 @@ namespace AudioAlign {
 
             // INIT PROGRESSBAR
             progressBar1.IsEnabled = false;
-            ProgressMonitor.Instance.ProcessingStarted += new EventHandler(
+            ProgressMonitor.GlobalInstance.ProcessingStarted += new EventHandler(
                 delegate(object sender2, EventArgs e2) {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.IsEnabled = true;
-                        progressBar1Label.Text = ProgressMonitor.Instance.StatusMessage;
+                        progressBar1Label.Text = ProgressMonitor.GlobalInstance.StatusMessage;
                         win7TaskBar.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
                         win7TaskBar.ProgressValue = 0;
                     });
                 });
 
-            ProgressMonitor.Instance.ProcessingProgressChanged += new EventHandler<ValueEventArgs<float>>(
+            ProgressMonitor.GlobalInstance.ProcessingProgressChanged += new EventHandler<ValueEventArgs<float>>(
                 delegate(object sender2, ValueEventArgs<float> e2) {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.Value = e2.Value;
                         win7TaskBar.ProgressValue = e2.Value / 100;
-                        progressBar1Label.Text = ProgressMonitor.Instance.StatusMessage;
+                        progressBar1Label.Text = ProgressMonitor.GlobalInstance.StatusMessage;
                     });
                 });
 
-            ProgressMonitor.Instance.ProcessingFinished += new EventHandler(
+            ProgressMonitor.GlobalInstance.ProcessingFinished += new EventHandler(
                 delegate(object sender2, EventArgs e2) {
                     progressBar1.Dispatcher.BeginInvoke((Action)delegate {
                         progressBar1.Value = 0;
