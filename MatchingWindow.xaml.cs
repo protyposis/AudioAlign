@@ -91,7 +91,6 @@ namespace AudioAlign {
         private void Instance_ProcessingStarted(object sender, EventArgs e) {
             progressBar.Dispatcher.BeginInvoke((Action)delegate {
                 progressBar.IsEnabled = true;
-                //progressBar.IsIndeterminate = true;
                 progressBarLabel.Text = progressMonitor.StatusMessage;
             });
         }
@@ -107,7 +106,6 @@ namespace AudioAlign {
             progressBar.Dispatcher.BeginInvoke((Action)delegate {
                 progressBar.Value = 0;
                 progressBar.IsEnabled = false;
-                //progressBar.IsIndeterminate = false;
                 progressBarLabel.Text = "";
             });
         }
@@ -119,7 +117,7 @@ namespace AudioAlign {
 
             Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, audioTrack => {
                 DateTime startTime = DateTime.Now;
-                ProgressReporter progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
+                IProgressReporter progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
 
                 FingerprintGenerator fpg = new FingerprintGenerator(audioTrack, 3, true);
                 int subFingerprintsCalculated = 0;
@@ -131,7 +129,7 @@ namespace AudioAlign {
                 fpg.Completed += new EventHandler(FingerprintGenerator_Completed);
                 fpg.Generate();
 
-                progressMonitor.EndTask(progressReporter);
+                progressReporter.Finish();
                 Debug.WriteLine("subfingerprint generation finished - " + (DateTime.Now - startTime));
             }));
         }
@@ -243,7 +241,7 @@ namespace AudioAlign {
                     if (swap) {
                         selectedMatch.SwapTracks();
                     }
-                    CrossCorrelation.Adjust(selectedMatch);
+                    CrossCorrelation.Adjust(selectedMatch, progressMonitor);
                     if (swap) {
                         selectedMatch.SwapTracks();
                     }
@@ -265,7 +263,7 @@ namespace AudioAlign {
                 Match match = matchFE; // needed as reference for async task
                 Task.Factory.StartNew(() => {
                     TimeSpan offset = CrossCorrelation.Calculate(match.Track1.CreateAudioStream(), new Interval(match.Track1Time.Ticks, match.Track1Time.Ticks + secfactor / 2),
-                        match.Track2.CreateAudioStream(), new Interval(match.Track2Time.Ticks, match.Track2Time.Ticks + secfactor / 2));
+                        match.Track2.CreateAudioStream(), new Interval(match.Track2Time.Ticks, match.Track2Time.Ticks + secfactor / 2), progressMonitor);
 
                     Debug.WriteLine("CC: " + match + ": " + offset);
                 });
