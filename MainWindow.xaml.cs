@@ -236,7 +236,7 @@ namespace AudioAlign {
         }
 
         private void btnAnalyze_Click(object sender, RoutedEventArgs e) {
-            Analysis.AnalyzeAlignmentAsync(trackList, new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 30), ProgressMonitor.GlobalInstance);
+            Analysis.AnalyzeAlignmentAsync(trackList, new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 30), 22050, ProgressMonitor.GlobalInstance);
         }
     }
 }
