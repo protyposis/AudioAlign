@@ -33,6 +33,7 @@ namespace AudioAlign {
         private TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
         private MatchingWindow matchingWindow;
+        private AnalysisWindow analysisWindow;
 
         public MainWindow() {
             InitializeComponent();
@@ -190,6 +191,9 @@ namespace AudioAlign {
             if (matchingWindow != null) {
                 matchingWindow.Close();
             }
+            if (analysisWindow != null) {
+                analysisWindow.Close();
+            }
         }
 
         private void playCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
@@ -236,7 +240,13 @@ namespace AudioAlign {
         }
 
         private void btnAnalyze_Click(object sender, RoutedEventArgs e) {
-            Analysis.AnalyzeAlignmentAsync(trackList, new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 30), 22050, ProgressMonitor.GlobalInstance);
+            if (analysisWindow == null || !analysisWindow.IsLoaded) {
+                analysisWindow = new AnalysisWindow(trackList);
+                analysisWindow.Show();
+            }
+            else {
+                analysisWindow.Activate();
+            }
         }
     }
 }

@@ -33,7 +33,7 @@
                 <Button Content="Pause" Command="MediaCommands.Pause" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Refresh" Name="btnRefresh" Click="btnRefresh_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
                 <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnFindMatches_Click" />
-                <Button Content="Analyze" Name="btnAnalyze" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnAnalyze_Click" />
+                <Button Content="Alignment Analysis" Name="btnAnalyze" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnAnalyze_Click" />
                 <CheckBox Content="Debug" VerticalAlignment="Center" Name="debugMode" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
             </StackPanel>
         </Border>
