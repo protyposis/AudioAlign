@@ -31,6 +31,7 @@ namespace AudioAlign {
         private TrackList<AudioTrack> trackList;
         private DataTable dataTable;
 
+        public AnalysisMode AnalysisMode { get; set; }
         public int AnalysisWindowSize { get; set; }
         public int AnalysisIntervalLength { get; set; }
         public int AnalysisSampleRate { get; set; }
@@ -39,6 +40,7 @@ namespace AudioAlign {
             // init data bound variables (since they're not dependency properties, they will only be read once
             // when the control with the applied binding initializes, so the variabled need to be initialized
             // before InitializeComponent() is called)
+            AnalysisMode = AnalysisMode.Correlation;
             AnalysisWindowSize = 1;
             AnalysisIntervalLength = 30;
             AnalysisSampleRate = 22050;
@@ -60,6 +62,18 @@ namespace AudioAlign {
             dataTable.Columns.Add("|μ|", typeof(double));
             dataTable.Columns.Add("%", typeof(double));
 
+            var graphStyles = new Tuple<Pen, PointMarker>[] {
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.YellowGreen, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.YellowGreen, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new CirclePointMarker()),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.Cyan, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.Cyan, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.Cyan, 1d), new CirclePointMarker()),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.Red, 2d), new CirclePointMarker())
+            };
+
             HorizontalTimeSpanAxis timeSpanAxis = new HorizontalTimeSpanAxis();
             resultPlotter.HorizontalAxis = timeSpanAxis;
             for (int i = 1; i < dataTable.Columns.Count; i++) {
@@ -67,12 +81,10 @@ namespace AudioAlign {
                 TableDataSource dataSource = new TableDataSource(dataTable);
                 dataSource.SetXMapping(row => timeSpanAxis.ConvertToDouble((TimeSpan)row[0]));
                 dataSource.SetYMapping(row => (double)row[column]);
-                if (i == 9) {
-                    resultPlotter.AddLineGraph(dataSource, Colors.Red, 2d, column.ColumnName);
-                }
-                else {
-                    resultPlotter.AddLineGraph(dataSource, column.ColumnName);
-                }
+                resultPlotter.AddLineGraph(dataSource, 
+                    graphStyles[i - 1].Item1,
+                    graphStyles[i - 1].Item2,
+                    new PenDescription(column.ColumnName));
             }
         }
 
@@ -118,7 +130,9 @@ namespace AudioAlign {
         }
 
         private void analyzeButton_Click(object sender, RoutedEventArgs e) {
-            Analysis analysis = new Analysis(trackList, 
+            Analysis analysis = new Analysis(
+                AnalysisMode,
+                trackList, 
                 new TimeSpan(0, 0, AnalysisWindowSize),
                 new TimeSpan(0, 0, AnalysisIntervalLength), 
                 AnalysisSampleRate, 
