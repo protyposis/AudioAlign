@@ -15,6 +15,11 @@ using AudioAlign.Audio.TaskMonitor;
 using AudioAlign.Audio.Matching;
 using AudioAlign.Audio;
 using System.Collections.ObjectModel;
+using System.Data;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay.PointMarkers;
+using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.Charts;
 
 namespace AudioAlign {
     /// <summary>
@@ -23,23 +28,52 @@ namespace AudioAlign {
     public partial class AnalysisWindow : Window {
 
         private ProgressMonitor progressMonitor;
-        //private Analysis analysis;
         private TrackList<AudioTrack> trackList;
+        private DataTable dataTable;
 
         public int AnalysisWindowSize { get; set; }
         public int AnalysisIntervalLength { get; set; }
         public int AnalysisSampleRate { get; set; }
 
         public AnalysisWindow(TrackList<AudioTrack> trackList) {
+            // init data bound variables (since they're not dependency properties, they will only be read once
+            // when the control with the applied binding initializes, so the variabled need to be initialized
+            // before InitializeComponent() is called)
             AnalysisWindowSize = 1;
             AnalysisIntervalLength = 30;
             AnalysisSampleRate = 22050;
 
             InitializeComponent();
+
             progressMonitor = new ProgressMonitor();
             this.trackList = trackList;
 
-            
+            dataTable = new DataTable();
+            dataTable.Columns.Add("Time", typeof(TimeSpan));
+            dataTable.Columns.Add("Min", typeof(double));
+            dataTable.Columns.Add("Max", typeof(double));
+            dataTable.Columns.Add("Σ+", typeof(double));
+            dataTable.Columns.Add("Σ-", typeof(double));
+            dataTable.Columns.Add("|Σ|", typeof(double));
+            dataTable.Columns.Add("μ+", typeof(double));
+            dataTable.Columns.Add("μ-", typeof(double));
+            dataTable.Columns.Add("|μ|", typeof(double));
+            dataTable.Columns.Add("%", typeof(double));
+
+            HorizontalTimeSpanAxis timeSpanAxis = new HorizontalTimeSpanAxis();
+            resultPlotter.HorizontalAxis = timeSpanAxis;
+            for (int i = 1; i < dataTable.Columns.Count; i++) {
+                DataColumn column = dataTable.Columns[i];
+                TableDataSource dataSource = new TableDataSource(dataTable);
+                dataSource.SetXMapping(row => timeSpanAxis.ConvertToDouble((TimeSpan)row[0]));
+                dataSource.SetYMapping(row => (double)row[column]);
+                if (i == 9) {
+                    resultPlotter.AddLineGraph(dataSource, Colors.Red, 2d, column.ColumnName);
+                }
+                else {
+                    resultPlotter.AddLineGraph(dataSource, column.ColumnName);
+                }
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
@@ -89,21 +123,33 @@ namespace AudioAlign {
                 new TimeSpan(0, 0, AnalysisIntervalLength), 
                 AnalysisSampleRate, 
                 progressMonitor);
+            
             ObservableCollection<AnalysisEventArgs> windowResults = new ObservableCollection<AnalysisEventArgs>();
             analysisResultsGrid.ItemsSource = windowResults;
+
+            dataTable.Clear();
+
             //analysis.Started += new EventHandler(delegate(object sender2, EventArgs e2) {
-            //    analysisResultsGrid.Dispatcher.Invoke((Action)delegate {
+            //    resultPlotter.Dispatcher.Invoke((Action)delegate {
             //    });
             //});
             analysis.WindowAnalysed += new EventHandler<AnalysisEventArgs>(delegate(object sender2, AnalysisEventArgs e2) {
                 analysisResultsGrid.Dispatcher.Invoke((Action)delegate {
                     windowResults.Add(e2);
+                    dataTable.Rows.Add(e2.Time, 
+                        e2.Min, e2.Max, 
+                        e2.SumPositive, e2.SumNegative, e2.SumAbsolute, 
+                        e2.AveragePositive, e2.AverageNegative, e2.AverageAbsolute,
+                        e2.Score);
                 });
             });
             analysis.Finished += new EventHandler<AnalysisEventArgs>(delegate(object sender2, AnalysisEventArgs e2) {
                 analysisResultsGrid.Dispatcher.Invoke((Action)delegate {
                     windowResults.Add(e2);
                 });
+                //resultPlotter.Dispatcher.Invoke((Action)delegate {
+                //    resultPlotter.Viewport.FitToView();
+                //});
             });
             analysis.ExecuteAsync();
         }
