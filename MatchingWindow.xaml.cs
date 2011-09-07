@@ -121,113 +121,90 @@ namespace AudioAlign {
         }
 
         private void alignTracksButton_Click(object sender, RoutedEventArgs e) {
-            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
-            List<Match> selectedMatches = new List<Match>();
-
-            if (matches.Count == 0) {
-                Debug.WriteLine("no matches available");
-                return;
-            }
-
-            Dictionary<AudioTrack, List<Match>> mapping = new Dictionary<AudioTrack, List<Match>>();
-
-            foreach (AudioTrack audioTrack in trackList) {
-                if (!mapping.ContainsKey(audioTrack)) {
-                    mapping.Add(audioTrack, new List<Match>());
-                }
-                List<Match> audioTrackMatches = mapping[audioTrack];
-                foreach (Match match in matches) {
-                    if (match.Track1 == audioTrack || match.Track2 == audioTrack) {
-                        audioTrackMatches.Add(match);
-                    }
-                }
-            }
-
+            MatchFilterMode matchFilterMode = MatchFilterMode.None;
             if ((bool)bestMatchRadioButton.IsChecked) {
-                foreach (AudioTrack audioTrack in mapping.Keys) {
-                    if (audioTrack == trackList[0] || mapping[audioTrack].Count == 0) {
-                        continue;
-                    }
-                    IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderByDescending(m => m.Similarity);
-                    Match bestMatch = sortedMatches.First();
-                    Debug.WriteLine("best match: " + bestMatch);
-                    selectedMatches.Add(bestMatch);
-                }
+                 matchFilterMode = MatchFilterMode.Best;
             }
             else if ((bool)firstMatchRadioButton.IsChecked) {
-                foreach (AudioTrack audioTrack in mapping.Keys) {
-                    if (audioTrack == trackList[0]) {
-                        continue;
-                    }
-                    IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderBy(m => m.Track1Time);
-                    Match firstMatch = sortedMatches.First();
-                    Debug.WriteLine("first match: " + firstMatch);
-                    selectedMatches.Add(firstMatch);
-                }
+                matchFilterMode = MatchFilterMode.First;
             }
             else if ((bool)midMatchRadioButton.IsChecked) {
-                foreach (AudioTrack audioTrack in mapping.Keys) {
-                    if (audioTrack == trackList[0]) {
-                        continue;
-                    }
-                    IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderBy(m => m.Track1Time);
-                    Match midMatch = sortedMatches.ElementAt(sortedMatches.Count() / 2);
-                    Debug.WriteLine("mid match: " + midMatch);
-                    selectedMatches.Add(midMatch);
-                }
+                matchFilterMode = MatchFilterMode.Mid;
             }
             else if ((bool)lastMatchRadioButton.IsChecked) {
-                foreach (AudioTrack audioTrack in mapping.Keys) {
-                    if (audioTrack == trackList[0]) {
-                        continue;
-                    }
-                    IEnumerable<Match> sortedMatches = mapping[audioTrack].OrderBy(m => m.Track1Time);
-                    Match lastMatch = sortedMatches.Last();
-                    Debug.WriteLine("last match: " + lastMatch);
-                    selectedMatches.Add(lastMatch);
-                }
-            }
-            else if ((bool)averageMatchRadioButton.IsChecked) {
-                //
-            }
-            else if ((bool)allMatchRadioButton.IsChecked) {
-                //
+                matchFilterMode = MatchFilterMode.Last;
             }
 
-            foreach (Match selectedMatch in selectedMatches) {
-                if (selectedMatch.Track1.Offset.Ticks + selectedMatch.Track1Time.Ticks < selectedMatch.Track2.Offset.Ticks + selectedMatch.Track2Time.Ticks) {
-                    // align track 1
-                    selectedMatch.Track1.Offset = new TimeSpan(selectedMatch.Track2.Offset.Ticks + selectedMatch.Track2Time.Ticks - selectedMatch.Track1Time.Ticks);
-                }
-                else {
-                    // align track 2
-                    selectedMatch.Track2.Offset = new TimeSpan(selectedMatch.Track1.Offset.Ticks + selectedMatch.Track1Time.Ticks - selectedMatch.Track2Time.Ticks);
-                }
-                if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
-                    bool swap = false;
-                    foreach (AudioTrack audioTrack in trackList) {
-                        if (audioTrack == selectedMatch.Track1) {
-                            break;
-                        } else if(audioTrack == selectedMatch.Track2) {
-                            swap = true;
-                            break;
+            List<Tuple<AudioTrack, AudioTrack>> trackPairs = 
+                MatchProcessor.GetTrackPairs(trackList);
+            List<Tuple<AudioTrack, AudioTrack, List<Match>>> trackPairsMatches = 
+                MatchProcessor.GetTrackPairsMatches(trackPairs, multiTrackViewer.Matches);
+            List<Tuple<AudioTrack, AudioTrack, List<Match>, double>> filteredTrackPairsMatches = 
+                new List<Tuple<AudioTrack,AudioTrack,List<Match>, double>>();
+
+            foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in trackPairsMatches) {
+                List<Match> filteredMatches;
+
+                if (trackPairMatches.Item3.Count > 0) {
+                    if (matchFilterMode == MatchFilterMode.None) {
+                        filteredMatches = trackPairMatches.Item3;
+                    }
+                    else {
+                        if ((bool)windowedModeCheckBox.IsChecked) {
+                            filteredMatches = MatchProcessor.WindowFilter(trackPairMatches.Item3, matchFilterMode, new TimeSpan(0, 0, int.Parse(windowSize.Text)));
+                        }
+                        else {
+                            filteredMatches = new List<Match>();
+                            filteredMatches.Add(MatchProcessor.Filter(trackPairMatches.Item3, matchFilterMode));
                         }
                     }
-                    if (swap) {
-                        selectedMatch.SwapTracks();
+
+                    double similarity = 0;
+                    foreach (Match match in filteredMatches) {
+                        similarity += match.Similarity;
                     }
-                    CrossCorrelation.Adjust(selectedMatch, progressMonitor);
-                    if (swap) {
-                        selectedMatch.SwapTracks();
+                    similarity /= filteredMatches.Count;
+
+                    filteredTrackPairsMatches.Add(new Tuple<AudioTrack, AudioTrack, List<Match>, double>(
+                        trackPairMatches.Item1, trackPairMatches.Item2, filteredMatches, similarity));
+                }
+            }
+
+            filteredTrackPairsMatches = new List<Tuple<AudioTrack, AudioTrack, List<Match>, double>>(
+                filteredTrackPairsMatches.OrderByDescending(tuple => tuple.Item4));
+
+            List<Tuple<AudioTrack, AudioTrack, List<Match>>> filteredTrackPairs =
+                new List<Tuple<AudioTrack, AudioTrack, List<Match>>>();
+            foreach (Tuple<AudioTrack, AudioTrack, List<Match>, double> filteredTrackPairMatches
+                in filteredTrackPairsMatches.OrderByDescending(tuple => tuple.Item4)) {
+                if (filteredTrackPairs.Count < trackList.Count - 1) {
+                    filteredTrackPairs.Add(new Tuple<AudioTrack, AudioTrack, List<Match>>(
+                        filteredTrackPairMatches.Item1, filteredTrackPairMatches.Item2, filteredTrackPairMatches.Item3));
+                    Debug.WriteLine("TrackPair {0} <-> {1}: {2} matches, similarity = {3}",
+                        filteredTrackPairMatches.Item1, filteredTrackPairMatches.Item2,
+                        filteredTrackPairMatches.Item3.Count, filteredTrackPairMatches.Item4);
+                }
+            }
+
+            if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
+                    MatchProcessor.ValidatePairOrder(trackPairMatches.Item3);
+                    foreach (Match match in trackPairMatches.Item3) {
+                        CrossCorrelation.Adjust(match, ProgressMonitor.GlobalInstance);
                     }
                 }
             }
+
             if ((bool)removeUnusedMatchingPointsCheckBox.IsChecked) {
                 multiTrackViewer.Matches.Clear();
-                foreach (Match selectedMatch in selectedMatches) {
-                    multiTrackViewer.Matches.Add(selectedMatch);
+                foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
+                    foreach (Match match in trackPairMatches.Item3) {
+                        multiTrackViewer.Matches.Add(match);
+                    }
                 }
             }
+
+            MatchProcessor.AlignTracks(filteredTrackPairs);
         }
 
         private void crossCorrelateButton_Click(object sender, RoutedEventArgs e) {

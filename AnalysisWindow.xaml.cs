@@ -63,8 +63,8 @@ namespace AudioAlign {
             dataTable.Columns.Add("%", typeof(double));
 
             var graphStyles = new Tuple<Pen, PointMarker>[] {
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.YellowGreen, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
                 new Tuple<Pen, PointMarker>(new Pen(Brushes.YellowGreen, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
+                new Tuple<Pen, PointMarker>(new Pen(Brushes.YellowGreen, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
                 new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
                 new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
                 new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new CirclePointMarker()),
@@ -74,8 +74,14 @@ namespace AudioAlign {
                 new Tuple<Pen, PointMarker>(new Pen(Brushes.Red, 2d), new CirclePointMarker())
             };
 
+            // setup plotter axes
             HorizontalTimeSpanAxis timeSpanAxis = new HorizontalTimeSpanAxis();
             resultPlotter.HorizontalAxis = timeSpanAxis;
+            
+            // setup plotter viewport
+            resultPlotter.Viewport.Visible = new Rect(0, -1.1, timeSpanAxis.ConvertToDouble(trackList.End - trackList.Start), 2.2);
+
+            // setup plotter graph lines
             for (int i = 1; i < dataTable.Columns.Count; i++) {
                 DataColumn column = dataTable.Columns[i];
                 TableDataSource dataSource = new TableDataSource(dataTable);
