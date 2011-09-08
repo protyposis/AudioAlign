@@ -204,7 +204,14 @@ namespace AudioAlign {
                 }
             }
 
-            MatchProcessor.AlignTracks(filteredTrackPairs);
+            List<Match> allFilteredMatches = new List<Match>();
+            foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
+                allFilteredMatches.AddRange(trackPairMatches.Item3);
+            }
+
+            MatchProcessor.AlignTracks(filteredTrackPairs, allFilteredMatches);
+
+            MatchProcessor.MoveToStartTime(trackList, TimeSpan.Zero);
         }
 
         private void crossCorrelateButton_Click(object sender, RoutedEventArgs e) {
