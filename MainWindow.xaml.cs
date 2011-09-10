@@ -173,17 +173,20 @@ namespace AudioAlign {
 
 
             // INIT FFT
-            FFTAnalyzer fftAnalyzer = new FFTAnalyzer(1024);
-            WindowFunction fftWindow = WindowUtil.GetFunction(WindowType.BlackmanHarris, 1024);
+            int fftSize = 1024;
+            FFTAnalyzer fftAnalyzer = new FFTAnalyzer(fftSize);
+            WindowFunction fftWindow = WindowUtil.GetFunction(WindowType.BlackmanHarris, fftSize);
             fftAnalyzer.WindowFunction = fftWindow;
             fftAnalyzer.WindowAnalyzed += new EventHandler<ValueEventArgs<float[]>>(delegate(object sender2, ValueEventArgs<float[]> e2) {
                 spectrumGraph.Dispatcher.BeginInvoke((Action)delegate {
                     spectrumGraph.Values = e2.Value;
+                    spectrogram.AddSpectrogramColumn(e2.Value);
                 });
             });
             player.SamplesMonitored += new EventHandler<StreamDataMonitorEventArgs>(delegate(object sender2, StreamDataMonitorEventArgs e2) {
                 fftAnalyzer.PutSamples(AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length)[0]);
             });
+            spectrogram.SpectrogramSize = fftSize / 2;
         }
 
         private void Window_Closed(object sender, EventArgs e) {
