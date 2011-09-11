@@ -65,10 +65,10 @@
             </GroupBox>
             <GridSplitter Height="1" Background="Transparent" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
             <GroupBox Grid.Row="1" Header="Spectrum" Margin="3,3,6,6">
-                <my:Graph Name="spectrumGraph" Background="Black" Mode="Decibel" Minimum="-150" Margin="0,3,0,0" />
+                <my:Graph Name="spectrumGraph" Background="Black" Mode="Decibel" Minimum="-150" Margin="-3,0,-3,-3" />
             </GroupBox>
             <GroupBox Grid.Row="2" Header="Spectrogram" Margin="3,3,6,6">
-                <my:Spectrogram Name="spectrogram" Background="Black" Minimum="-90" Margin="0,3,0,0" />
+                <my:Spectrogram Name="spectrogram" Background="Black" Minimum="-90" Margin="-3,0,-3,-3" />
             </GroupBox>
         </Grid>
         <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Height="24" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
