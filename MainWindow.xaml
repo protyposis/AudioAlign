@@ -38,10 +38,7 @@
             </StackPanel>
         </Border>
         <Grid Grid.Row="1">
-            <my:MultiTrackViewer Margin="6,6,3,23" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="20" Margin="16,0,0,3" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="146" ToolTip="Offset" FontFamily="Segoe UI" />
-            <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="20" Margin="361,0,363,3" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" ToolTip="Width" FontFamily="Segoe UI" />
-            <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Height="23" HorizontalAlignment="Right" Margin="0,0,6,3" Name="textBox1" VerticalAlignment="Bottom" Width="127" FontSize="14" Background="{x:Null}" BorderBrush="{x:Null}" />
+            <my:MultiTrackViewer Margin="6,6,3,6" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
         </Grid>
         <GridSplitter Width="1" Grid.Column="0" Grid.Row="1" Background="Transparent" />
         <Grid Grid.Row="1" Grid.Column="1">
@@ -85,6 +82,9 @@
             </StatusBarItem>
             <StatusBarItem>
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset}" ContentStringFormat="VVO: {0}" Width="130" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Width="127" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" Padding="0" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

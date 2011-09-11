@@ -6,7 +6,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ExpressionDark.xaml"/>
-                <ResourceDictionary Source="/AudioAlign.WaveControls;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="/AudioAlign.WaveControls;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="ThemeCustomizations.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
