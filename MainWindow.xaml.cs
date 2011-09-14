@@ -251,5 +251,52 @@ namespace AudioAlign {
                 analysisWindow.Activate();
             }
         }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".aap";
+            dlg.Filter = "AudioAlign Projects|*.aap";
+
+            if (dlg.ShowDialog() == true) {
+                Project p = new Project();
+                foreach (AudioTrack track in trackList) {
+                    p.AudioTracks.Add(track);
+                }
+                p.Matches.AddRange(multiTrackViewer1.Matches);
+                p.MasterVolume = (float)volumeSlider.Value;
+                Project.Save(p, new FileInfo(dlg.FileName));
+            }
+        }
+
+        private void btnOpen_Click(object sender, RoutedEventArgs e) {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.DefaultExt = ".aap";
+            dlg.Filter = "AudioAlign Projects|*.aap";
+            dlg.Multiselect = false;
+
+            if (dlg.ShowDialog() == true) {
+                Project project = Project.Load(new FileInfo(dlg.FileName));
+                
+                // clear current data
+                multiTrackViewer1.Matches.Clear();
+                multiTrackViewer1.Items.Clear();
+                trackList.Clear();
+
+                // load new data
+                foreach (AudioTrack track in project.AudioTracks) {
+                    trackList.Add(track);
+                    multiTrackViewer1.Items.Add(track);
+                }
+                foreach(Match match in project.Matches) {
+                    multiTrackViewer1.Matches.Add(match);
+                }
+                volumeSlider.Value = project.MasterVolume;
+
+                // update gui
+                spectrumGraph.Clear();
+                spectrogram.Clear();
+                multiTrackViewer1.RefreshAdornerLayer(); // TODO find out why this doesn't work
+            }
+        }
     }
 }

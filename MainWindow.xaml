@@ -35,6 +35,8 @@
                 <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnFindMatches_Click" />
                 <Button Content="Alignment Analysis" Name="btnAnalyze" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnAnalyze_Click" />
                 <CheckBox Content="Debug" VerticalAlignment="Center" Name="debugMode" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
+                <Button Content="Save Project" Height="23" Name="btnSave" Width="75" Click="btnSave_Click" />
+                <Button Content="Open Project" Height="23" Name="btnOpen" Width="75" Click="btnOpen_Click" />
             </StackPanel>
         </Border>
         <Grid Grid.Row="1">
