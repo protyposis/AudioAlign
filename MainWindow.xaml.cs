@@ -30,6 +30,7 @@ namespace AudioAlign {
     /// </summary>
     public partial class MainWindow : Window {
 
+        private Project project;
         private TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
         private MatchingWindow matchingWindow;
@@ -38,29 +39,8 @@ namespace AudioAlign {
         public MainWindow() {
             InitializeComponent();
 
+            project = new Project();
             trackList = new TrackList<AudioTrack>();
-            Button test = btnAddWaveform;
-        }
-
-        private void btnAddWaveform_Click(object sender, RoutedEventArgs e) {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".wav";
-            dlg.Filter = "Wave files|*.wav";
-            dlg.Multiselect = true;
-
-            if (dlg.ShowDialog() == true) {
-                foreach (string fileName in dlg.FileNames) {
-                    AddFile(fileName);
-                }
-            }
-        }
-
-        private void AddFile(string fileName) {
-            if (AudioStreamFactory.IsSupportedFile(fileName)) {
-                AudioTrack audioTrack = new AudioTrack(new FileInfo(fileName));
-                multiTrackViewer1.Items.Add(audioTrack);
-                trackList.Add(audioTrack);
-            }
         }
 
         private void multiTrackViewer1_Drop(object sender, DragEventArgs e) {
@@ -227,10 +207,6 @@ namespace AudioAlign {
             }
         }
 
-        private void btnRefresh_Click(object sender, RoutedEventArgs e) {
-            multiTrackViewer1.RefreshAdornerLayer();
-        }
-
         private void btnFindMatches_Click(object sender, RoutedEventArgs e) {
             if (matchingWindow == null || !matchingWindow.IsLoaded) {
                 matchingWindow = new MatchingWindow(trackList, multiTrackViewer1);
@@ -252,51 +228,103 @@ namespace AudioAlign {
             }
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e) {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".aap";
-            dlg.Filter = "AudioAlign Projects|*.aap";
+        private void SaveProject(FileInfo targetFile) {
+            Project p = new Project();
+            foreach (AudioTrack track in trackList) {
+                p.AudioTracks.Add(track);
+            }
+            p.Matches.AddRange(multiTrackViewer1.Matches);
+            p.MasterVolume = (float)volumeSlider.Value;
+            Project.Save(p, targetFile);
+            this.project = p;
+        }
 
-            if (dlg.ShowDialog() == true) {
-                Project p = new Project();
-                foreach (AudioTrack track in trackList) {
-                    p.AudioTracks.Add(track);
-                }
-                p.Matches.AddRange(multiTrackViewer1.Matches);
-                p.MasterVolume = (float)volumeSlider.Value;
-                Project.Save(p, new FileInfo(dlg.FileName));
+        private void OpenProject(Project project) {
+            this.project = project;
+
+            // clear current data
+            multiTrackViewer1.Matches.Clear();
+            multiTrackViewer1.Items.Clear();
+            trackList.Clear();
+
+            // load new data
+            foreach (AudioTrack track in project.AudioTracks) {
+                trackList.Add(track);
+                multiTrackViewer1.Items.Add(track);
+            }
+            foreach (Match match in project.Matches) {
+                multiTrackViewer1.Matches.Add(match);
+            }
+            volumeSlider.Value = project.MasterVolume;
+
+            // update gui
+            spectrumGraph.Clear();
+            spectrogram.Clear();
+            multiTrackViewer1.RefreshAdornerLayer(); // TODO find out why this doesn't work
+        }
+
+        private void AddFile(string fileName) {
+            if (AudioStreamFactory.IsSupportedFile(fileName)) {
+                AudioTrack audioTrack = new AudioTrack(new FileInfo(fileName));
+                multiTrackViewer1.Items.Add(audioTrack);
+                trackList.Add(audioTrack);
             }
         }
 
-        private void btnOpen_Click(object sender, RoutedEventArgs e) {
+        private void CommandBinding_New(object sender, ExecutedRoutedEventArgs e) {
+            OpenProject(new Project());
+        }
+
+        private void CommandBinding_Open(object sender, ExecutedRoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.DefaultExt = ".aap";
             dlg.Filter = "AudioAlign Projects|*.aap";
             dlg.Multiselect = false;
 
             if (dlg.ShowDialog() == true) {
-                Project project = Project.Load(new FileInfo(dlg.FileName));
-                
-                // clear current data
-                multiTrackViewer1.Matches.Clear();
-                multiTrackViewer1.Items.Clear();
-                trackList.Clear();
-
-                // load new data
-                foreach (AudioTrack track in project.AudioTracks) {
-                    trackList.Add(track);
-                    multiTrackViewer1.Items.Add(track);
-                }
-                foreach(Match match in project.Matches) {
-                    multiTrackViewer1.Matches.Add(match);
-                }
-                volumeSlider.Value = project.MasterVolume;
-
-                // update gui
-                spectrumGraph.Clear();
-                spectrogram.Clear();
-                multiTrackViewer1.RefreshAdornerLayer(); // TODO find out why this doesn't work
+                OpenProject(Project.Load(new FileInfo(dlg.FileName)));
             }
+        }
+
+        private void CommandBinding_CanSave(object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = project.File != null;
+        }
+
+        private void CommandBinding_Save(object sender, ExecutedRoutedEventArgs e) {
+            if (project.File != null) {
+                SaveProject(project.File);
+            }
+        }
+
+        private void CommandBinding_SaveAs(object sender, ExecutedRoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".aap";
+            dlg.Filter = "AudioAlign Projects|*.aap";
+
+            if (dlg.ShowDialog() == true) {
+                SaveProject(new FileInfo(dlg.FileName));
+            }
+        }
+
+        private void CommandBinding_AddAudioFile(object sender, ExecutedRoutedEventArgs e) {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.DefaultExt = ".wav";
+            dlg.Filter = "Wave files|*.wav";
+            dlg.Multiselect = true;
+
+            if (dlg.ShowDialog() == true) {
+                foreach (string fileName in dlg.FileNames) {
+                    AddFile(fileName);
+                }
+            }
+        }
+
+        private void CommandBinding_Close(object sender, ExecutedRoutedEventArgs e) {
+            Close();
+        }
+
+        private void CommandBinding_DebugRefreshMultiTrackViewer(object sender, ExecutedRoutedEventArgs e) {
+            multiTrackViewer1.RefreshAdornerLayer();
         }
     }
 }

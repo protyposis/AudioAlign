@@ -10,6 +10,15 @@
     <Window.Resources>
         <my:TimeSpanConverter x:Key="TimeSpanConverter"/>
     </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="CommandBinding_New"/>
+        <CommandBinding Command="Open" Executed="CommandBinding_Open"/>
+        <CommandBinding Command="Save" Executed="CommandBinding_Save" CanExecute="CommandBinding_CanSave"/>
+        <CommandBinding Command="SaveAs" Executed="CommandBinding_SaveAs"/>
+        <CommandBinding Command="local:Commands.AddAudioFile" Executed="CommandBinding_AddAudioFile"/>
+        <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
+        <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
+    </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
     </Window.InputBindings>
@@ -19,6 +28,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -26,24 +36,48 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="120" MinWidth="120"/>
         </Grid.ColumnDefinitions>
-        <Border Padding="6 6 6 0" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Add Waveform" Name="btnAddWaveform" Click="btnAddWaveform_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
-                <Button Content="Play" Command="MediaCommands.Play" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
-                <Button Content="Pause" Command="MediaCommands.Pause" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
-                <Button Content="Refresh" Name="btnRefresh" Click="btnRefresh_Click" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
-                <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnFindMatches_Click" />
-                <Button Content="Alignment Analysis" Name="btnAnalyze" Padding="8,4" MinWidth="75" Margin="0,0,5,0" Click="btnAnalyze_Click" />
-                <CheckBox Content="Debug" VerticalAlignment="Center" Name="debugMode" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}" Padding="8,4" MinWidth="75" Margin="0,0,5,0" />
-                <Button Content="Save Project" Height="23" Name="btnSave" Width="75" Click="btnSave_Click" />
-                <Button Content="Open Project" Height="23" Name="btnOpen" Width="75" Click="btnOpen_Click" />
-            </StackPanel>
+        <Menu Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <Menu.Resources>
+                <ResourceDictionary Source="/presentationframework.aero;component/themes/aero.normalcolor.xaml"/>
+            </Menu.Resources>
+            <MenuItem Header="File">
+                <MenuItem Command="New"/>
+                <MenuItem Command="Open"/>
+                <MenuItem Command="Save"/>
+                <MenuItem Command="SaveAs"/>
+                <Separator/>
+                <MenuItem Command="local:Commands.AddAudioFile"/>
+                <Separator/>
+                <MenuItem Command="Close"/>
+            </MenuItem>
+            <MenuItem Header="Debug">
+                <MenuItem Header="WaveView debug" IsCheckable="True" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}"/>
+                <MenuItem Command="local:Commands.DebugRefreshMultiTrackViewer"/>
+            </MenuItem>
+        </Menu>
+        <Border Grid.Row="1" Grid.ColumnSpan="2">
         </Border>
-        <Grid Grid.Row="1">
-            <my:MultiTrackViewer Margin="6,6,3,6" Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
+        <Grid Grid.Row="2">
+            <Grid Margin="6,6,3,6">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <my:MultiTrackViewer Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Style="{DynamicResource ToolBarStackPanel}" Margin="0,-1,0,0">
+                    <Button Command="MediaCommands.Play" Width="20" Margin="2,2,0,2">
+                        <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-start}"/>
+                    </Button>
+                    <Button Command="MediaCommands.Pause" Width="20" Margin="2,2,0,2">
+                        <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-pause}"/>
+                    </Button>
+                    <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnFindMatches_Click" />
+                    <Button Content="Alignment Analysis" Name="btnAnalyze" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnAnalyze_Click" />
+                </StackPanel>
+            </Grid>
         </Grid>
-        <GridSplitter Width="1" Grid.Column="0" Grid.Row="1" Background="Transparent" />
-        <Grid Grid.Row="1" Grid.Column="1">
+        <GridSplitter Width="1" Grid.Column="0" Grid.Row="2" Background="Transparent" />
+        <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height=".5*"/>
@@ -70,7 +104,7 @@
                 <my:Spectrogram Name="spectrogram" Background="Black" Minimum="-90" Margin="-3,0,-3,-3" />
             </GroupBox>
         </Grid>
-        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Height="24" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
+        <StatusBar Grid.Row="3" Grid.ColumnSpan="2" Height="24" HorizontalAlignment="Stretch"  Name="statusBar1" VerticalAlignment="Top" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,1,0,0" Background="{StaticResource WindowBackgroundBrush}">
             <StatusBarItem>
                 <Grid Height="16" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300">
                     <ProgressBar Name="progressBar1" />

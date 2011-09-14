@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="media-playback-pause.xaml"/>
+        <ResourceDictionary Source="media-playback-start.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="media-playback-pause.xaml"/>
+        <ResourceDictionary Source="media-playback-start.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

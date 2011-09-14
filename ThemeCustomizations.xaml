@@ -14,5 +14,9 @@
     <Style TargetType="{x:Type wc:WaveView}">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
     </Style>
+    
+    <Style TargetType="{x:Type StackPanel}" x:Key="ToolBarStackPanel">
+        <Setter Property="Background" Value="{DynamicResource NormalBorderBrush}"/>
+    </Style>
 
 </ResourceDictionary>
