@@ -19,6 +19,7 @@ using AudioAlign.Audio.Matching;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Interop;
+using AudioAlign.Audio.Matching.Graph;
 
 namespace AudioAlign {
     /// <summary>
@@ -170,48 +171,69 @@ namespace AudioAlign {
                 }
             }
 
-            filteredTrackPairsMatches = new List<Tuple<AudioTrack, AudioTrack, List<Match>, double>>(
-                filteredTrackPairsMatches.OrderByDescending(tuple => tuple.Item4));
 
-            List<Tuple<AudioTrack, AudioTrack, List<Match>>> filteredTrackPairs =
-                new List<Tuple<AudioTrack, AudioTrack, List<Match>>>();
-            foreach (Tuple<AudioTrack, AudioTrack, List<Match>, double> filteredTrackPairMatches
-                in filteredTrackPairsMatches.OrderByDescending(tuple => tuple.Item4)) {
-                if (filteredTrackPairs.Count < trackList.Count - 1) {
+            // determine connected tracks
+            UndirectedGraph<AudioTrack, double> trackGraph = new UndirectedGraph<AudioTrack, double>();
+            foreach (Tuple<AudioTrack, AudioTrack, List<Match>, double> trackPair in filteredTrackPairsMatches) {
+                trackGraph.Add(new Edge<AudioTrack, double>(trackPair.Item1, trackPair.Item2, 1d - trackPair.Item4) { 
+                    Tag = trackPair 
+                });
+            }
+            List<UndirectedGraph<AudioTrack, double>> trackGraphComponents = trackGraph.GetConnectedComponents();
+            Debug.WriteLine("{0} disconnected components", trackGraphComponents.Count);
+
+            if ((bool)removeUnusedMatchingPointsCheckBox.IsChecked) {
+                multiTrackViewer.Matches.Clear();
+            }
+
+            TimeSpan componentStartTime = TimeSpan.Zero;
+            foreach (UndirectedGraph<AudioTrack, double> component in trackGraphComponents) {
+                List<Tuple<AudioTrack, AudioTrack, List<Match>, double>> connectedTrackPairsMatches = 
+                    new List<Tuple<AudioTrack, AudioTrack, List<Match>, double>>();
+
+                foreach (Edge<AudioTrack, double> edge in component.GetMinimalSpanningTree().Edges) {
+                    connectedTrackPairsMatches.Add((Tuple<AudioTrack, AudioTrack, List<Match>, double>)edge.Tag);
+                }
+
+                List<Tuple<AudioTrack, AudioTrack, List<Match>>> filteredTrackPairs =
+                    new List<Tuple<AudioTrack, AudioTrack, List<Match>>>();
+                foreach (Tuple<AudioTrack, AudioTrack, List<Match>, double> filteredTrackPairMatches
+                    in connectedTrackPairsMatches.OrderByDescending(tuple => tuple.Item4)) {
                     filteredTrackPairs.Add(new Tuple<AudioTrack, AudioTrack, List<Match>>(
                         filteredTrackPairMatches.Item1, filteredTrackPairMatches.Item2, filteredTrackPairMatches.Item3));
                     Debug.WriteLine("TrackPair {0} <-> {1}: {2} matches, similarity = {3}",
                         filteredTrackPairMatches.Item1, filteredTrackPairMatches.Item2,
                         filteredTrackPairMatches.Item3.Count, filteredTrackPairMatches.Item4);
                 }
-            }
 
-            if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
-                foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
-                    MatchProcessor.ValidatePairOrder(trackPairMatches.Item3);
-                    foreach (Match match in trackPairMatches.Item3) {
-                        CrossCorrelation.Adjust(match, ProgressMonitor.GlobalInstance);
+                if ((bool)postProcessMatchingPointsCheckBox.IsChecked) {
+                    foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
+                        MatchProcessor.ValidatePairOrder(trackPairMatches.Item3);
+                        foreach (Match match in trackPairMatches.Item3) {
+                            CrossCorrelation.Adjust(match, ProgressMonitor.GlobalInstance);
+                        }
                     }
                 }
-            }
 
-            if ((bool)removeUnusedMatchingPointsCheckBox.IsChecked) {
-                multiTrackViewer.Matches.Clear();
-                foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
-                    foreach (Match match in trackPairMatches.Item3) {
-                        multiTrackViewer.Matches.Add(match);
+                if ((bool)removeUnusedMatchingPointsCheckBox.IsChecked) {
+                    foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
+                        foreach (Match match in trackPairMatches.Item3) {
+                            multiTrackViewer.Matches.Add(match);
+                        }
                     }
                 }
+
+                List<Match> allFilteredMatches = new List<Match>();
+                foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
+                    allFilteredMatches.AddRange(trackPairMatches.Item3);
+                }
+
+                MatchProcessor.AlignTracks(filteredTrackPairs, allFilteredMatches);
+
+                TrackList<AudioTrack> componentTrackList = new TrackList<AudioTrack>(component.Vertices);
+                MatchProcessor.MoveToStartTime(componentTrackList, componentStartTime);
+                componentStartTime = componentTrackList.End;
             }
-
-            List<Match> allFilteredMatches = new List<Match>();
-            foreach (Tuple<AudioTrack, AudioTrack, List<Match>> trackPairMatches in filteredTrackPairs) {
-                allFilteredMatches.AddRange(trackPairMatches.Item3);
-            }
-
-            MatchProcessor.AlignTracks(filteredTrackPairs, allFilteredMatches);
-
-            MatchProcessor.MoveToStartTime(trackList, TimeSpan.Zero);
         }
 
         private void crossCorrelateButton_Click(object sender, RoutedEventArgs e) {
