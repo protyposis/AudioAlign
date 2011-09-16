@@ -198,7 +198,7 @@ namespace AudioAlign {
                 List<Tuple<AudioTrack, AudioTrack, List<Match>>> filteredTrackPairs =
                     new List<Tuple<AudioTrack, AudioTrack, List<Match>>>();
                 foreach (Tuple<AudioTrack, AudioTrack, List<Match>, double> filteredTrackPairMatches
-                    in connectedTrackPairsMatches.OrderByDescending(tuple => tuple.Item4)) {
+                    in connectedTrackPairsMatches) {
                     filteredTrackPairs.Add(new Tuple<AudioTrack, AudioTrack, List<Match>>(
                         filteredTrackPairMatches.Item1, filteredTrackPairMatches.Item2, filteredTrackPairMatches.Item3));
                     Debug.WriteLine("TrackPair {0} <-> {1}: {2} matches, similarity = {3}",
