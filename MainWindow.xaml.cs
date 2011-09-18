@@ -164,7 +164,7 @@ namespace AudioAlign {
                 });
             });
             player.SamplesMonitored += new EventHandler<StreamDataMonitorEventArgs>(delegate(object sender2, StreamDataMonitorEventArgs e2) {
-                fftAnalyzer.PutSamples(AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length)[0]);
+                fftAnalyzer.PutSamples(AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length, true)[0]);
             });
             spectrogram.SpectrogramSize = fftSize / 2;
         }
