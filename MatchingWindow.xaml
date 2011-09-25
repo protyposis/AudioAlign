@@ -8,10 +8,17 @@
         <Grid Margin="6">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <DockPanel Margin="0,0,0,3">
+            <GroupBox Header="Parameters" Margin="0,4">
+                <Grid Height="25">
+                    <Label Content="Profile" Height="17" HorizontalAlignment="Left" Margin="6,8,0,0" VerticalAlignment="Top" />
+                    <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" Margin="43,3,0,0" Name="profileComboBox" VerticalAlignment="Top" Width="120" />
+                </Grid>
+            </GroupBox>
+            <DockPanel Grid.Row="1" Margin="0,0,0,3">
                 <Button Name="scanTracksButton" Content="Scan Tracks" Height="23" Width="75" Click="scanTracksButton_Click" />
                 <Grid Margin="6,0,0,0">
                     <ProgressBar Name="progressBar" />
@@ -20,7 +27,7 @@
                     </Label>
                 </Grid>
             </DockPanel>
-            <GroupBox Grid.Row="1" Header="Matching Points" Margin="0,4">
+            <GroupBox Grid.Row="2" Header="Matching Points" Margin="0,4">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -46,7 +53,7 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Row="2" Header="Alignment" Margin="0,3,0,0">
+            <GroupBox Grid.Row="3" Header="Alignment" Margin="0,3,0,0">
                 <Grid Height="73">
                     <RadioButton Content="best" Height="16" Margin="43,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="bestMatchRadioButton" />
                     <RadioButton Content="last" Height="16" Margin="182,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="lastMatchRadioButton" />

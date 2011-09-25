@@ -37,7 +37,6 @@ namespace AudioAlign {
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             InitializeComponent();
             progressMonitor = new ProgressMonitor();
-            this.fingerprintStore = new FingerprintStore();
             this.trackList = trackList;
             this.multiTrackViewer = multiTrackViewer;
         }
@@ -54,6 +53,8 @@ namespace AudioAlign {
             bestMatchRadioButton.IsChecked = true;
 
             matchGrid.ItemsSource = multiTrackViewer.Matches;
+            profileComboBox.ItemsSource = FingerprintGenerator.GetProfiles();
+            profileComboBox.SelectedIndex = 0;
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e) {
@@ -89,13 +90,14 @@ namespace AudioAlign {
         private void scanTracksButton_Click(object sender, RoutedEventArgs e) {
             // calculate subfingerprints
             numTasksRunning = trackList.Count;
-            fingerprintStore.Clear();
+            IProfile profile = (IProfile)profileComboBox.SelectedItem;
+            fingerprintStore = new FingerprintStore(profile);
 
             Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, audioTrack => {
                 DateTime startTime = DateTime.Now;
                 IProgressReporter progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
 
-                FingerprintGenerator fpg = new FingerprintGenerator(audioTrack, 3, true);
+                FingerprintGenerator fpg = new FingerprintGenerator(profile, audioTrack, 3, true);
                 int subFingerprintsCalculated = 0;
                 fpg.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
                     subFingerprintsCalculated++;
