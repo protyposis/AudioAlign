@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Interop;
 using AudioAlign.Audio.Matching.Graph;
+using AudioAlign.Audio.Matching.Dixon2005;
 
 namespace AudioAlign {
     /// <summary>
@@ -308,6 +309,30 @@ namespace AudioAlign {
                 TimeSpan t2 = match.Track2.Offset + match.Track2Time;
                 TimeSpan diff = t1 - t2;
                 multiTrackViewer.Display(t1 - new TimeSpan(diff.Ticks / 2), true);
+            }
+        }
+
+        private void dtwButton_Click(object sender, RoutedEventArgs e) {
+            if (trackList.Count > 1) {
+                Task.Factory.StartNew(() => {
+                    DTW dtw = new DTW();
+                    List<Tuple<TimeSpan, TimeSpan>> path = 
+                        dtw.Execute(trackList[0].CreateAudioStream(), trackList[1].CreateAudioStream());
+
+                    multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
+                        int count = 0;
+                        foreach (Tuple<TimeSpan, TimeSpan> match in path) {
+                            if (count++ > 100) {
+                                multiTrackViewer.Matches.Add(new Match() {
+                                    Track1 = trackList[0], Track1Time = match.Item1,
+                                    Track2 = trackList[1], Track2Time = match.Item2,
+                                    Similarity = 1
+                                });
+                                count = 0;
+                            }
+                        }
+                    });
+                });
             }
         }
     }

@@ -68,6 +68,7 @@
                     <RadioButton Content="mid" Height="16" HorizontalAlignment="Left" Margin="136,6,0,0" Name="midMatchRadioButton" VerticalAlignment="Top" />
                     <CheckBox Content="windowed *" Height="16" HorizontalAlignment="Left" Margin="272,6,0,0" Name="windowedModeCheckBox" VerticalAlignment="Top" />
                     <CheckBox Content="remove unused matching points" Height="16" HorizontalAlignment="Left" Margin="268,52,0,0" Name="removeUnusedMatchingPointsCheckBox" VerticalAlignment="Top" IsChecked="True" />
+                    <Button Content="DTW" Height="23" HorizontalAlignment="Right" Margin="0,0,81,0" Name="dtwButton" VerticalAlignment="Bottom" Width="75" Click="dtwButton_Click" />
                 </Grid>
             </GroupBox>
         </Grid>
