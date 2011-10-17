@@ -326,5 +326,15 @@ namespace AudioAlign {
         private void CommandBinding_DebugRefreshMultiTrackViewer(object sender, ExecutedRoutedEventArgs e) {
             multiTrackViewer1.RefreshAdornerLayer();
         }
+
+        private void CommandBinding_ViewZoomToFit(object sender, ExecutedRoutedEventArgs e) {
+            if (trackList.Count > 0) {
+                multiTrackViewer1.VirtualViewportOffset = 0;
+                multiTrackViewer1.VirtualViewportWidth = trackList.End.Ticks + TimeUtil.SECS_TO_TICKS * 10;
+            }
+            else {
+                MessageBox.Show(this, "Timeline is empty!", ((RoutedUICommand)e.Command).Text, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
     }
 }

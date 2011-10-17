@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Windows.Interop;
 using AudioAlign.Audio.Matching.Graph;
 using AudioAlign.Audio.Matching.Dixon2005;
+using AudioAlign.Audio.Streams;
 
 namespace AudioAlign {
     /// <summary>
@@ -258,13 +259,22 @@ namespace AudioAlign {
             if (trackList.Count > 1) {
                 Task.Factory.StartNew(() => {
                     DTW dtw = new DTW(new TimeSpan(0,0,10), progressMonitor);
-                    List<Tuple<TimeSpan, TimeSpan>> path = 
-                        dtw.Execute(trackList[0].CreateAudioStream(), trackList[1].CreateAudioStream());
+                    IAudioStream s1 = trackList[0].CreateAudioStream();
+                    IAudioStream s2 = trackList[1].CreateAudioStream();
+                    List<Tuple<TimeSpan, TimeSpan>> path = null; //dtw.Execute(s1, s2);
+
+                    OLTW oltw = new OLTW(s1, s2, progressMonitor);
+                    oltw.execute();
 
                     multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
                         int count = 0;
                         foreach (Tuple<TimeSpan, TimeSpan> match in path) {
                             if (count++ > 100) {
+                                //double similarity = 1 - CrossCorrelation.Correlate(
+                                //    s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS * 2),
+                                //    s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS * 2), 
+                                //    progressMonitor);
+
                                 multiTrackViewer.Matches.Add(new Match() {
                                     Track1 = trackList[0], Track1Time = match.Item1,
                                     Track2 = trackList[1], Track2Time = match.Item2,

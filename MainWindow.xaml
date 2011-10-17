@@ -9,6 +9,7 @@
         Loaded="Window_Loaded" Closed="Window_Closed">
     <Window.Resources>
         <my:TimeSpanConverter x:Key="TimeSpanConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="New" Executed="CommandBinding_New"/>
@@ -18,6 +19,7 @@
         <CommandBinding Command="local:Commands.AddAudioFile" Executed="CommandBinding_AddAudioFile"/>
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
         <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
+        <CommandBinding Command="local:Commands.ViewZoomToFit" Executed="CommandBinding_ViewZoomToFit"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
@@ -50,8 +52,12 @@
                 <Separator/>
                 <MenuItem Command="Close"/>
             </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Command="local:Commands.ViewZoomToFit"/>
+            </MenuItem>
             <MenuItem Header="Debug">
                 <MenuItem Header="WaveView debug" IsCheckable="True" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}"/>
+                <MenuItem Header="MultiTrackViewer debug" IsCheckable="True" Name="MultiTrackViewerDebugCheckbox"/>
                 <MenuItem Command="local:Commands.DebugRefreshMultiTrackViewer"/>
             </MenuItem>
         </Menu>
@@ -113,10 +119,10 @@
                     </Label>
                 </Grid>
             </StatusBarItem>
-            <StatusBarItem>
+            <StatusBarItem Visibility="{Binding ElementName=MultiTrackViewerDebugCheckbox, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth}" ContentStringFormat="VVW: {0}" Width="130" />
             </StatusBarItem>
-            <StatusBarItem>
+            <StatusBarItem Visibility="{Binding ElementName=MultiTrackViewerDebugCheckbox, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset}" ContentStringFormat="VVO: {0}" Width="130" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
