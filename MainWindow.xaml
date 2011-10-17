@@ -91,6 +91,10 @@
             </Grid.RowDefinitions>
             <GroupBox Header="Audio Master" Margin="3,6,6,3">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <Grid Margin="6,19,0,6" HorizontalAlignment="Left" Width="30">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -100,12 +104,14 @@
                         <Label Grid.Row="1" Name="decibelLabel" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding ElementName=volumeSlider, Path=Value, FallbackValue=dB, Converter={StaticResource LinearDecibelConverter}}" ContentStringFormat="{}{0:0.0}" FontSize="9" Padding="0" HorizontalAlignment="Center"/>
                     </Grid>
                     <my:StereoVUMeter Margin="43,6,6,6" Name="stereoVUMeter1" />
+                    <my:CorrelationMeter Grid.Row="1" Name="correlationMeter" Background="Black" Margin="-3,0,-3,-3" FontSize="9" />
                 </Grid>
             </GroupBox>
             <GridSplitter Height="1" Background="Transparent" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
             <GroupBox Grid.Row="1" Header="Spectrum" Margin="3,3,6,6">
                 <my:Graph Name="spectrumGraph" Background="Black" Mode="Decibel" Minimum="-150" Margin="-3,0,-3,-3" />
             </GroupBox>
+            <GridSplitter Height="1" Background="Transparent" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
             <GroupBox Grid.Row="2" Header="Spectrogram" Margin="3,3,6,6">
                 <my:Spectrogram Name="spectrogram" Background="Black" Minimum="-90" Margin="-3,0,-3,-3" />
             </GroupBox>

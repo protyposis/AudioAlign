@@ -154,6 +154,7 @@ namespace AudioAlign {
 
             // INIT FFT
             int fftSize = 1024;
+            double correlation = 0;
             FFTAnalyzer fftAnalyzer = new FFTAnalyzer(fftSize);
             WindowFunction fftWindow = WindowUtil.GetFunction(WindowType.BlackmanHarris, fftSize);
             fftAnalyzer.WindowFunction = fftWindow;
@@ -161,10 +162,13 @@ namespace AudioAlign {
                 spectrumGraph.Dispatcher.BeginInvoke((Action)delegate {
                     spectrumGraph.Values = e2.Value;
                     spectrogram.AddSpectrogramColumn(e2.Value);
+                    correlationMeter.Value = correlation;
                 });
             });
             player.SamplesMonitored += new EventHandler<StreamDataMonitorEventArgs>(delegate(object sender2, StreamDataMonitorEventArgs e2) {
-                fftAnalyzer.PutSamples(AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length, true)[0]);
+                float[][] uninterleaved = AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length, true);
+                fftAnalyzer.PutSamples(uninterleaved[0]); // put the summed up mono samples into the analyzer
+                correlation = CrossCorrelation.Correlate(uninterleaved[1], uninterleaved[2]);
             });
             spectrogram.SpectrogramSize = fftSize / 2;
         }
