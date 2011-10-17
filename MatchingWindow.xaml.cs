@@ -258,30 +258,42 @@ namespace AudioAlign {
         private void dtwButton_Click(object sender, RoutedEventArgs e) {
             if (trackList.Count > 1) {
                 Task.Factory.StartNew(() => {
-                    DTW dtw = new DTW(new TimeSpan(0,0,10), progressMonitor);
                     IAudioStream s1 = trackList[0].CreateAudioStream();
                     IAudioStream s2 = trackList[1].CreateAudioStream();
-                    List<Tuple<TimeSpan, TimeSpan>> path = null; //dtw.Execute(s1, s2);
 
-                    OLTW oltw = new OLTW(s1, s2, progressMonitor);
-                    oltw.execute();
+                    //DTW dtw = new DTW(new TimeSpan(0, 0, 10), progressMonitor);
+                    //List<Tuple<TimeSpan, TimeSpan>> path = dtw.Execute(s1, s2);
+
+                    OLTW oltw = new OLTW(progressMonitor);
+                    List<Tuple<TimeSpan, TimeSpan>> path = oltw.Execute(s1, s2);
 
                     multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
                         int count = 0;
+                        List<Match> matches = new List<Match>();
+                        float maxSimilarity = 0;
                         foreach (Tuple<TimeSpan, TimeSpan> match in path) {
-                            if (count++ > 100) {
-                                //double similarity = 1 - CrossCorrelation.Correlate(
-                                //    s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS * 2),
-                                //    s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS * 2), 
-                                //    progressMonitor);
+                            if (count++ >= 100) {
+                                //float similarity = 1;
+                                float similarity = (float)Math.Abs(CrossCorrelation.Correlate(
+                                    s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS),
+                                    s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS),
+                                    progressMonitor));
 
-                                multiTrackViewer.Matches.Add(new Match() {
+                                if (similarity > maxSimilarity) {
+                                    maxSimilarity = similarity;
+                                }
+
+                                matches.Add(new Match() {
                                     Track1 = trackList[0], Track1Time = match.Item1,
                                     Track2 = trackList[1], Track2Time = match.Item2,
-                                    Similarity = 1
+                                    Similarity = similarity
                                 });
                                 count = 0;
                             }
+                        }
+                        foreach (Match match in matches) {
+                            match.Similarity /= maxSimilarity; // normalize to 1
+                            multiTrackViewer.Matches.Add(match);
                         }
                     });
                 });
