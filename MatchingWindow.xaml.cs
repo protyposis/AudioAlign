@@ -36,8 +36,14 @@ namespace AudioAlign {
 
         private volatile int numTasksRunning;
 
+        public int TimeWarpFilterSize { get; set; }
+
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
+            // init non-dependency-property variables before InitializeComponent() is called
+            TimeWarpFilterSize = 100;
+
             InitializeComponent();
+
             progressMonitor = new ProgressMonitor();
             this.trackList = trackList;
             this.multiTrackViewer = multiTrackViewer;
@@ -290,7 +296,7 @@ namespace AudioAlign {
                     }
 
                     // convert resulting path to matches and filter them
-                    int filterSize = 10; // take every n-th match and drop the rest
+                    int filterSize = TimeWarpFilterSize; // take every n-th match and drop the rest
                     int count = 0;
                     List<Match> matches = new List<Match>();
                     float maxSimilarity = 0; // needed for normalization

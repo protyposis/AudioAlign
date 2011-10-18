@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Match &amp; Align" Height="418" Width="702" 
         FontSize="11" 
-        Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" Loaded="Window_Loaded" Unloaded="Window_Unloaded"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid Margin="3">
             <Grid.RowDefinitions>
@@ -30,9 +31,12 @@
                         <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" />
                         <RadioButton Content="DTW" Height="16" HorizontalAlignment="Left" Margin="63,6,0,0" Name="dtwRadioButton" VerticalAlignment="Top" />
                         <RadioButton Content="OLTW" Height="16" HorizontalAlignment="Left" Margin="112,6,0,0" Name="oltwRadioButton" VerticalAlignment="Top" />
-                        <Label Content="Similarity:" Height="17" HorizontalAlignment="Left" Margin="6,29,0,0" VerticalAlignment="Top" />
-                        <CheckBox Content="calculate correlation" Height="16" HorizontalAlignment="Left" Margin="63,29,0,0" Name="dtwSimilarityCheckBox" VerticalAlignment="Top" IsChecked="True" />
-                        <CheckBox Content="normalize to 100%" Height="16" HorizontalAlignment="Left" Margin="188,29,0,0" Name="dtwSimilarityNormalizationCheckBox" VerticalAlignment="Top" IsChecked="True" IsEnabled="{Binding ElementName=dtwSimilarityCheckBox, Path=IsChecked}" />
+                        <Label Content="Similarity:" Height="17" HorizontalAlignment="Left" Margin="6,55,0,0" VerticalAlignment="Top" />
+                        <CheckBox Content="calculate correlation" Height="16" HorizontalAlignment="Left" Margin="63,55,0,0" Name="dtwSimilarityCheckBox" VerticalAlignment="Top" IsChecked="True" />
+                        <CheckBox Content="normalize to 100%" Height="16" HorizontalAlignment="Left" Margin="188,55,0,0" Name="dtwSimilarityNormalizationCheckBox" VerticalAlignment="Top" IsChecked="True" IsEnabled="{Binding ElementName=dtwSimilarityCheckBox, Path=IsChecked}" />
+                        <Label Content="Filter:" Height="17" HorizontalAlignment="Left" Margin="7,31,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="63,28,0,0" VerticalAlignment="Top" Width="54" Text="{Binding Path=TimeWarpFilterSize, Mode=TwoWay}" />
+                        <Label Content="(take every n-th match)" Height="17" HorizontalAlignment="Left" Margin="123,31,0,0" VerticalAlignment="Top" />
                     </Grid>
                 </TabItem>
             </TabControl>
