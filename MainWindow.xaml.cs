@@ -33,8 +33,12 @@ namespace AudioAlign {
         private Project project;
         private TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
+        private FFTAnalyzer fftAnalyzer;
         private MatchingWindow matchingWindow;
         private AnalysisWindow analysisWindow;
+
+        private int fftAnalyzerConsumer;
+        private int correlationConsumer;
 
         public MainWindow() {
             InitializeComponent();
@@ -71,16 +75,7 @@ namespace AudioAlign {
 
             // INIT PLAYER
             player = new MultitrackPlayer(trackList);
-
-            player.VolumeAnnounced += new EventHandler<AudioAlign.Audio.Streams.StreamVolumeEventArgs>(
-                delegate(object sender2, AudioAlign.Audio.Streams.StreamVolumeEventArgs e2) {
-                    multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
-                        if (e2.MaxSampleValues.Length >= 2) {
-                            stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
-                            stereoVUMeter1.AmplitudeRight = e2.MaxSampleValues[1];
-                        }
-                    });
-                });
+            player.VolumeAnnounced += Player_VolumeAnnounced_VolumeMeter;
 
             player.CurrentTimeChanged += new EventHandler<ValueEventArgs<TimeSpan>>(
                 delegate(object sender2, ValueEventArgs<TimeSpan> e2) {
@@ -155,22 +150,49 @@ namespace AudioAlign {
             // INIT FFT
             int fftSize = 1024;
             double correlation = 0;
-            FFTAnalyzer fftAnalyzer = new FFTAnalyzer(fftSize);
+            fftAnalyzer = new FFTAnalyzer(fftSize);
+            fftAnalyzerConsumer = 2;
+            correlationConsumer = 1;
             WindowFunction fftWindow = WindowUtil.GetFunction(WindowType.BlackmanHarris, fftSize);
             fftAnalyzer.WindowFunction = fftWindow;
-            fftAnalyzer.WindowAnalyzed += new EventHandler<ValueEventArgs<float[]>>(delegate(object sender2, ValueEventArgs<float[]> e2) {
-                spectrumGraph.Dispatcher.BeginInvoke((Action)delegate {
-                    spectrumGraph.Values = e2.Value;
-                    spectrogram.AddSpectrogramColumn(e2.Value);
-                    correlationMeter.Value = correlation;
-                });
-            });
+            fftAnalyzer.WindowAnalyzed += FftAnalyzer_WindowAnalyzed_FrequencyGraph;
+            fftAnalyzer.WindowAnalyzed += FftAnalyzer_WindowAnalyzed_Spectrogram;
             player.SamplesMonitored += new EventHandler<StreamDataMonitorEventArgs>(delegate(object sender2, StreamDataMonitorEventArgs e2) {
-                float[][] uninterleaved = AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length, true);
-                fftAnalyzer.PutSamples(uninterleaved[0]); // put the summed up mono samples into the analyzer
-                correlation = CrossCorrelation.Correlate(uninterleaved[1], uninterleaved[2]);
+                if (fftAnalyzerConsumer > 0 || correlationConsumer > 0) {
+                    float[][] uninterleaved = AudioUtil.Uninterleave(e2.Properties, e2.Buffer, e2.Offset, e2.Length, true);
+                    if (fftAnalyzerConsumer > 0) {
+                        fftAnalyzer.PutSamples(uninterleaved[0]); // put the summed up mono samples into the analyzer
+                    }
+                    if (correlationConsumer > 0) {
+                        correlation = CrossCorrelation.Correlate(uninterleaved[1], uninterleaved[2]);
+                        Dispatcher.BeginInvoke((Action)delegate {
+                            correlationMeter.Value = correlation;
+                        });
+                    }
+                }
             });
             spectrogram.SpectrogramSize = fftSize / 2;
+        }
+
+        private void Player_VolumeAnnounced_VolumeMeter(object sender, StreamVolumeEventArgs e) {
+            Dispatcher.BeginInvoke((Action)delegate {
+                if (e.MaxSampleValues.Length >= 2) {
+                    stereoVUMeter1.AmplitudeLeft = e.MaxSampleValues[0];
+                    stereoVUMeter1.AmplitudeRight = e.MaxSampleValues[1];
+                }
+            });
+        }
+
+        private void FftAnalyzer_WindowAnalyzed_FrequencyGraph(object sender, ValueEventArgs<float[]> e) {
+            Dispatcher.BeginInvoke((Action)delegate {
+                spectrumGraph.Values = e.Value;
+            });
+        }
+
+        private void FftAnalyzer_WindowAnalyzed_Spectrogram(object sender, ValueEventArgs<float[]> e) {
+            Dispatcher.BeginInvoke((Action)delegate {
+                spectrogram.AddSpectrogramColumn(e.Value);
+            });
         }
 
         private void Window_Closed(object sender, EventArgs e) {
@@ -262,9 +284,15 @@ namespace AudioAlign {
             volumeSlider.Value = project.MasterVolume;
 
             // update gui
-            spectrumGraph.Clear();
-            spectrogram.Clear();
+            ResetAudioMonitors();
             multiTrackViewer1.RefreshAdornerLayer(); // TODO find out why this doesn't work
+        }
+
+        private void ResetAudioMonitors() {
+            spectrumGraph.Reset();
+            spectrogram.Reset();
+            stereoVUMeter1.Reset();
+            correlationMeter.Reset();
         }
 
         private void AddFile(string fileName) {
@@ -338,6 +366,50 @@ namespace AudioAlign {
             }
             else {
                 MessageBox.Show(this, "Timeline is empty!", ((RoutedUICommand)e.Command).Text, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
+
+        private void CommandBinding_MonitorMasterVolume(object sender, ExecutedRoutedEventArgs e) {
+            if (menuItemMonitorMasterVolume.IsChecked) {
+                player.VolumeAnnounced += Player_VolumeAnnounced_VolumeMeter;
+            }
+            else {
+                player.VolumeAnnounced -= Player_VolumeAnnounced_VolumeMeter;
+                stereoVUMeter1.Reset();
+            }
+        }
+
+        private void CommandBinding_MonitorMasterCorrelation(object sender, ExecutedRoutedEventArgs e) {
+            if (menuItemMonitorMasterCorrelation.IsChecked) {
+                correlationConsumer++;
+            }
+            else {
+                correlationMeter.Reset();
+                correlationConsumer--;
+            }
+        }
+
+        private void CommandBinding_MonitorFrequencyGraph(object sender, ExecutedRoutedEventArgs e) {
+            if (menuItemMonitorFrequencyGraph.IsChecked) {
+                fftAnalyzer.WindowAnalyzed += FftAnalyzer_WindowAnalyzed_FrequencyGraph;
+                fftAnalyzerConsumer++;
+            }
+            else {
+                fftAnalyzer.WindowAnalyzed -= FftAnalyzer_WindowAnalyzed_FrequencyGraph;
+                fftAnalyzerConsumer--;
+                spectrumGraph.Reset();
+            }
+        }
+
+        private void CommandBinding_MonitorSpectrogram(object sender, ExecutedRoutedEventArgs e) {
+            if (menuItemMonitorSpectrogram.IsChecked) {
+                fftAnalyzer.WindowAnalyzed += FftAnalyzer_WindowAnalyzed_Spectrogram;
+                fftAnalyzerConsumer++;
+            }
+            else {
+                fftAnalyzer.WindowAnalyzed -= FftAnalyzer_WindowAnalyzed_Spectrogram;
+                fftAnalyzerConsumer--;
+                spectrogram.Reset();
             }
         }
     }

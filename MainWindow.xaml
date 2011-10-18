@@ -20,6 +20,10 @@
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
         <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
         <CommandBinding Command="local:Commands.ViewZoomToFit" Executed="CommandBinding_ViewZoomToFit"/>
+        <CommandBinding Command="local:Commands.MonitorMasterVolume" Executed="CommandBinding_MonitorMasterVolume"/>
+        <CommandBinding Command="local:Commands.MonitorMasterCorrelation" Executed="CommandBinding_MonitorMasterCorrelation"/>
+        <CommandBinding Command="local:Commands.MonitorFrequencyGraph" Executed="CommandBinding_MonitorFrequencyGraph"/>
+        <CommandBinding Command="local:Commands.MonitorSpectrogram" Executed="CommandBinding_MonitorSpectrogram"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
@@ -54,6 +58,12 @@
             </MenuItem>
             <MenuItem Header="View">
                 <MenuItem Command="local:Commands.ViewZoomToFit"/>
+            </MenuItem>
+            <MenuItem Header="Monitor">
+                <MenuItem Command="local:Commands.MonitorMasterVolume" Name="menuItemMonitorMasterVolume" IsCheckable="True" IsChecked="True"/>
+                <MenuItem Command="local:Commands.MonitorMasterCorrelation" Name="menuItemMonitorMasterCorrelation" IsCheckable="True" IsChecked="True"/>
+                <MenuItem Command="local:Commands.MonitorFrequencyGraph" Name="menuItemMonitorFrequencyGraph" IsCheckable="True" IsChecked="True"/>
+                <MenuItem Command="local:Commands.MonitorSpectrogram" Name="menuItemMonitorSpectrogram" IsCheckable="True" IsChecked="True"/>
             </MenuItem>
             <MenuItem Header="Debug">
                 <MenuItem Header="WaveView debug" IsCheckable="True" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}"/>
