@@ -16,14 +16,14 @@
         </ObjectDataProvider>
     </Window.Resources>
     <Grid>
-        <Grid Margin="6">
+        <Grid Margin="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Parameters" Margin="0,4" Name="parameterGroupBox">
+            <GroupBox Header="Parameters" Name="parameterGroupBox">
                 <Grid Height="29">
                     <Label Content="Mode:" Height="20" HorizontalAlignment="Left" Margin="5,9,0,0" VerticalAlignment="Top" />
                     <ComboBox Height="23" HorizontalAlignment="Left" Margin="42,0,0,1" Name="analysisMode" VerticalAlignment="Bottom" Width="95" ItemsSource="{Binding Source={StaticResource AnalysisModeValues}}" SelectedValue="{Binding Path=AnalysisMode, Mode=TwoWay}" />
@@ -46,18 +46,16 @@
                         <ComboBoxItem>96000</ComboBoxItem>
                         <ComboBoxItem>192000</ComboBoxItem>
                     </ComboBox>
+                    <Button Name="analyzeButton" Content="Analyze" Height="23" Width="75" Click="analyzeButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
                 </Grid>
             </GroupBox>
-            <DockPanel Margin="0,0,0,3" Grid.Row="1">
-                <Button Name="analyzeButton" Content="Analyze" Height="23" Width="75" Click="analyzeButton_Click" />
-                <Grid Margin="6,0,0,0">
-                    <ProgressBar Name="progressBar" />
-                    <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="6,0" FontSize="11">
-                        <TextBlock Name="progressBarLabel" TextTrimming="CharacterEllipsis" />
-                    </Label>
-                </Grid>
-            </DockPanel>
-            <GroupBox Grid.Row="2" Header="Results" Margin="0,4">
+            <Grid Grid.Row="1" Margin="0,3,0,0" Height="25">
+                <ProgressBar Name="progressBar" />
+                <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="6,0" FontSize="11">
+                    <TextBlock Name="progressBarLabel" TextTrimming="CharacterEllipsis" />
+                </Label>
+            </Grid>
+            <GroupBox Grid.Row="2" Header="Results" Margin="0,3,0,0">
                 <Grid Margin="0,3,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

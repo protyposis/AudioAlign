@@ -5,29 +5,44 @@
         FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
     <Grid>
-        <Grid Margin="6">
+        <Grid Margin="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Parameters" Margin="0,4">
-                <Grid Height="25">
-                    <Label Content="Profile" Height="17" HorizontalAlignment="Left" Margin="6,8,0,0" VerticalAlignment="Top" />
-                    <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" Margin="43,3,0,0" Name="profileComboBox" VerticalAlignment="Top" Width="120" />
-                </Grid>
-            </GroupBox>
-            <DockPanel Grid.Row="1" Margin="0,0,0,3">
-                <Button Name="scanTracksButton" Content="Scan Tracks" Height="23" Width="75" Click="scanTracksButton_Click" />
-                <Grid Margin="6,0,0,0">
-                    <ProgressBar Name="progressBar" />
-                    <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="6,0" FontSize="11">
-                        <TextBlock Name="progressBarLabel" TextTrimming="CharacterEllipsis" />
-                    </Label>
-                </Grid>
-            </DockPanel>
-            <GroupBox Grid.Row="2" Header="Matching Points" Margin="0,4">
+            <TabControl Height="100">
+                <TabItem Header="Fingerprint">
+                    <Grid>
+                        <Label Content="Profile" Height="17" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" />
+                        <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" Margin="46,6,0,0" Name="profileComboBox" VerticalAlignment="Top" Width="120" />
+                        <Button Name="scanTracksButton" Content="Start" Height="23" Width="75" Click="scanTracksButton_Click" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                        <Button Name="findPossibleMatchesButton" Content="Analyze" Height="23" Width="65" Margin="373,0,0,7" Click="findPossibleMatchesButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                        <Button Name="clearStoreButton" Content="Clear Store" Height="23" Width="85" Margin="6,0,0,6" Click="clearStoreButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                        <Button Name="findMatchingMatchesButton" Content="Find Direct Matches (default)" Height="23" Margin="97,0,0,6" Click="findMatchingMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="154" />
+                        <Button Name="findSoftMatchesButton" Content="Find Soft Matches" Height="23" Width="110" Margin="257,0,0,7" Click="findSoftMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Dynamic Time Warping">
+                    <Grid>
+                        <Button Content="Start" Height="23" Name="dtwButton" Width="75" Click="dtwButton_Click" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+                        <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" />
+                        <RadioButton Content="DTW" Height="16" HorizontalAlignment="Left" Margin="63,6,0,0" Name="dtwRadioButton" VerticalAlignment="Top" />
+                        <RadioButton Content="OLTW" Height="16" HorizontalAlignment="Left" Margin="112,6,0,0" Name="oltwRadioButton" VerticalAlignment="Top" />
+                        <Label Content="Similarity:" Height="17" HorizontalAlignment="Left" Margin="6,29,0,0" VerticalAlignment="Top" />
+                        <CheckBox Content="calculate correlation" Height="16" HorizontalAlignment="Left" Margin="63,29,0,0" Name="dtwSimilarityCheckBox" VerticalAlignment="Top" IsChecked="True" />
+                        <CheckBox Content="normalize to 100%" Height="16" HorizontalAlignment="Left" Margin="188,29,0,0" Name="dtwSimilarityNormalizationCheckBox" VerticalAlignment="Top" IsChecked="True" IsEnabled="{Binding ElementName=dtwSimilarityCheckBox, Path=IsChecked}" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <Grid Grid.Row="1" Margin="0,3,0,0" Height="25">
+                <ProgressBar Name="progressBar" />
+                <Label VerticalContentAlignment="Center" VerticalAlignment="Stretch" Margin="6,0" FontSize="11">
+                    <TextBlock Name="progressBarLabel" TextTrimming="CharacterEllipsis" />
+                </Label>
+            </Grid>
+            <GroupBox Grid.Row="2" Header="Matching Points" Margin="0,3,0,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -45,10 +60,6 @@
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,3,0,0">
                         <Button Name="clearMatchesButton" Content="Clear Matches" Height="23" Width="85" Margin="0,0,3,0" Click="clearMatchesButton_Click" />
-                        <Button Name="clearStoreButton" Content="Clear Store" Height="23" Width="85" Margin="0,0,3,0" Click="clearStoreButton_Click" />
-                        <Button Name="findMatchingMatchesButton" Content="Find Direct Matches" Height="23" Width="110" Margin="0,0,3,0" Click="findMatchingMatchesButton_Click" />
-                        <Button Name="findSoftMatchesButton" Content="Find Soft Matches" Height="23" Width="110" Margin="0,0,3,0" Click="findSoftMatchesButton_Click" />
-                        <Button Name="findPossibleMatchesButton" Content="Analyze" Height="23" Width="65" Margin="0,0,3,0" Click="findPossibleMatchesButton_Click" />
                         <Button Content="Cross-Correlate Matches" Height="23" Margin="0,0,78,0" Name="crossCorrelateButton" Width="135" Click="crossCorrelateButton_Click" />
                     </StackPanel>
                 </Grid>
@@ -68,7 +79,6 @@
                     <RadioButton Content="mid" Height="16" HorizontalAlignment="Left" Margin="136,6,0,0" Name="midMatchRadioButton" VerticalAlignment="Top" />
                     <CheckBox Content="windowed *" Height="16" HorizontalAlignment="Left" Margin="272,6,0,0" Name="windowedModeCheckBox" VerticalAlignment="Top" />
                     <CheckBox Content="remove unused matching points" Height="16" HorizontalAlignment="Left" Margin="268,52,0,0" Name="removeUnusedMatchingPointsCheckBox" VerticalAlignment="Top" IsChecked="True" />
-                    <Button Content="DTW" Height="23" HorizontalAlignment="Right" Margin="0,0,81,0" Name="dtwButton" VerticalAlignment="Bottom" Width="75" Click="dtwButton_Click" />
                 </Grid>
             </GroupBox>
         </Grid>

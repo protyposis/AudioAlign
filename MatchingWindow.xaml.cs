@@ -52,7 +52,9 @@ namespace AudioAlign {
             progressMonitor.ProcessingProgressChanged += Instance_ProcessingProgressChanged;
             progressMonitor.ProcessingFinished += Instance_ProcessingFinished;
             ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
+
             bestMatchRadioButton.IsChecked = true;
+            dtwRadioButton.IsChecked = true;
 
             matchGrid.ItemsSource = multiTrackViewer.Matches;
             profileComboBox.ItemsSource = FingerprintGenerator.GetProfiles();
@@ -257,42 +259,73 @@ namespace AudioAlign {
 
         private void dtwButton_Click(object sender, RoutedEventArgs e) {
             if (trackList.Count > 1) {
+                int mode = 0;
+                if ((bool)dtwRadioButton.IsChecked) {
+                    mode = 1;
+                }
+                else if ((bool)oltwRadioButton.IsChecked) {
+                    mode = 2;
+                }
+                bool calculateSimilarity = (bool)dtwSimilarityCheckBox.IsChecked;
+                bool normalizeSimilarity = (bool)dtwSimilarityNormalizationCheckBox.IsChecked;
+
                 Task.Factory.StartNew(() => {
                     IAudioStream s1 = trackList[0].CreateAudioStream();
                     IAudioStream s2 = trackList[1].CreateAudioStream();
 
-                    //DTW dtw = new DTW(new TimeSpan(0, 0, 10), progressMonitor);
-                    //List<Tuple<TimeSpan, TimeSpan>> path = dtw.Execute(s1, s2);
+                    List<Tuple<TimeSpan, TimeSpan>> path = null;
 
-                    OLTW oltw = new OLTW(progressMonitor);
-                    List<Tuple<TimeSpan, TimeSpan>> path = oltw.Execute(s1, s2);
+                    // execute time warping
+                    if (mode == 1) {
+                        DTW dtw = new DTW(new TimeSpan(0, 0, 10), progressMonitor);
+                        path = dtw.Execute(s1, s2);
+                    }
+                    else if (mode == 2) {
+                        OLTW oltw = new OLTW(progressMonitor);
+                        path = oltw.Execute(s1, s2);
+                    }
+
+                    if (path == null) {
+                        return;
+                    }
+
+                    // convert resulting path to matches and filter them
+                    int filterSize = 10; // take every n-th match and drop the rest
+                    int count = 0;
+                    List<Match> matches = new List<Match>();
+                    float maxSimilarity = 0; // needed for normalization
+                    IProgressReporter progressReporter = progressMonitor.BeginTask("post-process resulting path...", true);
+                    double totalProgress = path.Count;
+                    double progress = 0;
+                    foreach (Tuple<TimeSpan, TimeSpan> match in path) {
+                        if (count++ >= filterSize) {
+                            float similarity = calculateSimilarity ? (float)Math.Abs(CrossCorrelation.Correlate(
+                                s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS),
+                                s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS))) : 1;
+
+                            if (similarity > maxSimilarity) {
+                                maxSimilarity = similarity;
+                            }
+
+                            matches.Add(new Match() {
+                                Track1 = trackList[0],
+                                Track1Time = match.Item1,
+                                Track2 = trackList[1],
+                                Track2Time = match.Item2,
+                                Similarity = similarity
+                            });
+                            count = 0;
+                            progressReporter.ReportProgress(progress / totalProgress * 100);
+                        }
+                        progress++;
+                    }
+                    progressReporter.Finish();
 
                     multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
-                        int count = 0;
-                        List<Match> matches = new List<Match>();
-                        float maxSimilarity = 0;
-                        foreach (Tuple<TimeSpan, TimeSpan> match in path) {
-                            if (count++ >= 100) {
-                                //float similarity = 1;
-                                float similarity = (float)Math.Abs(CrossCorrelation.Correlate(
-                                    s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS),
-                                    s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS),
-                                    progressMonitor));
-
-                                if (similarity > maxSimilarity) {
-                                    maxSimilarity = similarity;
-                                }
-
-                                matches.Add(new Match() {
-                                    Track1 = trackList[0], Track1Time = match.Item1,
-                                    Track2 = trackList[1], Track2Time = match.Item2,
-                                    Similarity = similarity
-                                });
-                                count = 0;
-                            }
-                        }
                         foreach (Match match in matches) {
-                            match.Similarity /= maxSimilarity; // normalize to 1
+                            if (normalizeSimilarity) {
+                                match.Similarity /= maxSimilarity; // normalize to 1
+                            }
                             multiTrackViewer.Matches.Add(match);
                         }
                     });
