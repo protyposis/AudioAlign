@@ -32,7 +32,7 @@
                         <RadioButton Content="DTW" Height="16" HorizontalAlignment="Left" Margin="63,6,0,0" Name="dtwRadioButton" VerticalAlignment="Top" />
                         <RadioButton Content="OLTW" Height="16" HorizontalAlignment="Left" Margin="112,6,0,0" Name="oltwRadioButton" VerticalAlignment="Top" />
                         <Label Content="Similarity:" Height="17" HorizontalAlignment="Left" Margin="6,55,0,0" VerticalAlignment="Top" />
-                        <CheckBox Content="calculate correlation" Height="16" HorizontalAlignment="Left" Margin="63,55,0,0" Name="dtwSimilarityCheckBox" VerticalAlignment="Top" IsChecked="True" />
+                        <CheckBox Content="calculate correlation" Height="16" HorizontalAlignment="Left" Margin="63,55,0,0" Name="dtwSimilarityCheckBox" VerticalAlignment="Top" />
                         <CheckBox Content="normalize to 100%" Height="16" HorizontalAlignment="Left" Margin="188,55,0,0" Name="dtwSimilarityNormalizationCheckBox" VerticalAlignment="Top" IsChecked="True" IsEnabled="{Binding ElementName=dtwSimilarityCheckBox, Path=IsChecked}" />
                         <Label Content="Filter:" Height="17" HorizontalAlignment="Left" Margin="7,31,0,0" VerticalAlignment="Top" />
                         <TextBox Height="23" HorizontalAlignment="Left" Margin="63,28,0,0" VerticalAlignment="Top" Width="54" Text="{Binding Path=TimeWarpFilterSize, Mode=TwoWay}" />
