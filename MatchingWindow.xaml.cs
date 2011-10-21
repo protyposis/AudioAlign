@@ -36,11 +36,15 @@ namespace AudioAlign {
 
         private volatile int numTasksRunning;
 
+        public TimeSpan MatchFilterWindowSize { get; set; }
         public int TimeWarpFilterSize { get; set; }
+        public TimeSpan TimeWarpSearchWidth { get; set; }
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
+            MatchFilterWindowSize = new TimeSpan(0, 0, 30);
             TimeWarpFilterSize = 100;
+            TimeWarpSearchWidth = new TimeSpan(0, 0, 10);
 
             InitializeComponent();
 
@@ -280,11 +284,11 @@ namespace AudioAlign {
 
                     // execute time warping
                     if (mode == 1) {
-                        DTW dtw = new DTW(new TimeSpan(0, 0, 10), progressMonitor);
+                        DTW dtw = new DTW(TimeWarpSearchWidth, progressMonitor);
                         path = dtw.Execute(s1, s2);
                     }
                     else if (mode == 2) {
-                        OLTW oltw = new OLTW(progressMonitor);
+                        OLTW oltw = new OLTW(TimeWarpSearchWidth, progressMonitor);
                         path = oltw.Execute(s1, s2);
                     }
 
@@ -354,7 +358,7 @@ namespace AudioAlign {
 
             List<Match> matches = new List<Match>(multiTrackViewer.Matches);
             return DetermineMatchGroups(matchFilterMode, trackList, matches,
-                (bool)windowedModeCheckBox.IsChecked, new TimeSpan(0, 0, int.Parse(windowSize.Text)));
+                (bool)windowedModeCheckBox.IsChecked, MatchFilterWindowSize);
         }
 
         private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode, TrackList<AudioTrack> trackList,

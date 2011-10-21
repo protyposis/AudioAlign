@@ -32,8 +32,8 @@ namespace AudioAlign {
         private DataTable dataTable;
 
         public AnalysisMode AnalysisMode { get; set; }
-        public int AnalysisWindowSize { get; set; }
-        public int AnalysisIntervalLength { get; set; }
+        public TimeSpan AnalysisWindowSize { get; set; }
+        public TimeSpan AnalysisIntervalLength { get; set; }
         public int AnalysisSampleRate { get; set; }
 
         public AnalysisWindow(TrackList<AudioTrack> trackList) {
@@ -41,8 +41,8 @@ namespace AudioAlign {
             // when the control with the applied binding initializes, so the variabled need to be initialized
             // before InitializeComponent() is called)
             AnalysisMode = AnalysisMode.Correlation;
-            AnalysisWindowSize = 1;
-            AnalysisIntervalLength = 30;
+            AnalysisWindowSize = new TimeSpan(0, 0, 1);
+            AnalysisIntervalLength = new TimeSpan(0, 0, 30);
             AnalysisSampleRate = 22050;
 
             InitializeComponent();
@@ -139,8 +139,8 @@ namespace AudioAlign {
             Analysis analysis = new Analysis(
                 AnalysisMode,
                 trackList, 
-                new TimeSpan(0, 0, AnalysisWindowSize),
-                new TimeSpan(0, 0, AnalysisIntervalLength), 
+                AnalysisWindowSize,
+                AnalysisIntervalLength, 
                 AnalysisSampleRate, 
                 progressMonitor);
             
