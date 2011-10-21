@@ -133,27 +133,24 @@ namespace AudioAlign {
             }
         }
 
+        private void filterMatchesButton_Click(object sender, RoutedEventArgs e) {
+            List<MatchGroup> trackGroups = DetermineMatchGroups();
+            multiTrackViewer.Matches.Clear();
+            foreach (MatchGroup trackGroup in trackGroups) {
+                foreach (MatchPair trackPair in trackGroup.MatchPairs) {
+                    foreach (Match match in trackPair.Matches) {
+                        multiTrackViewer.Matches.Add(match);
+                    }
+                }
+            }
+        }
+
         private void alignTracksButton_Click(object sender, RoutedEventArgs e) {
-            MatchFilterMode matchFilterMode = MatchFilterMode.None;
             bool postProcessMatchingPoints = (bool)postProcessMatchingPointsCheckBox.IsChecked;
             bool removeUnusedMatchingPoints = (bool)removeUnusedMatchingPointsCheckBox.IsChecked;
 
-            if ((bool)bestMatchRadioButton.IsChecked) {
-                matchFilterMode = MatchFilterMode.Best;
-            }
-            else if ((bool)firstMatchRadioButton.IsChecked) {
-                matchFilterMode = MatchFilterMode.First;
-            }
-            else if ((bool)midMatchRadioButton.IsChecked) {
-                matchFilterMode = MatchFilterMode.Mid;
-            }
-            else if ((bool)lastMatchRadioButton.IsChecked) {
-                matchFilterMode = MatchFilterMode.Last;
-            }
-
             List<Match> matches = new List<Match>(multiTrackViewer.Matches);
-            List<MatchGroup> trackGroups = DetermineMatchGroups(matchFilterMode, trackList, matches,
-                (bool)windowedModeCheckBox.IsChecked, new TimeSpan(0, 0, int.Parse(windowSize.Text)));
+            List<MatchGroup> trackGroups = DetermineMatchGroups();
 
             Task.Factory.StartNew(() => {
                 Parallel.ForEach(trackGroups, trackGroup => {
@@ -337,6 +334,27 @@ namespace AudioAlign {
                     });
                 });
             }
+        }
+
+        private List<MatchGroup> DetermineMatchGroups() {
+            MatchFilterMode matchFilterMode = MatchFilterMode.None;
+
+            if ((bool)bestMatchRadioButton.IsChecked) {
+                matchFilterMode = MatchFilterMode.Best;
+            }
+            else if ((bool)firstMatchRadioButton.IsChecked) {
+                matchFilterMode = MatchFilterMode.First;
+            }
+            else if ((bool)midMatchRadioButton.IsChecked) {
+                matchFilterMode = MatchFilterMode.Mid;
+            }
+            else if ((bool)lastMatchRadioButton.IsChecked) {
+                matchFilterMode = MatchFilterMode.Last;
+            }
+
+            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
+            return DetermineMatchGroups(matchFilterMode, trackList, matches,
+                (bool)windowedModeCheckBox.IsChecked, new TimeSpan(0, 0, int.Parse(windowSize.Text)));
         }
 
         private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode, TrackList<AudioTrack> trackList,

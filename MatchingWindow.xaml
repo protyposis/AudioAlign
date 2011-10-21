@@ -99,6 +99,7 @@
                     <RadioButton Content="last" Height="16" Margin="182,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="lastMatchRadioButton" />
                     <RadioButton Content="all *" Height="16" Margin="226,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="allMatchRadioButton" />
                     <Button Name="alignTracksButton" Content="Align Tracks" Height="23" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="alignTracksButton_Click" />
+                    <Button Name="filterMatchesButton" Content="Filter Matches" Height="23" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="filterMatchesButton_Click" Margin="0,0,81,0" />
                     <TextBox Height="23" Name="windowSize" Margin="106,26,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Text="30" />
                     <RadioButton Content="first" Height="16" HorizontalAlignment="Left" Margin="91,6,0,0" VerticalAlignment="Top" Name="firstMatchRadioButton" />
                     <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label1" VerticalAlignment="Top" />
