@@ -62,10 +62,35 @@
                             <DataGridTextColumn Header="Similarity" Binding="{Binding Similarity}" IsReadOnly="False"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,3,0,0">
-                        <Button Name="clearMatchesButton" Content="Clear Matches" Height="23" Width="85" Margin="0,0,3,0" Click="clearMatchesButton_Click" />
-                        <Button Content="Cross-Correlate Matches" Height="23" Margin="0,0,78,0" Name="crossCorrelateButton" Width="135" Click="crossCorrelateButton_Click" />
-                    </StackPanel>
+                    <DockPanel Grid.Row="1" Margin="0,3,0,0">
+                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                            <Button Name="clearMatchesButton" Content="Clear Matches" Height="23" Width="85" Margin="0,0,3,0" Click="clearMatchesButton_Click" />
+                            <Button Name="crossCorrelateButton" Content="Cross-Correlate Matches" Height="23" Margin="0" Width="135" Click="crossCorrelateButton_Click" />
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Add from timeline..." Height="23" Name="addManualMatchButton" Width="110" Click="addManualMatchButton_Click" />
+                            <Popup Name="addManualMatchPopup" PlacementTarget="{Binding ElementName=addManualMatchButton}" Placement="Relative" VerticalOffset="{Binding ElementName=addManualMatchButton, Path=ActualHeight}" PopupAnimation="Slide" StaysOpen="False">
+                                <Border Background="{StaticResource WindowBackgroundBrush}" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="1">
+                                    <Grid Margin="3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Label Margin="3" Grid.Column="0" Grid.Row="0" Content="Track A:" VerticalAlignment="Center"/>
+                                        <Label Margin="3" Grid.Column="0" Grid.Row="1" Content="Track B:" VerticalAlignment="Center"/>
+                                        <ComboBox Margin="3" Grid.Column="1" Grid.Row="0" Name="addManualMatchPopupComboBoxA"/>
+                                        <ComboBox Margin="3" Grid.Column="1" Grid.Row="1" Name="addManualMatchPopupComboBoxB"/>
+                                        <Button Margin="3" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Content="Add" Height="23" Width="40" Click="addManualMatchPopupAddButton_Click"/>
+                                    </Grid>
+                                </Border>
+                            </Popup>
+                        </StackPanel>
+                    </DockPanel>
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Row="3" Header="Alignment" Margin="0,3,0,0">

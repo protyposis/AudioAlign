@@ -255,7 +255,7 @@ namespace AudioAlign {
 
         private void matchGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             Match match = matchGrid.SelectedItem as Match;
-            if(match != null) {
+            if (match != null) {
                 TimeSpan t1 = match.Track1.Offset + match.Track1Time;
                 TimeSpan t2 = match.Track2.Offset + match.Track2Time;
                 TimeSpan diff = t1 - t2;
@@ -339,7 +339,7 @@ namespace AudioAlign {
             }
         }
 
-        private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode, TrackList<AudioTrack> trackList, 
+        private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode, TrackList<AudioTrack> trackList,
                                                       List<Match> matches, bool windowed, TimeSpan windowSize) {
             List<MatchPair> trackPairs = MatchProcessor.GetTrackPairs(trackList);
             MatchProcessor.AssignMatches(trackPairs, matches);
@@ -401,6 +401,42 @@ namespace AudioAlign {
             }
 
             return trackGroups;
+        }
+
+        private void addManualMatchButton_Click(object sender, RoutedEventArgs e) {
+            TimeSpan position = new TimeSpan(multiTrackViewer.VirtualCaretOffset);
+
+            // remove selections to force update of the displayed text
+            addManualMatchPopupComboBoxA.SelectedItem = null;
+            addManualMatchPopupComboBoxB.SelectedItem = null;
+
+            addManualMatchPopupComboBoxA.ItemsSource = trackList.EnumerateAtPosition(position);
+            addManualMatchPopupComboBoxB.ItemsSource = trackList.EnumerateAtPosition(position);
+
+            // preselection of first two tracks
+            // TODO make preselection more intelligent (don't preselect tracks not visible in the viewport, etc...)
+            if (addManualMatchPopupComboBoxA.Items.Count > 0) {
+                addManualMatchPopupComboBoxA.SelectedIndex = 0;
+                addManualMatchPopupComboBoxB.SelectedIndex = 1;
+                if (addManualMatchPopupComboBoxB.Items.Count > 1) {
+                    addManualMatchPopupComboBoxB.SelectedIndex = 1;
+                }
+            }
+
+            addManualMatchPopup.IsOpen = true;
+        }
+
+        private void addManualMatchPopupAddButton_Click(object sender, RoutedEventArgs e) {
+            TimeSpan position = new TimeSpan(multiTrackViewer.VirtualCaretOffset);
+            AudioTrack t1 = addManualMatchPopupComboBoxA.SelectedItem as AudioTrack;
+            AudioTrack t2 = addManualMatchPopupComboBoxB.SelectedItem as AudioTrack;
+            if (t1 != null && t2 != null) {
+                multiTrackViewer.Matches.Add(new Match {
+                    Track1 = t1, Track1Time = position - t1.Offset,
+                    Track2 = t2, Track2Time = position - t2.Offset,
+                    Similarity = 1
+                });
+            }
         }
     }
 }
