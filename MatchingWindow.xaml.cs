@@ -304,24 +304,24 @@ namespace AudioAlign {
                             Match first = matches.First();
                             Match last = matches.Last();
 
-                            if (mode == TimeWarpMode.AllSections) {
-                                Task.Factory.StartNew(() => {
-                                    TimeSpan sectionLength = first.Track1Time > first.Track2Time ? first.Track2Time : first.Track1Time;
-                                    TimeWarp(type,
-                                        first.Track1, first.Track1Time - sectionLength, first.Track1Time,
-                                        first.Track2, first.Track2Time - sectionLength, first.Track2Time,
-                                        calculateSimilarity, normalizeSimilarity);
-                                });
-                            }
+                            Task.Factory.StartNew(() => {
+                                TimeSpan sectionLength = first.Track1Time > first.Track2Time ? first.Track2Time : first.Track1Time;
+                                TimeWarp(type,
+                                    first.Track1, first.Track1Time - sectionLength, first.Track1Time,
+                                    first.Track2, first.Track2Time - sectionLength, first.Track2Time,
+                                    calculateSimilarity, normalizeSimilarity);
+                            });
 
-                            if (matches.Count > 1) {
-                                for (int i = 0; i < matches.Count - 1; i++) {
-                                    Match from = matches[i];
-                                    Match to = matches[i + 1];
-                                    TimeWarp(type,
-                                        from.Track1, from.Track1Time, to.Track1Time,
-                                        from.Track2, from.Track2Time, to.Track2Time,
-                                        calculateSimilarity, normalizeSimilarity);
+                            if (mode == TimeWarpMode.AllSections) {
+                                if (matches.Count > 1) {
+                                    for (int i = 0; i < matches.Count - 1; i++) {
+                                        Match from = matches[i];
+                                        Match to = matches[i + 1];
+                                        TimeWarp(type,
+                                            from.Track1, from.Track1Time, to.Track1Time,
+                                            from.Track2, from.Track2Time, to.Track2Time,
+                                            calculateSimilarity, normalizeSimilarity);
+                                    }
                                 }
                             }
 
