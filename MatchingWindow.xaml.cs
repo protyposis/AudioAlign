@@ -267,66 +267,79 @@ namespace AudioAlign {
 
         private void dtwButton_Click(object sender, RoutedEventArgs e) {
             if (trackList.Count > 1) {
-                int type = 0;
+                TimeWarpType type = TimeWarpType.DTW;
                 if ((bool)dtwRadioButton.IsChecked) {
-                    type = 1;
+                    type = TimeWarpType.DTW;
                 }
                 else if ((bool)oltwRadioButton.IsChecked) {
-                    type = 2;
+                    type = TimeWarpType.OLTW;
                 }
-                int mode = 0;
+
+                TimeWarpMode mode = TimeWarpMode.FirstTwoTracks;
                 if ((bool)timeWarpModeBorderSectionsRadioButton.IsChecked) {
-                    mode = 1;
+                    mode = TimeWarpMode.BorderSections;
                 }
                 else if ((bool)timeWarpModeAllSectionsRadioButton.IsChecked) {
-                    mode = 2;
+                    mode = TimeWarpMode.AllSections;
                 }
+
                 bool calculateSimilarity = (bool)dtwSimilarityCheckBox.IsChecked;
                 bool normalizeSimilarity = (bool)dtwSimilarityNormalizationCheckBox.IsChecked;
 
-                List<MatchGroup> trackGroups = DetermineMatchGroups();
+                if (mode == TimeWarpMode.FirstTwoTracks) {
+                    if (trackList.Count > 1) {
+                        Task.Factory.StartNew(() => {
+                            TimeWarp(type,
+                                trackList[0], TimeSpan.Zero, trackList[0].Length,
+                                trackList[1], TimeSpan.Zero, trackList[1].Length,
+                                calculateSimilarity, normalizeSimilarity);
+                        });
+                    }
+                }
+                else {
+                    List<MatchGroup> trackGroups = DetermineMatchGroups();
+                    foreach (MatchGroup trackGroup in trackGroups) {
+                        foreach (MatchPair trackPair in trackGroup.MatchPairs) {
+                            List<Match> matches = trackPair.Matches.OrderBy(match => { return match.Track1Time; }).ToList();
+                            Match first = matches.First();
+                            Match last = matches.Last();
 
-                foreach (MatchGroup trackGroup in trackGroups) {
-                    foreach (MatchPair trackPair in trackGroup.MatchPairs) {
-                        List<Match> matches = trackPair.Matches.OrderBy(match => { return match.Track1Time; }).ToList();
-                        Match first = matches.First();
-                        Match last = matches.Last();
+                            if (mode == TimeWarpMode.AllSections) {
+                                Task.Factory.StartNew(() => {
+                                    TimeSpan sectionLength = first.Track1Time > first.Track2Time ? first.Track2Time : first.Track1Time;
+                                    TimeWarp(type,
+                                        first.Track1, first.Track1Time - sectionLength, first.Track1Time,
+                                        first.Track2, first.Track2Time - sectionLength, first.Track2Time,
+                                        calculateSimilarity, normalizeSimilarity);
+                                });
+                            }
 
-                        if (mode == 2) {
+                            if (matches.Count > 1) {
+                                for (int i = 0; i < matches.Count - 1; i++) {
+                                    Match from = matches[i];
+                                    Match to = matches[i + 1];
+                                    TimeWarp(type,
+                                        from.Track1, from.Track1Time, to.Track1Time,
+                                        from.Track2, from.Track2Time, to.Track2Time,
+                                        calculateSimilarity, normalizeSimilarity);
+                                }
+                            }
+
                             Task.Factory.StartNew(() => {
-                                TimeSpan sectionLength = first.Track1Time > first.Track2Time ? first.Track2Time : first.Track1Time;
+                                TimeSpan sectionLength = first.Track1.Length - first.Track1Time > first.Track2.Length - first.Track2Time ?
+                                    first.Track2.Length - first.Track2Time : first.Track1.Length - first.Track1Time;
                                 TimeWarp(type,
-                                    first.Track1, first.Track1Time - sectionLength, first.Track1Time,
-                                    first.Track2, first.Track2Time - sectionLength, first.Track2Time,
+                                    first.Track1, first.Track1Time, first.Track1Time + sectionLength,
+                                    first.Track2, first.Track2Time, first.Track2Time + sectionLength,
                                     calculateSimilarity, normalizeSimilarity);
                             });
                         }
-
-                        if (matches.Count > 1) {
-                            for (int i = 0; i < matches.Count - 1; i++) {
-                                Match from = matches[i];
-                                Match to = matches[i + 1];
-                                TimeWarp(type,
-                                    from.Track1, from.Track1Time, to.Track1Time,
-                                    from.Track2, from.Track2Time, to.Track2Time,
-                                    calculateSimilarity, normalizeSimilarity);
-                            }
-                        }
-
-                        Task.Factory.StartNew(() => {
-                            TimeSpan sectionLength = first.Track1.Length - first.Track1Time > first.Track2.Length - first.Track2Time ? 
-                                first.Track2.Length - first.Track2Time : first.Track1.Length - first.Track1Time;
-                            TimeWarp(type,
-                                first.Track1, first.Track1Time, first.Track1Time + sectionLength,
-                                first.Track2, first.Track2Time, first.Track2Time + sectionLength,
-                                calculateSimilarity, normalizeSimilarity);
-                        });
                     }
                 }
             }
         }
 
-        private void TimeWarp(int type, AudioTrack t1, TimeSpan t1From, TimeSpan t1To, AudioTrack t2, TimeSpan t2From, TimeSpan t2To, bool calculateSimilarity, bool normalizeSimilarity) {
+        private void TimeWarp(TimeWarpType type, AudioTrack t1, TimeSpan t1From, TimeSpan t1To, AudioTrack t2, TimeSpan t2From, TimeSpan t2To, bool calculateSimilarity, bool normalizeSimilarity) {
             IAudioStream s1 = t1.CreateAudioStream();
             IAudioStream s2 = t2.CreateAudioStream();
             s1 = new CropStream(s1, TimeUtil.TimeSpanToBytes(t1From, s1.Properties), TimeUtil.TimeSpanToBytes(t1To, s1.Properties));
@@ -335,11 +348,11 @@ namespace AudioAlign {
             List<Tuple<TimeSpan, TimeSpan>> path = null;
 
             // execute time warping
-            if (type == 1) {
+            if (type == TimeWarpType.DTW) {
                 DTW dtw = new DTW(TimeWarpSearchWidth, progressMonitor);
                 path = dtw.Execute(s1, s2);
             }
-            else if (type == 2) {
+            else if (type == TimeWarpType.OLTW) {
                 OLTW oltw = new OLTW(TimeWarpSearchWidth, progressMonitor);
                 path = oltw.Execute(s1, s2);
             }
