@@ -65,6 +65,7 @@ namespace AudioAlign {
 
             bestMatchRadioButton.IsChecked = true;
             dtwRadioButton.IsChecked = true;
+            timeWarpModeBorderSectionsRadioButton.IsChecked = true;
 
             matchGrid.ItemsSource = multiTrackViewer.Matches;
             profileComboBox.ItemsSource = FingerprintGenerator.GetProfiles();
@@ -266,78 +267,127 @@ namespace AudioAlign {
 
         private void dtwButton_Click(object sender, RoutedEventArgs e) {
             if (trackList.Count > 1) {
-                int mode = 0;
+                int type = 0;
                 if ((bool)dtwRadioButton.IsChecked) {
-                    mode = 1;
+                    type = 1;
                 }
                 else if ((bool)oltwRadioButton.IsChecked) {
+                    type = 2;
+                }
+                int mode = 0;
+                if ((bool)timeWarpModeBorderSectionsRadioButton.IsChecked) {
+                    mode = 1;
+                }
+                else if ((bool)timeWarpModeAllSectionsRadioButton.IsChecked) {
                     mode = 2;
                 }
                 bool calculateSimilarity = (bool)dtwSimilarityCheckBox.IsChecked;
                 bool normalizeSimilarity = (bool)dtwSimilarityNormalizationCheckBox.IsChecked;
 
-                Task.Factory.StartNew(() => {
-                    IAudioStream s1 = trackList[0].CreateAudioStream();
-                    IAudioStream s2 = trackList[1].CreateAudioStream();
+                List<MatchGroup> trackGroups = DetermineMatchGroups();
 
-                    List<Tuple<TimeSpan, TimeSpan>> path = null;
+                foreach (MatchGroup trackGroup in trackGroups) {
+                    foreach (MatchPair trackPair in trackGroup.MatchPairs) {
+                        List<Match> matches = trackPair.Matches.OrderBy(match => { return match.Track1Time; }).ToList();
+                        Match first = matches.First();
+                        Match last = matches.Last();
 
-                    // execute time warping
-                    if (mode == 1) {
-                        DTW dtw = new DTW(TimeWarpSearchWidth, progressMonitor);
-                        path = dtw.Execute(s1, s2);
-                    }
-                    else if (mode == 2) {
-                        OLTW oltw = new OLTW(TimeWarpSearchWidth, progressMonitor);
-                        path = oltw.Execute(s1, s2);
-                    }
-
-                    if (path == null) {
-                        return;
-                    }
-
-                    // convert resulting path to matches and filter them
-                    int filterSize = TimeWarpFilterSize; // take every n-th match and drop the rest
-                    int count = 0;
-                    List<Match> matches = new List<Match>();
-                    float maxSimilarity = 0; // needed for normalization
-                    IProgressReporter progressReporter = progressMonitor.BeginTask("post-process resulting path...", true);
-                    double totalProgress = path.Count;
-                    double progress = 0;
-                    foreach (Tuple<TimeSpan, TimeSpan> match in path) {
-                        if (count++ >= filterSize) {
-                            float similarity = calculateSimilarity ? (float)Math.Abs(CrossCorrelation.Correlate(
-                                s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS),
-                                s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS))) : 1;
-
-                            if (similarity > maxSimilarity) {
-                                maxSimilarity = similarity;
-                            }
-
-                            matches.Add(new Match() {
-                                Track1 = trackList[0],
-                                Track1Time = match.Item1,
-                                Track2 = trackList[1],
-                                Track2Time = match.Item2,
-                                Similarity = similarity
+                        if (mode == 2) {
+                            Task.Factory.StartNew(() => {
+                                TimeSpan sectionLength = first.Track1Time > first.Track2Time ? first.Track2Time : first.Track1Time;
+                                TimeWarp(type,
+                                    first.Track1, first.Track1Time - sectionLength, first.Track1Time,
+                                    first.Track2, first.Track2Time - sectionLength, first.Track2Time,
+                                    calculateSimilarity, normalizeSimilarity);
                             });
-                            count = 0;
-                            progressReporter.ReportProgress(progress / totalProgress * 100);
                         }
-                        progress++;
-                    }
-                    progressReporter.Finish();
 
-                    multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
-                        foreach (Match match in matches) {
-                            if (normalizeSimilarity) {
-                                match.Similarity /= maxSimilarity; // normalize to 1
+                        if (matches.Count > 1) {
+                            for (int i = 0; i < matches.Count - 1; i++) {
+                                Match from = matches[i];
+                                Match to = matches[i + 1];
+                                TimeWarp(type,
+                                    from.Track1, from.Track1Time, to.Track1Time,
+                                    from.Track2, from.Track2Time, to.Track2Time,
+                                    calculateSimilarity, normalizeSimilarity);
                             }
-                            multiTrackViewer.Matches.Add(match);
                         }
-                    });
-                });
+
+                        Task.Factory.StartNew(() => {
+                            TimeSpan sectionLength = first.Track1.Length - first.Track1Time > first.Track2.Length - first.Track2Time ? 
+                                first.Track2.Length - first.Track2Time : first.Track1.Length - first.Track1Time;
+                            TimeWarp(type,
+                                first.Track1, first.Track1Time, first.Track1Time + sectionLength,
+                                first.Track2, first.Track2Time, first.Track2Time + sectionLength,
+                                calculateSimilarity, normalizeSimilarity);
+                        });
+                    }
+                }
             }
+        }
+
+        private void TimeWarp(int type, AudioTrack t1, TimeSpan t1From, TimeSpan t1To, AudioTrack t2, TimeSpan t2From, TimeSpan t2To, bool calculateSimilarity, bool normalizeSimilarity) {
+            IAudioStream s1 = t1.CreateAudioStream();
+            IAudioStream s2 = t2.CreateAudioStream();
+            s1 = new CropStream(s1, TimeUtil.TimeSpanToBytes(t1From, s1.Properties), TimeUtil.TimeSpanToBytes(t1To, s1.Properties));
+            s2 = new CropStream(s2, TimeUtil.TimeSpanToBytes(t2From, s2.Properties), TimeUtil.TimeSpanToBytes(t2To, s2.Properties));
+
+            List<Tuple<TimeSpan, TimeSpan>> path = null;
+
+            // execute time warping
+            if (type == 1) {
+                DTW dtw = new DTW(TimeWarpSearchWidth, progressMonitor);
+                path = dtw.Execute(s1, s2);
+            }
+            else if (type == 2) {
+                OLTW oltw = new OLTW(TimeWarpSearchWidth, progressMonitor);
+                path = oltw.Execute(s1, s2);
+            }
+
+            if (path == null) {
+                return;
+            }
+
+            // convert resulting path to matches and filter them
+            int filterSize = TimeWarpFilterSize; // take every n-th match and drop the rest
+            int count = 0;
+            List<Match> matches = new List<Match>();
+            float maxSimilarity = 0; // needed for normalization
+            IProgressReporter progressReporter = progressMonitor.BeginTask("post-process resulting path...", true);
+            double totalProgress = path.Count;
+            double progress = 0;
+            foreach (Tuple<TimeSpan, TimeSpan> match in path) {
+                if (count++ >= filterSize) {
+                    float similarity = calculateSimilarity ? (float)Math.Abs(CrossCorrelation.Correlate(
+                        s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS),
+                        s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS))) : 1;
+
+                    if (similarity > maxSimilarity) {
+                        maxSimilarity = similarity;
+                    }
+
+                    matches.Add(new Match() {
+                        Track1 = t1,
+                        Track1Time = match.Item1 + t1From,
+                        Track2 = t2,
+                        Track2Time = match.Item2 + t2From,
+                        Similarity = similarity
+                    });
+                    count = 0;
+                    progressReporter.ReportProgress(progress / totalProgress * 100);
+                }
+                progress++;
+            }
+            progressReporter.Finish();
+
+            multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
+                foreach (Match match in matches) {
+                    if (normalizeSimilarity) {
+                        match.Similarity /= maxSimilarity; // normalize to 1
+                    }
+                    multiTrackViewer.Matches.Add(match);
+                }
+            });
         }
 
         private List<MatchGroup> DetermineMatchGroups() {

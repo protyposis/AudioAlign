@@ -28,7 +28,7 @@
                 <TabItem Header="Dynamic Time Warping">
                     <Grid>
                         <Button Content="Start" Height="23" Name="dtwButton" Width="75" Click="dtwButton_Click" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-                        <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" />
+                        <Label Content="Type:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" />
                         <RadioButton Content="DTW" Height="16" HorizontalAlignment="Left" Margin="63,6,0,0" Name="dtwRadioButton" VerticalAlignment="Top" />
                         <RadioButton Content="OLTW" Height="16" HorizontalAlignment="Left" Margin="112,6,0,0" Name="oltwRadioButton" VerticalAlignment="Top" />
                         <Label Content="Similarity:" Height="17" HorizontalAlignment="Left" Margin="6,55,0,0" VerticalAlignment="Top" />
@@ -37,8 +37,13 @@
                         <Label Content="Filter:" Height="17" HorizontalAlignment="Left" Margin="7,31,0,0" VerticalAlignment="Top" />
                         <TextBox Height="23" HorizontalAlignment="Left" Margin="63,28,0,0" VerticalAlignment="Top" Width="54" Text="{Binding Path=TimeWarpFilterSize, Mode=TwoWay}" />
                         <Label Content="(take every n-th match)" Height="17" HorizontalAlignment="Left" Margin="123,31,0,0" VerticalAlignment="Top" />
-                        <TextBox Height="23" HorizontalAlignment="Left" Margin="250,3,0,0" Text="{Binding Path=TimeWarpSearchWidth, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
-                        <Label Content="Search Width:" Height="17" HorizontalAlignment="Left" Margin="177,6,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="253,3,0,0" Text="{Binding Path=TimeWarpSearchWidth, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
+                        <Label Content="Search Width:" Height="17" HorizontalAlignment="Left" Margin="180,6,0,0" VerticalAlignment="Top" />
+                        <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="331,6,0,0" VerticalAlignment="Top" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="368,6,0,0">
+                            <RadioButton Name="timeWarpModeBorderSectionsRadioButton" Content="border sections" Margin="0,0,3,0"/>
+                            <RadioButton Name="timeWarpModeAllSectionsRadioButton" Content="all sections" Margin="0,0,3,0"/>
+                        </StackPanel>
                     </Grid>
                 </TabItem>
             </TabControl>
