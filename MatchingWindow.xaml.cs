@@ -532,52 +532,57 @@ namespace AudioAlign {
             List<MatchGroup> trackGroups = DetermineMatchGroups();
             foreach (MatchGroup trackGroup in trackGroups) {
                 foreach (MatchPair trackPair in trackGroup.MatchPairs) {
-                    TimeSpan length;
-                    TimeSpan t1Offset;
-                    TimeSpan t2Offset;
-                    if (trackPair.Track1.Length > trackPair.Track2.Length) {
-                        length = trackPair.Track2.Length;
-                        t1Offset = trackPair.Track2.Offset - trackPair.Track1.Offset;
-                        t2Offset = TimeSpan.Zero;
-                    }
-                    else {
-                        length = trackPair.Track1.Length;
-                        t1Offset = TimeSpan.Zero;
-                        t2Offset = trackPair.Track1.Offset - trackPair.Track2.Offset;
-                    }
-                    TimeSpan interval = CorrelationIntervalSize;
-                    TimeSpan window = CorrelationWindowSize;
-
+                    MatchPair localMP = trackPair;
                     Task.Factory.StartNew(() => {
+                        TimeSpan t1Offset;
+                        TimeSpan t2Offset;
+                        if (localMP.Track1.Offset < localMP.Track2.Offset) {
+                            t1Offset = localMP.Track2.Offset - localMP.Track1.Offset;
+                            t2Offset = TimeSpan.Zero;
+                        }
+                        else {
+                            t1Offset = TimeSpan.Zero;
+                            t2Offset = localMP.Track1.Offset - localMP.Track2.Offset;
+                        }
+                        TimeSpan length;
+                        if (localMP.Track1.Length > localMP.Track2.Length) {
+                            length = localMP.Track2.Length;
+                        }
+                        else {
+                            length = localMP.Track1.Length;
+                        }
+                        TimeSpan interval = CorrelationIntervalSize;
+                        TimeSpan window = CorrelationWindowSize;
+
                         List<Match> computedMatches = new List<Match>();
                         for (TimeSpan position = TimeSpan.Zero; position < length; position += interval) {
                             Interval t1Interval = new Interval((t1Offset + position).Ticks, (t1Offset + position + window).Ticks);
                             Interval t2Interval = new Interval((t2Offset + position).Ticks, (t2Offset + position + window).Ticks);
 
-                            if (t1Interval.TimeTo >= trackPair.Track1.Length || t2Interval.TimeTo >= trackPair.Track2.Length) {
+                            if (t1Interval.TimeTo >= localMP.Track1.Length || t2Interval.TimeTo >= localMP.Track2.Length) {
                                 // not enough samples remaining to compute the correlation (end of track reached)
-                                return;
+                                break;
                             }
 
                             TimeSpan offset = CrossCorrelation.Calculate(
-                                trackPair.Track1.CreateAudioStream(), t1Interval,
-                                trackPair.Track2.CreateAudioStream(), t2Interval,
+                                localMP.Track1.CreateAudioStream(), t1Interval,
+                                localMP.Track2.CreateAudioStream(), t2Interval,
                                 progressMonitor);
                             // always apply a positive offset that moves the match position inside the corelation interval,
                             // else it can happen that a negative offset is applied to a match at the beginning of the stream
                             // which means that the matching point would be at a negative position in the audio stream
                             computedMatches.Add(new Match {
-                                Track1 = trackPair.Track1, Track1Time = t1Offset + position + (offset < TimeSpan.Zero ? -offset : TimeSpan.Zero),
-                                Track2 = trackPair.Track2, Track2Time = t2Offset + position + (offset >= TimeSpan.Zero ? offset : TimeSpan.Zero),
+                                Track1 = localMP.Track1, Track1Time = t1Offset + position + (offset < TimeSpan.Zero ? -offset : TimeSpan.Zero),
+                                Track2 = localMP.Track2, Track2Time = t2Offset + position + (offset >= TimeSpan.Zero ? offset : TimeSpan.Zero),
                                 Similarity = 1
                             });
                         }
 
-                        Dispatcher.BeginInvoke((Action)(() => {
+                        Dispatcher.BeginInvoke((Action)delegate {
                             foreach (Match match in computedMatches) {
                                 multiTrackViewer.Matches.Add(match);
                             }
-                        }));
+                        });
                     });
                 }
             }
