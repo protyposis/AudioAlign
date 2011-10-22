@@ -39,12 +39,16 @@ namespace AudioAlign {
         public TimeSpan MatchFilterWindowSize { get; set; }
         public int TimeWarpFilterSize { get; set; }
         public TimeSpan TimeWarpSearchWidth { get; set; }
+        public TimeSpan CorrelationWindowSize { get; set; }
+        public TimeSpan CorrelationIntervalSize { get; set; }
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
             MatchFilterWindowSize = new TimeSpan(0, 0, 30);
             TimeWarpFilterSize = 100;
             TimeWarpSearchWidth = new TimeSpan(0, 0, 10);
+            CorrelationWindowSize = new TimeSpan(0, 0, 5);
+            CorrelationIntervalSize = new TimeSpan(0, 5, 0);
 
             InitializeComponent();
 
@@ -521,6 +525,58 @@ namespace AudioAlign {
                     Track2 = t2, Track2Time = position - t2.Offset,
                     Similarity = 1
                 });
+            }
+        }
+
+        private void correlationButton_Click(object sender, RoutedEventArgs e) {
+            List<MatchGroup> trackGroups = DetermineMatchGroups();
+            foreach (MatchGroup trackGroup in trackGroups) {
+                foreach (MatchPair trackPair in trackGroup.MatchPairs) {
+                    TimeSpan length;
+                    TimeSpan t1Offset;
+                    TimeSpan t2Offset;
+                    if (trackPair.Track1.Length > trackPair.Track2.Length) {
+                        length = trackPair.Track2.Length;
+                        t1Offset = trackPair.Track2.Offset - trackPair.Track1.Offset;
+                        t2Offset = TimeSpan.Zero;
+                    }
+                    else {
+                        length = trackPair.Track1.Length;
+                        t1Offset = TimeSpan.Zero;
+                        t2Offset = trackPair.Track1.Offset - trackPair.Track2.Offset;
+                    }
+                    TimeSpan interval = CorrelationIntervalSize;
+                    TimeSpan window = CorrelationWindowSize;
+
+                    Task.Factory.StartNew(() => {
+                        List<Match> computedMatches = new List<Match>();
+                        for (TimeSpan position = TimeSpan.Zero; position < length; position += interval) {
+                            Interval t1Interval = new Interval((t1Offset + position).Ticks, (t1Offset + position + window).Ticks);
+                            Interval t2Interval = new Interval((t2Offset + position).Ticks, (t2Offset + position + window).Ticks);
+
+                            if (t1Interval.TimeTo >= trackPair.Track1.Length || t2Interval.TimeTo >= trackPair.Track2.Length) {
+                                // not enough samples remaining to compute the correlation
+                                return;
+                            }
+
+                            TimeSpan offset = CrossCorrelation.Calculate(
+                                trackPair.Track1.CreateAudioStream(), t1Interval,
+                                trackPair.Track2.CreateAudioStream(), t2Interval,
+                                progressMonitor);
+                            computedMatches.Add(new Match {
+                                Track1 = trackPair.Track1, Track1Time = t1Offset + position,
+                                Track2 = trackPair.Track2, Track2Time = t2Offset + position + offset,
+                                Similarity = 1
+                            });
+                        }
+
+                        Dispatcher.BeginInvoke((Action)(() => {
+                            foreach (Match match in computedMatches) {
+                                multiTrackViewer.Matches.Add(match);
+                            }
+                        }));
+                    });
+                }
             }
         }
     }

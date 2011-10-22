@@ -47,6 +47,15 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Correlation">
+                    <Grid>
+                        <Label Content="Window Size:" Height="20" HorizontalAlignment="Left" Margin="6,9,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="77,6,0,0" Text="{Binding Path=CorrelationWindowSize, Mode=TwoWay}" VerticalAlignment="Top" Width="54" />
+                        <Label Content="Interval Size:" Height="20" HorizontalAlignment="Left" Margin="6,38,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="77,35,0,0" Text="{Binding Path=CorrelationIntervalSize, Mode=TwoWay}" VerticalAlignment="Top" Width="54" />
+                        <Button Content="Start" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" Name="correlationButton" VerticalAlignment="Bottom" Width="75" Click="correlationButton_Click" />
+                    </Grid>
+                </TabItem>
             </TabControl>
             <Grid Grid.Row="1" Margin="0,3,0,0" Height="25">
                 <ProgressBar Name="progressBar" />

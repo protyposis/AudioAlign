@@ -27,12 +27,12 @@
                 <Grid Height="29">
                     <Label Content="Mode:" Height="20" HorizontalAlignment="Left" Margin="5,9,0,0" VerticalAlignment="Top" />
                     <ComboBox Height="23" HorizontalAlignment="Left" Margin="42,0,0,1" Name="analysisMode" VerticalAlignment="Bottom" Width="95" ItemsSource="{Binding Source={StaticResource AnalysisModeValues}}" SelectedValue="{Binding Path=AnalysisMode, Mode=TwoWay}" />
-                    <Label Content="Window Size (secs):" Height="20" HorizontalAlignment="Left" Margin="152,9,0,0" VerticalAlignment="Top" />
-                    <TextBox Name="windowSize" Height="23" Margin="252,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Text="{Binding Path=AnalysisWindowSize, Mode=TwoWay}" />
-                    <Label Content="Interval Size (secs):" Height="20" HorizontalAlignment="Left" Margin="320,9,0,0" VerticalAlignment="Top" />
-                    <TextBox Name="intervalSize" Height="23" Margin="416,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Text="{Binding Path=AnalysisIntervalLength, Mode=TwoWay}" />
-                    <Label Content="Sample Rate:" Height="20" HorizontalAlignment="Left" Margin="486,9,0,0" VerticalAlignment="Top" />
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="555,5,0,0" Name="sampleRate" VerticalAlignment="Top" Width="88" Text="{Binding Path=AnalysisSampleRate, Mode=TwoWay}" IsEditable="True">
+                    <Label Content="Window Size:" Height="20" HorizontalAlignment="Left" Margin="152,9,0,0" VerticalAlignment="Top" />
+                    <TextBox Name="windowSize" Height="23" Margin="223,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Text="{Binding Path=AnalysisWindowSize, Mode=TwoWay}" />
+                    <Label Content="Interval Size:" Height="20" HorizontalAlignment="Left" Margin="283,9,0,0" VerticalAlignment="Top" />
+                    <TextBox Name="intervalSize" Height="23" Margin="350,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Text="{Binding Path=AnalysisIntervalLength, Mode=TwoWay}" />
+                    <Label Content="Sample Rate:" Height="20" HorizontalAlignment="Left" Margin="410,9,0,0" VerticalAlignment="Top" />
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="479,4,0,0" Name="sampleRate" VerticalAlignment="Top" Width="88" Text="{Binding Path=AnalysisSampleRate, Mode=TwoWay}" IsEditable="True">
                         <ComboBoxItem>2756</ComboBoxItem>
                         <ComboBoxItem>5512</ComboBoxItem>
                         <ComboBoxItem>8000</ComboBoxItem>
