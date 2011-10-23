@@ -236,6 +236,7 @@ namespace AudioAlign {
         private void btnFindMatches_Click(object sender, RoutedEventArgs e) {
             if (matchingWindow == null || !matchingWindow.IsLoaded) {
                 matchingWindow = new MatchingWindow(trackList, multiTrackViewer1);
+                matchingWindow.Owner = this;
                 matchingWindow.Show();
             }
             else {
@@ -247,6 +248,7 @@ namespace AudioAlign {
         private void btnAnalyze_Click(object sender, RoutedEventArgs e) {
             if (analysisWindow == null || !analysisWindow.IsLoaded) {
                 analysisWindow = new AnalysisWindow(trackList);
+                analysisWindow.Owner = this;
                 analysisWindow.Show();
             }
             else {
