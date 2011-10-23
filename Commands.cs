@@ -10,6 +10,7 @@ namespace AudioAlign {
         public static readonly RoutedUICommand AddAudioFile = new RoutedUICommand("Add audio file", "AddAudioFile", typeof(MainWindow));
         public static readonly RoutedUICommand DebugRefreshMultiTrackViewer = new RoutedUICommand("Refresh MultiTrackViewer", "DebugRefreshMultiTrackViewer", typeof(MainWindow));
         public static readonly RoutedUICommand ViewZoomToFit = new RoutedUICommand("Zoom to fit", "ViewZoomToFit", typeof(MainWindow));
+        public static readonly RoutedUICommand ViewFitTracksVertically = new RoutedUICommand("Fit tracks vertically", "ViewFitTracksVertically", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorMasterVolume = new RoutedUICommand("Master Volume", "MonitorMasterVolume", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorMasterCorrelation = new RoutedUICommand("Master Correlation", "MonitorMasterCorrelation", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorFrequencyGraph = new RoutedUICommand("Frequency Graph", "MonitorFrequencyGraph", typeof(MainWindow));

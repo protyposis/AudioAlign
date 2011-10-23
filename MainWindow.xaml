@@ -20,6 +20,7 @@
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
         <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
         <CommandBinding Command="local:Commands.ViewZoomToFit" Executed="CommandBinding_ViewZoomToFit"/>
+        <CommandBinding Command="local:Commands.ViewFitTracksVertically" Executed="CommandBinding_ViewFitTracksVertically"/>
         <CommandBinding Command="local:Commands.MonitorMasterVolume" Executed="CommandBinding_MonitorMasterVolume"/>
         <CommandBinding Command="local:Commands.MonitorMasterCorrelation" Executed="CommandBinding_MonitorMasterCorrelation"/>
         <CommandBinding Command="local:Commands.MonitorFrequencyGraph" Executed="CommandBinding_MonitorFrequencyGraph"/>
@@ -58,6 +59,7 @@
             </MenuItem>
             <MenuItem Header="View">
                 <MenuItem Command="local:Commands.ViewZoomToFit"/>
+                <MenuItem Command="local:Commands.ViewFitTracksVertically"/>
             </MenuItem>
             <MenuItem Header="Monitor">
                 <MenuItem Command="local:Commands.MonitorMasterVolume" Name="menuItemMonitorMasterVolume" IsCheckable="True" IsChecked="True"/>

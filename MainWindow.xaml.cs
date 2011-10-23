@@ -369,6 +369,10 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_ViewFitTracksVertically(object sender, ExecutedRoutedEventArgs e) {
+            multiTrackViewer1.FitTracksVertically(30);
+        }
+
         private void CommandBinding_MonitorMasterVolume(object sender, ExecutedRoutedEventArgs e) {
             if (menuItemMonitorMasterVolume.IsChecked) {
                 player.VolumeAnnounced += Player_VolumeAnnounced_VolumeMeter;
