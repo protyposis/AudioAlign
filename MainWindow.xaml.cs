@@ -372,7 +372,7 @@ namespace AudioAlign {
         }
 
         private void CommandBinding_ViewFitTracksVertically(object sender, ExecutedRoutedEventArgs e) {
-            multiTrackViewer1.FitTracksVertically(30);
+            multiTrackViewer1.FitTracksVertically(40);
         }
 
         private void CommandBinding_MonitorMasterVolume(object sender, ExecutedRoutedEventArgs e) {
