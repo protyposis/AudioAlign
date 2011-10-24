@@ -47,7 +47,7 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Correlation">
+                <TabItem Header="Cross-Correlation">
                     <Grid>
                         <Label Content="Window Size:" Height="20" HorizontalAlignment="Left" Margin="6,9,0,0" VerticalAlignment="Top" />
                         <TextBox Height="23" HorizontalAlignment="Left" Margin="77,6,0,0" Text="{Binding Path=CorrelationWindowSize, Mode=TwoWay}" VerticalAlignment="Top" Width="54" />
@@ -81,12 +81,11 @@
                     </DataGrid>
                     <DockPanel Grid.Row="1" Margin="0,3,0,0">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                            <Button Name="clearMatchesButton" Content="Clear Matches" Height="23" Width="85" Margin="0,0,3,0" Click="clearMatchesButton_Click" />
-                            <Button Name="crossCorrelateButton" Content="Cross-Correlate Matches" Height="23" Margin="0" Width="135" Click="crossCorrelateButton_Click" />
+                            <Button Name="clearMatchesButton" Content="Clear" Height="23" Width="85" Margin="0,0,3,0" Click="clearMatchesButton_Click" />
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button Content="Add from timeline..." Height="23" Name="addManualMatchButton" Width="110" Click="addManualMatchButton_Click" />
-                            <Popup Name="addManualMatchPopup" PlacementTarget="{Binding ElementName=addManualMatchButton}" Placement="Relative" VerticalOffset="{Binding ElementName=addManualMatchButton, Path=ActualHeight}" PopupAnimation="Slide" StaysOpen="False">
+                            <Popup Name="addManualMatchPopup" PlacementTarget="{Binding ElementName=addManualMatchButton}" Placement="Relative" VerticalOffset="{Binding ElementName=addManualMatchButton, Path=ActualHeight}" PopupAnimation="Slide" AllowsTransparency="True" StaysOpen="False">
                                 <Border Background="{StaticResource WindowBackgroundBrush}" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="1">
                                     <Grid Margin="3">
                                         <Grid.ColumnDefinitions>
@@ -106,6 +105,7 @@
                                     </Grid>
                                 </Border>
                             </Popup>
+                            <Button Name="crossCorrelateButton" Content="Cross-correlate selection" Height="23" Margin="3,0,0,0" Width="135" Click="crossCorrelateButton_Click" />
                         </StackPanel>
                     </DockPanel>
                 </Grid>

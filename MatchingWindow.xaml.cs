@@ -197,16 +197,20 @@ namespace AudioAlign {
         }
 
         private void crossCorrelateButton_Click(object sender, RoutedEventArgs e) {
-            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
-            long secfactor = 1000 * 1000 * 10;
-
+            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
             foreach (Match matchFE in matches) {
                 Match match = matchFE; // needed as reference for async task
                 Task.Factory.StartNew(() => {
-                    TimeSpan offset = CrossCorrelation.Calculate(match.Track1.CreateAudioStream(), new Interval(match.Track1Time.Ticks, match.Track1Time.Ticks + secfactor / 2),
-                        match.Track2.CreateAudioStream(), new Interval(match.Track2Time.Ticks, match.Track2Time.Ticks + secfactor / 2), progressMonitor);
-
+                    TimeSpan offset = CrossCorrelation.Calculate(
+                        match.Track1.CreateAudioStream(), new Interval(match.Track1Time.Ticks, match.Track1Time.Ticks + TimeUtil.SECS_TO_TICKS),
+                        match.Track2.CreateAudioStream(), new Interval(match.Track2Time.Ticks, match.Track2Time.Ticks + TimeUtil.SECS_TO_TICKS),
+                        progressMonitor);
                     Debug.WriteLine("CC: " + match + ": " + offset);
+                    Dispatcher.BeginInvoke((Action)delegate {
+                        match.Track2Time += offset;
+                        matchGrid.Items.Refresh();
+                        multiTrackViewer.RefreshAdornerLayer();
+                    });
                 });
             }
         }
@@ -520,11 +524,14 @@ namespace AudioAlign {
             AudioTrack t1 = addManualMatchPopupComboBoxA.SelectedItem as AudioTrack;
             AudioTrack t2 = addManualMatchPopupComboBoxB.SelectedItem as AudioTrack;
             if (t1 != null && t2 != null) {
-                multiTrackViewer.Matches.Add(new Match {
+                Match match = new Match {
                     Track1 = t1, Track1Time = position - t1.Offset,
                     Track2 = t2, Track2Time = position - t2.Offset,
                     Similarity = 1
-                });
+                };
+                multiTrackViewer.Matches.Add(match);
+                matchGrid.SelectedItem = match;
+                matchGrid.ScrollIntoView(match);
             }
         }
 
