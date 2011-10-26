@@ -18,5 +18,8 @@
     <Style TargetType="{x:Type StackPanel}" x:Key="ToolBarStackPanel">
         <Setter Property="Background" Value="{DynamicResource NormalBorderBrush}"/>
     </Style>
+    
+    <!-- this is a workaround to generally apply the Slider style from the ExpressionDark theme -->
+    <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource DarkSlider}"/>
 
 </ResourceDictionary>

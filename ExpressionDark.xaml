@@ -2227,7 +2227,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1,1,1,1"/>
     </Style>
-    <Style TargetType="{x:Type Slider}">
+    <!-- the slider style needs to be keyed so that it doesn't get applied by default, otherwise the application doesn't run outside visual studio -->
+    <Style x:Key="DarkSlider" TargetType="{x:Type Slider}">
         <Setter Property="Background" Value="{DynamicResource NormalBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
         <Setter Property="Template">
