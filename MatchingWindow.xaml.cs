@@ -201,13 +201,8 @@ namespace AudioAlign {
             foreach (Match matchFE in matches) {
                 Match match = matchFE; // needed as reference for async task
                 Task.Factory.StartNew(() => {
-                    TimeSpan offset = CrossCorrelation.Calculate(
-                        match.Track1.CreateAudioStream(), new Interval(match.Track1Time.Ticks, match.Track1Time.Ticks + TimeUtil.SECS_TO_TICKS),
-                        match.Track2.CreateAudioStream(), new Interval(match.Track2Time.Ticks, match.Track2Time.Ticks + TimeUtil.SECS_TO_TICKS),
-                        progressMonitor);
-                    Debug.WriteLine("CC: " + match + ": " + offset);
+                    CrossCorrelation.Adjust(match, progressMonitor);
                     Dispatcher.BeginInvoke((Action)delegate {
-                        match.Track2Time += offset;
                         matchGrid.Items.Refresh();
                         multiTrackViewer.RefreshAdornerLayer();
                     });
