@@ -482,6 +482,7 @@ namespace AudioAlign {
                 multiTrackViewer.Matches.Add(match);
                 matchGrid.SelectedItem = match;
                 matchGrid.ScrollIntoView(match);
+                addManualMatchPopup.IsOpen = false;
             }
         }
 
