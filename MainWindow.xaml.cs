@@ -51,7 +51,13 @@ namespace AudioAlign {
             // source: http://stackoverflow.com/questions/332859/detect-dragndrop-file-in-wpf
             if (e.Data is DataObject && ((DataObject)e.Data).ContainsFileDropList()) {
                 foreach (string filePath in ((DataObject)e.Data).GetFileDropList()) {
-                    AddFile(filePath);
+                    FileInfo fileInfo = new FileInfo(filePath);
+                    if ((fileInfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory) {
+                        AddDirectory(new DirectoryInfo(filePath));
+                    }
+                    else {
+                        AddFile(fileInfo);
+                    }
                 }
             }
         }
@@ -297,11 +303,20 @@ namespace AudioAlign {
             correlationMeter.Reset();
         }
 
-        private void AddFile(string fileName) {
-            if (AudioStreamFactory.IsSupportedFile(fileName)) {
-                AudioTrack audioTrack = new AudioTrack(new FileInfo(fileName));
+        private void AddFile(FileInfo fileInfo) {
+            if (AudioStreamFactory.IsSupportedFile(fileInfo.FullName)) {
+                AudioTrack audioTrack = new AudioTrack(fileInfo);
                 multiTrackViewer1.Items.Add(audioTrack);
                 trackList.Add(audioTrack);
+            }
+        }
+
+        private void AddDirectory(DirectoryInfo dirInfo) {
+            foreach (FileInfo fileInfo in dirInfo.EnumerateFiles()) {
+                AddFile(fileInfo);
+            }
+            foreach (DirectoryInfo subDirInfo in dirInfo.EnumerateDirectories()) {
+                AddDirectory(subDirInfo);
             }
         }
 
@@ -348,7 +363,7 @@ namespace AudioAlign {
 
             if (dlg.ShowDialog() == true) {
                 foreach (string fileName in dlg.FileNames) {
-                    AddFile(fileName);
+                    AddFile(new FileInfo(fileName));
                 }
             }
         }
