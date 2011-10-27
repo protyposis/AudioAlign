@@ -36,6 +36,8 @@ namespace AudioAlign {
 
         private volatile int numTasksRunning;
 
+        public int FingerprintSize { get; set; }
+        public float FingerprintBerThreshold { get; set; }
         public TimeSpan MatchFilterWindowSize { get; set; }
         public int TimeWarpFilterSize { get; set; }
         public TimeSpan TimeWarpSearchWidth { get; set; }
@@ -44,6 +46,8 @@ namespace AudioAlign {
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
+            FingerprintSize = FingerprintStore.DEFAULT_FINGERPRINT_SIZE;
+            FingerprintBerThreshold = FingerprintStore.DEFAULT_THRESHOLD;
             MatchFilterWindowSize = new TimeSpan(0, 0, 30);
             TimeWarpFilterSize = 100;
             TimeWarpSearchWidth = new TimeSpan(0, 0, 10);
@@ -236,6 +240,8 @@ namespace AudioAlign {
         }
 
         private void FindAllDirectMatches() {
+            fingerprintStore.Threshold = FingerprintBerThreshold;
+            fingerprintStore.FingerprintSize = FingerprintSize;
             List<Match> matches = fingerprintStore.FindAllMatchingMatches();
             Debug.WriteLine(matches.Count + " matches found");
             matches = FingerprintStore.FilterDuplicateMatches(matches);
@@ -246,6 +252,8 @@ namespace AudioAlign {
         }
 
         private void FindAllSoftMatches() {
+            fingerprintStore.Threshold = FingerprintBerThreshold;
+            fingerprintStore.FingerprintSize = FingerprintSize;
             List<Match> matches = fingerprintStore.FindAllMatches();
             Debug.WriteLine(matches.Count + " matches found");
             matches = FingerprintStore.FilterDuplicateMatches(matches);
@@ -260,6 +268,8 @@ namespace AudioAlign {
         }
 
         private void findPossibleMatchesButton_Click(object sender, RoutedEventArgs e) {
+            fingerprintStore.Threshold = FingerprintBerThreshold;
+            fingerprintStore.FingerprintSize = FingerprintSize;
             fingerprintStore.FindAllMatches(3, 0.35f);
         }
 

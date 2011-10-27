@@ -23,6 +23,10 @@
                         <Button Name="clearStoreButton" Content="Clear Store" Height="23" Width="85" Margin="6,0,0,6" Click="clearStoreButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
                         <Button Name="findMatchingMatchesButton" Content="Find Direct Matches (default)" Height="23" Margin="97,0,0,6" Click="findMatchingMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="154" />
                         <Button Name="findSoftMatchesButton" Content="Find Soft Matches" Height="23" Width="110" Margin="257,0,0,7" Click="findSoftMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                        <Label Content="Error Threshold" Height="17" HorizontalAlignment="Left" Margin="188,10,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="269,7,0,0" VerticalAlignment="Top" Width="60" Text="{Binding Path=FingerprintBerThreshold, Mode=TwoWay}" />
+                        <Label Content="Fingerprint Size" Height="17" HorizontalAlignment="Left" Margin="349,10,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="430,7,0,0" Text="{Binding Path=FingerprintSize, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Dynamic Time Warping">
