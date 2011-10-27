@@ -375,6 +375,20 @@ namespace AudioAlign {
             multiTrackViewer1.FitTracksVertically(40);
         }
 
+        private void CommandBinding_ViewGroupMatchingTracks(object sender, ExecutedRoutedEventArgs e) {
+            List<MatchGroup> matchGroups = MatchProcessor.DetermineMatchGroups(
+                MatchFilterMode.First, trackList, new List<Match>(multiTrackViewer1.Matches), false, TimeSpan.Zero);
+
+            foreach (MatchGroup matchGroup in matchGroups) {
+                foreach (AudioTrack track in matchGroup.TrackList) {
+                    multiTrackViewer1.Items.Remove(track);
+                    trackList.Remove(track);
+                    trackList.Add(track);
+                    multiTrackViewer1.Items.Add(track);
+                }
+            }
+        }
+
         private void CommandBinding_MonitorMasterVolume(object sender, ExecutedRoutedEventArgs e) {
             if (menuItemMonitorMasterVolume.IsChecked) {
                 player.VolumeAnnounced += Player_VolumeAnnounced_VolumeMeter;

@@ -112,7 +112,9 @@ namespace AudioAlign {
             IProfile profile = (IProfile)profileComboBox.SelectedItem;
             fingerprintStore = new FingerprintStore(profile);
 
-            Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, audioTrack => {
+            Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, 
+                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, 
+                audioTrack => {
                 DateTime startTime = DateTime.Now;
                 IProgressReporter progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
 
@@ -178,6 +180,7 @@ namespace AudioAlign {
                         multiTrackViewer.Matches.Clear();
                     }
 
+                    TrackList<AudioTrack> alignedTracks = new TrackList<AudioTrack>();
                     TimeSpan componentStartTime = TimeSpan.Zero;
                     foreach (MatchGroup trackGroup in trackGroups) {
                         if (removeUnusedMatchingPoints) {
@@ -190,7 +193,13 @@ namespace AudioAlign {
 
                         MatchProcessor.AlignTracks(trackGroup.MatchPairs);
                         MatchProcessor.MoveToStartTime(trackGroup.TrackList, componentStartTime);
+                        alignedTracks.Add(trackGroup.TrackList);
                         componentStartTime = trackGroup.TrackList.End;
+                    }
+
+                    // process unaligned tracks (= tracks without matching points)
+                    foreach (AudioTrack track in trackList.Except(alignedTracks)) {
+                        track.Volume = 0;
                     }
                 });
             });
@@ -423,72 +432,8 @@ namespace AudioAlign {
             }
 
             List<Match> matches = new List<Match>(multiTrackViewer.Matches);
-            return DetermineMatchGroups(matchFilterMode, trackList, matches,
+            return MatchProcessor.DetermineMatchGroups(matchFilterMode, trackList, matches,
                 (bool)windowedModeCheckBox.IsChecked, MatchFilterWindowSize);
-        }
-
-        private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode, TrackList<AudioTrack> trackList,
-                                                      List<Match> matches, bool windowed, TimeSpan windowSize) {
-            List<MatchPair> trackPairs = MatchProcessor.GetTrackPairs(trackList);
-            MatchProcessor.AssignMatches(trackPairs, matches);
-            trackPairs = trackPairs.Where(matchPair => matchPair.Matches.Count > 0).ToList(); // remove all track pairs without matches
-
-            // filter matches
-            foreach (MatchPair trackPair in trackPairs) {
-                List<Match> filteredMatches;
-
-                if (trackPair.Matches.Count > 0) {
-                    if (matchFilterMode == MatchFilterMode.None) {
-                        filteredMatches = trackPair.Matches;
-                    }
-                    else {
-                        if (windowed) {
-                            filteredMatches = MatchProcessor.WindowFilter(trackPair.Matches, matchFilterMode, windowSize);
-                        }
-                        else {
-                            filteredMatches = new List<Match>();
-                            filteredMatches.Add(MatchProcessor.Filter(trackPair.Matches, matchFilterMode));
-                        }
-                    }
-
-                    trackPair.Matches = filteredMatches;
-                }
-            }
-
-            // determine connected tracks
-            UndirectedGraph<AudioTrack, double> trackGraph = new UndirectedGraph<AudioTrack, double>();
-            foreach (MatchPair trackPair in trackPairs) {
-                trackGraph.Add(new Edge<AudioTrack, double>(trackPair.Track1, trackPair.Track2, 1d - trackPair.CalculateAverageSimilarity()) {
-                    Tag = trackPair
-                });
-            }
-
-            List<UndirectedGraph<AudioTrack, double>> trackGraphComponents = trackGraph.GetConnectedComponents();
-            Debug.WriteLine("{0} disconnected components", trackGraphComponents.Count);
-
-            List<MatchGroup> trackGroups = new List<MatchGroup>();
-            foreach (UndirectedGraph<AudioTrack, double> component in trackGraphComponents) {
-                List<MatchPair> connectedTrackPairs = new List<MatchPair>();
-
-                foreach (Edge<AudioTrack, double> edge in component.GetMinimalSpanningTree().Edges) {
-                    connectedTrackPairs.Add((MatchPair)edge.Tag);
-                }
-
-                foreach (MatchPair filteredTrackPair in connectedTrackPairs) {
-                    Debug.WriteLine("TrackPair {0} <-> {1}: {2} matches, similarity = {3}",
-                        filteredTrackPair.Track1, filteredTrackPair.Track2,
-                        filteredTrackPair.Matches.Count, filteredTrackPair.CalculateAverageSimilarity());
-                }
-
-                TrackList<AudioTrack> componentTrackList = new TrackList<AudioTrack>(component.Vertices);
-
-                trackGroups.Add(new MatchGroup {
-                    MatchPairs = connectedTrackPairs,
-                    TrackList = componentTrackList
-                });
-            }
-
-            return trackGroups;
         }
 
         private void addManualMatchButton_Click(object sender, RoutedEventArgs e) {
