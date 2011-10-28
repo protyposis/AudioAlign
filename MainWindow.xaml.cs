@@ -407,6 +407,10 @@ namespace AudioAlign {
             multiTrackViewer1.DisplayMatches = !multiTrackViewer1.DisplayMatches;
         }
 
+        private void CommandBinding_ViewDisplayTrackHeaders(object sender, ExecutedRoutedEventArgs e) {
+            multiTrackViewer1.DisplayTrackHeaders = !multiTrackViewer1.DisplayTrackHeaders;
+        }
+
         private void CommandBinding_MonitorMasterVolume(object sender, ExecutedRoutedEventArgs e) {
             if (menuItemMonitorMasterVolume.IsChecked) {
                 player.VolumeAnnounced += Player_VolumeAnnounced_VolumeMeter;

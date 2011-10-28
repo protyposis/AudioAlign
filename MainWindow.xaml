@@ -23,6 +23,7 @@
         <CommandBinding Command="local:Commands.ViewFitTracksVertically" Executed="CommandBinding_ViewFitTracksVertically"/>
         <CommandBinding Command="local:Commands.ViewGroupMatchingTracks" Executed="CommandBinding_ViewGroupMatchingTracks"/>
         <CommandBinding Command="local:Commands.ViewDisplayMatches" Executed="CommandBinding_ViewDisplayMatches"/>
+        <CommandBinding Command="local:Commands.ViewDisplayTrackHeaders" Executed="CommandBinding_ViewDisplayTrackHeaders"/>
         <CommandBinding Command="local:Commands.MonitorMasterVolume" Executed="CommandBinding_MonitorMasterVolume"/>
         <CommandBinding Command="local:Commands.MonitorMasterCorrelation" Executed="CommandBinding_MonitorMasterCorrelation"/>
         <CommandBinding Command="local:Commands.MonitorFrequencyGraph" Executed="CommandBinding_MonitorFrequencyGraph"/>
@@ -63,7 +64,8 @@
                 <MenuItem Command="local:Commands.ViewZoomToFit"/>
                 <MenuItem Command="local:Commands.ViewFitTracksVertically"/>
                 <MenuItem Command="local:Commands.ViewGroupMatchingTracks"/>
-                <MenuItem Command="local:Commands.ViewDisplayMatches" IsChecked="True"/>
+                <MenuItem Command="local:Commands.ViewDisplayMatches" IsCheckable="True" IsChecked="True"/>
+                <MenuItem Command="local:Commands.ViewDisplayTrackHeaders" IsCheckable="True" IsChecked="True"/>
             </MenuItem>
             <MenuItem Header="Monitor">
                 <MenuItem Command="local:Commands.MonitorMasterVolume" Name="menuItemMonitorMasterVolume" IsCheckable="True" IsChecked="True"/>
