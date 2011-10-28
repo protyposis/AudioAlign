@@ -19,7 +19,6 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using AudioAlign.Audio.TaskMonitor;
 using AudioAlign.Audio.Matching;
-using NAudio.Wave;
 using AudioAlign.Audio.Matching.HaitsmaKalker2002;
 using AudioAlign.Audio.Streams;
 using System.Threading.Tasks;
