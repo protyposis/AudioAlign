@@ -354,6 +354,16 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_FileExportVegasEDL(object sender, ExecutedRoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Sony Vegas EDL text file|*.txt";
+
+            if (dlg.ShowDialog() == true) {
+                Project.ExportEDL(trackList, new FileInfo(dlg.FileName));
+            }
+        }
+
         private void CommandBinding_AddAudioFile(object sender, ExecutedRoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.DefaultExt = ".wav";

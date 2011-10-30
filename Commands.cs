@@ -7,10 +7,11 @@ using System.Windows.Input;
 namespace AudioAlign {
     static class Commands {
         public static readonly RoutedUICommand PlayToggle = new RoutedUICommand("Play/Pause", "PlayToggle", typeof(MainWindow));
+        public static readonly RoutedUICommand FileExportVegasEDL = new RoutedUICommand("Export to Sony Vegas EDL", "FileExportVegasEDL", typeof(MainWindow));
         public static readonly RoutedUICommand AddAudioFile = new RoutedUICommand("Add audio file", "AddAudioFile", typeof(MainWindow));
         public static readonly RoutedUICommand DebugRefreshMultiTrackViewer = new RoutedUICommand("Refresh MultiTrackViewer", "DebugRefreshMultiTrackViewer", typeof(MainWindow));
         public static readonly RoutedUICommand ViewZoomToFit = new RoutedUICommand("Zoom to fit", "ViewZoomToFit", typeof(MainWindow));
-        public static readonly RoutedUICommand ViewFitTracksVertically = new RoutedUICommand("Fit tracks vertically", "ViewFitTracksVertically", typeof(MainWindow));
+        public static readonly RoutedUICommand ViewFitTracksVertically = new RoutedUICommand("Resize track heights", "ViewFitTracksVertically", typeof(MainWindow));
         public static readonly RoutedUICommand ViewGroupMatchingTracks = new RoutedUICommand("Group matching tracks", "ViewGroupMatchingTracks", typeof(MainWindow));
         public static readonly RoutedUICommand ViewDisplayMatches = new RoutedUICommand("Display matches", "ViewDisplayMatches", typeof(MainWindow));
         public static readonly RoutedUICommand ViewDisplayTrackHeaders = new RoutedUICommand("Display track headers", "ViewDisplayTrackHeaders", typeof(MainWindow));
