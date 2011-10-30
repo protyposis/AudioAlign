@@ -47,7 +47,7 @@ namespace AudioAlign {
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
             FingerprintSize = FingerprintStore.DEFAULT_FINGERPRINT_SIZE;
-            FingerprintBerThreshold = FingerprintStore.DEFAULT_THRESHOLD;
+            FingerprintBerThreshold = 0.45f;
             MatchFilterWindowSize = new TimeSpan(0, 0, 30);
             TimeWarpFilterSize = 100;
             TimeWarpSearchWidth = new TimeSpan(0, 0, 10);
@@ -242,8 +242,11 @@ namespace AudioAlign {
         private void FindAllDirectMatches() {
             fingerprintStore.Threshold = FingerprintBerThreshold;
             fingerprintStore.FingerprintSize = FingerprintSize;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             List<Match> matches = fingerprintStore.FindAllMatchingMatches();
-            Debug.WriteLine(matches.Count + " matches found");
+            sw.Stop();
+            Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
             matches = FingerprintStore.FilterDuplicateMatches(matches);
             Debug.WriteLine(matches.Count + " matches found (filtered)");
             foreach (Match match in matches) {
