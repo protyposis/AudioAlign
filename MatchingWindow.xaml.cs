@@ -142,7 +142,7 @@ namespace AudioAlign {
                 // all running generator tasks have finished
                 multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
                     // calculate fingerprints / matches after processing of all tracks has finished
-                    ClearAllMatches();
+                    //ClearAllMatches();
                     FindAllDirectMatches();
                 });
             }
