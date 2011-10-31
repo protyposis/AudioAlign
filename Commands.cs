@@ -13,6 +13,7 @@ namespace AudioAlign {
         public static readonly RoutedUICommand ViewZoomToFit = new RoutedUICommand("Zoom to fit", "ViewZoomToFit", typeof(MainWindow));
         public static readonly RoutedUICommand ViewFitTracksVertically = new RoutedUICommand("Resize track heights", "ViewFitTracksVertically", typeof(MainWindow));
         public static readonly RoutedUICommand ViewGroupMatchingTracks = new RoutedUICommand("Group matching tracks", "ViewGroupMatchingTracks", typeof(MainWindow));
+        public static readonly RoutedUICommand ViewOrderTracksByOffset = new RoutedUICommand("Order tracks by offset", "ViewOrderTracksByOffset", typeof(MainWindow));
         public static readonly RoutedUICommand ViewDisplayMatches = new RoutedUICommand("Display matches", "ViewDisplayMatches", typeof(MainWindow));
         public static readonly RoutedUICommand ViewDisplayTrackHeaders = new RoutedUICommand("Display track headers", "ViewDisplayTrackHeaders", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorMasterVolume = new RoutedUICommand("Master Volume", "MonitorMasterVolume", typeof(MainWindow));

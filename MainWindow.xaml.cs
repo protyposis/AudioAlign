@@ -413,6 +413,15 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_ViewOrderTracksByOffset(object sender, ExecutedRoutedEventArgs e) {
+            foreach (AudioTrack track in trackList.OrderBy(track => track.Offset)) {
+                multiTrackViewer1.Items.Remove(track);
+                trackList.Remove(track);
+                trackList.Add(track);
+                multiTrackViewer1.Items.Add(track);
+            }
+        }
+
         private void CommandBinding_ViewDisplayMatches(object sender, ExecutedRoutedEventArgs e) {
             multiTrackViewer1.DisplayMatches = !multiTrackViewer1.DisplayMatches;
         }
