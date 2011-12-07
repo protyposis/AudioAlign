@@ -195,6 +195,7 @@ namespace AudioAlign {
                             }
                         }
 
+                        MatchProcessor.FilterCoincidentMatches(trackGroup.MatchPairs);
                         MatchProcessor.AlignTracks(trackGroup.MatchPairs);
                         MatchProcessor.MoveToStartTime(trackGroup.TrackList, componentStartTime);
                         alignedTracks.Add(trackGroup.TrackList);
