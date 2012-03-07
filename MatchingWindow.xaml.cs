@@ -40,6 +40,7 @@ namespace AudioAlign {
         public float FingerprintBerThreshold { get; set; }
         public TimeSpan MatchFilterWindowSize { get; set; }
         public int TimeWarpFilterSize { get; set; }
+        public bool TimeWarpSmoothing { get; set; }
         public TimeSpan TimeWarpSearchWidth { get; set; }
         public TimeSpan CorrelationWindowSize { get; set; }
         public TimeSpan CorrelationIntervalSize { get; set; }
@@ -49,7 +50,8 @@ namespace AudioAlign {
             FingerprintSize = FingerprintStore.DEFAULT_FINGERPRINT_SIZE;
             FingerprintBerThreshold = 0.45f;
             MatchFilterWindowSize = new TimeSpan(0, 0, 30);
-            TimeWarpFilterSize = 100;
+            TimeWarpFilterSize = 500;
+            TimeWarpSmoothing = true;
             TimeWarpSearchWidth = new TimeSpan(0, 0, 10);
             CorrelationWindowSize = new TimeSpan(0, 0, 5);
             CorrelationIntervalSize = new TimeSpan(0, 5, 0);
@@ -389,33 +391,67 @@ namespace AudioAlign {
 
             // convert resulting path to matches and filter them
             int filterSize = TimeWarpFilterSize; // take every n-th match and drop the rest
-            int count = 0;
+            bool smoothing = TimeWarpSmoothing;
+            int smoothingWidth = Math.Min(filterSize / 10, filterSize);
             List<Match> matches = new List<Match>();
             float maxSimilarity = 0; // needed for normalization
             IProgressReporter progressReporter = progressMonitor.BeginTask("post-process resulting path...", true);
             double totalProgress = path.Count;
             double progress = 0;
-            foreach (Tuple<TimeSpan, TimeSpan> match in path) {
-                if (count++ >= filterSize) {
-                    float similarity = calculateSimilarity ? (float)Math.Abs(CrossCorrelation.Correlate(
-                        s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS),
-                        s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS))) : 1;
 
-                    if (similarity > maxSimilarity) {
-                        maxSimilarity = similarity;
-                    }
+            for (int i = 0; i < path.Count; i += filterSize) {
+                //List<Tuple<TimeSpan, TimeSpan>> section = path.GetRange(i, Math.Min(path.Count - i, filterSize));
+                List<Tuple<TimeSpan, TimeSpan>> smoothingSection = path.GetRange(
+                        Math.Max(0, i - smoothingWidth / 2), Math.Min(path.Count - i, smoothingWidth));
+                Tuple<TimeSpan, TimeSpan> match = path[i];
 
-                    matches.Add(new Match() {
-                        Track1 = t1,
-                        Track1Time = match.Item1 + t1From,
-                        Track2 = t2,
-                        Track2Time = match.Item2 + t2From,
-                        Similarity = similarity
-                    });
-                    count = 0;
-                    progressReporter.ReportProgress(progress / totalProgress * 100);
+                if (smoothingSection.Count == 0) {
+                    throw new InvalidOperationException("must not happen");
                 }
-                progress++;
+                else if (smoothingSection.Count == 1 || !smoothing || i == 0) {
+                    // do nothing, match doesn't need any processing
+                    // the first and last match must not be smoothed since they must sit at the bounds
+                }
+                else {
+                    List<TimeSpan> offsets = new List<TimeSpan>(smoothingSection.Select(t => t.Item2 - t.Item1).OrderBy(t => t));
+                    int middle = offsets.Count / 2;
+
+                    // calculate median
+                    // http://en.wikiversity.org/wiki/Primary_mathematics/Average,_median,_and_mode#Median
+                    TimeSpan smoothedDriftTime = new TimeSpan((offsets[middle - 1] + offsets[middle]).Ticks / 2);
+                    match = new Tuple<TimeSpan, TimeSpan>(match.Item1, match.Item1 + smoothedDriftTime);
+                }
+
+                float similarity = calculateSimilarity ? (float)Math.Abs(CrossCorrelation.Correlate(
+                            s1, new Interval(match.Item1.Ticks, match.Item1.Ticks + TimeUtil.SECS_TO_TICKS),
+                            s2, new Interval(match.Item2.Ticks, match.Item2.Ticks + TimeUtil.SECS_TO_TICKS))) : 1;
+
+                if (similarity > maxSimilarity) {
+                    maxSimilarity = similarity;
+                }
+
+                matches.Add(new Match() {
+                    Track1 = t1,
+                    Track1Time = match.Item1 + t1From,
+                    Track2 = t2,
+                    Track2Time = match.Item2 + t2From,
+                    Similarity = similarity
+                });
+
+                progressReporter.ReportProgress(progress / totalProgress * 100);
+                progress += filterSize;
+            }
+
+            // add last match if it hasn't been added
+            if (path.Count % filterSize != 1) {
+                Tuple<TimeSpan, TimeSpan> lastMatch = path[path.Count - 1];
+                matches.Add(new Match() {
+                    Track1 = t1,
+                    Track1Time = lastMatch.Item1 + t1From,
+                    Track2 = t2,
+                    Track2Time = lastMatch.Item2 + t2From,
+                    Similarity = 1
+                });
             }
             progressReporter.Finish();
 
