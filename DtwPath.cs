@@ -122,7 +122,7 @@ namespace AudioAlign {
             int color;
             for (int x = 0; x < writeableBitmap.PixelWidth; x++) {
                 for (int y = 0; y < writeableBitmap.PixelHeight; y++) {
-                    double val = cellCostMatrix[iOffset + x, jOffset + y] / 1000;
+                    double val = cellCostMatrix[iOffset + x, jOffset + y];
                     if (totalCostMatrix[iOffset + x, jOffset + y] == double.PositiveInfinity)
                         color = undefColor;
                     else if (val < 0)

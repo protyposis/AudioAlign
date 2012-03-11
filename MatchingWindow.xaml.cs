@@ -387,7 +387,7 @@ namespace AudioAlign {
                 dtw = new DTW(TimeWarpSearchWidth, progressMonitor);
             }
             else if (type == TimeWarpType.OLTW) {
-                dtw = new OLTW(TimeWarpSearchWidth, progressMonitor);
+                dtw = new OLTW2(TimeWarpSearchWidth, progressMonitor);
             }
 
             this.Dispatcher.BeginInvoke((Action)delegate {
