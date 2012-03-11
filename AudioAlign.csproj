@@ -131,6 +131,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DtwPathViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExpressionDark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -151,6 +155,10 @@
     </Compile>
     <Compile Include="Chart\TrianglePointMarker.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="DtwPath.cs" />
+    <Compile Include="DtwPathViewer.xaml.cs">
+      <DependentUpon>DtwPathViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

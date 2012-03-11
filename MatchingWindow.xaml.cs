@@ -36,6 +36,8 @@ namespace AudioAlign {
 
         private volatile int numTasksRunning;
 
+        private DtwPathViewer dtwPathViewer;
+
         public int FingerprintSize { get; set; }
         public float FingerprintBerThreshold { get; set; }
         public TimeSpan MatchFilterWindowSize { get; set; }
@@ -88,6 +90,10 @@ namespace AudioAlign {
             progressMonitor.ProcessingProgressChanged -= Instance_ProcessingProgressChanged;
             progressMonitor.ProcessingFinished -= Instance_ProcessingFinished;
             multiTrackViewer.SelectedMatch = null;
+
+            if (dtwPathViewer != null) {
+                dtwPathViewer.Close();
+            }
         }
 
         private void Instance_ProcessingStarted(object sender, EventArgs e) {
@@ -374,16 +380,38 @@ namespace AudioAlign {
             s2 = new CropStream(s2, TimeUtil.TimeSpanToBytes(t2From, s2.Properties), TimeUtil.TimeSpanToBytes(t2To, s2.Properties));
 
             List<Tuple<TimeSpan, TimeSpan>> path = null;
+            DTW dtw = null;
 
             // execute time warping
             if (type == TimeWarpType.DTW) {
-                DTW dtw = new DTW(TimeWarpSearchWidth, progressMonitor);
-                path = dtw.Execute(s1, s2);
+                dtw = new DTW(TimeWarpSearchWidth, progressMonitor);
             }
             else if (type == TimeWarpType.OLTW) {
-                OLTW oltw = new OLTW(TimeWarpSearchWidth, progressMonitor);
-                path = oltw.Execute(s1, s2);
+                dtw = new OLTW(TimeWarpSearchWidth, progressMonitor);
             }
+
+            this.Dispatcher.BeginInvoke((Action)delegate {
+                dtwPathViewer = new DtwPathViewer();
+                dtwPathViewer.Show();
+            });
+
+            dtw.OltwInit += new DTW.OltwInitDelegate(delegate(int windowSize, IMatrix cellCostMatrix, IMatrix totalCostMatrix) {
+                dtwPathViewer.Dispatcher.BeginInvoke((Action)delegate {
+                    dtwPathViewer.DtwPath.Init(windowSize, cellCostMatrix, totalCostMatrix);
+                });
+            });
+            bool drawing = false;
+            dtw.OltwProgress += new DTW.OltwProgressDelegate(delegate(int i, int j, int minI, int minJ, bool force) {
+                if (!drawing || force) {
+                    dtwPathViewer.Dispatcher.BeginInvoke((Action)delegate {
+                        drawing = true;
+                        dtwPathViewer.DtwPath.Refresh(i, j, minI, minJ);
+                        drawing = false;
+                    });
+                }
+            });
+
+            path = dtw.Execute(s1, s2);
 
             if (path == null) {
                 return;
