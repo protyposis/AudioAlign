@@ -2,9 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:blubb="clr-namespace:AudioAlign"
-        Title="DtwPathViewer" Height="750" Width="750"
-        Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow">
+        Title="DTW Matrix &amp; Path"
+        Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" 
+        ResizeMode="NoResize" SizeToContent="WidthAndHeight">
     <Grid>
-        <blubb:DtwPath x:Name="dtwPath" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="700" />
+        <blubb:DtwPath x:Name="dtwPath" Width="600" Height="600">
+            <blubb:DtwPath.RenderTransform>
+                <ScaleTransform CenterY="300" ScaleY="-1"/>
+            </blubb:DtwPath.RenderTransform>
+        </blubb:DtwPath>
     </Grid>
 </Window>

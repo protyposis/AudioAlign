@@ -105,12 +105,12 @@ namespace AudioAlign {
         public void Init(int size, IMatrix cellCostMatrix, IMatrix totalCostMatrix) {
             this.cellCostMatrix = cellCostMatrix;
             this.totalCostMatrix = totalCostMatrix;
-            this.size = 700;
+            this.size = (int)this.Width;
             InitializeBitmap(true);
         }
 
         public void Refresh(int i, int j, int minI, int minJ) {
-            List<DTW.Pair> path = OLTW.OptimalWarpingPath(totalCostMatrix, minI, minJ);
+            List<DTW.Pair> path = DTW.OptimalWarpingPath(totalCostMatrix, minI, minJ);
 
             int iOffset = i - writeableBitmap.PixelWidth;
             int jOffset = j - writeableBitmap.PixelHeight;
@@ -136,7 +136,6 @@ namespace AudioAlign {
             }
 
             // draw path
-            path.Reverse();
             foreach (DTW.Pair p in path) {
                 if (p.i1 <= iOffset || p.i2 <= jOffset) {
                     break;
