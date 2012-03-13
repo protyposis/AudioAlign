@@ -12,80 +12,13 @@ using AudioAlign.Audio.Matching.Dixon2005;
 namespace AudioAlign {
     public class DtwPath : Control {
 
-        /// <summary>
-        /// Specified how much times the scroll mode bitmap should be larger than the actual control's width.
-        /// The bigger it is, the more memory is consumed, but the less bitmap copy operations need to be executed.
-        /// </summary>
-        private const int SCROLL_WIDTH_FACTOR = 3;
-
         private WriteableBitmap writeableBitmap;
-        private int position;
-        private int[] pixelColumn;
-        //private SpectrogramMode mode;
-
         private IMatrix cellCostMatrix;
         private IMatrix totalCostMatrix;
         private int size;
-        int[] pixels;
-        int pathColor, minColor, maxColor, undefColor;
-
+        private int[] pixels;
+        private int pathColor, minColor, maxColor, undefColor;
         private int[] colorPalette;
-        private bool paletteDemo = false;
-        private int paletteDemoIndex = 0;
-
-        public bool Drawing { get; set; }
-
-        //public SpectrogramMode Mode {
-        //    get { return (SpectrogramMode)GetValue(ModeProperty); }
-        //    set { SetValue(ModeProperty, value); }
-        //}
-
-        //public static readonly DependencyProperty ModeProperty =
-        //    DependencyProperty.Register("Mode", typeof(SpectrogramMode), typeof(Spectrogram),
-        //    new UIPropertyMetadata(SpectrogramMode.Scroll, OnModeChanged));
-
-        //private static void OnModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-        //    Spectrogram spectrogram = d as Spectrogram;
-        //    spectrogram.mode = (SpectrogramMode)e.NewValue;
-        //}
-
-        public int SpectrogramSize {
-            get { return (int)GetValue(SpectrogramSizeProperty); }
-            set { SetValue(SpectrogramSizeProperty, value); }
-        }
-
-        public static readonly DependencyProperty SpectrogramSizeProperty =
-            DependencyProperty.Register("SpectrogramSize", typeof(int), typeof(DtwPath),
-            new UIPropertyMetadata(1024) {
-                CoerceValueCallback = CoerceSpectrogramSize,
-                PropertyChangedCallback = OnSpectrogramSizeChanged
-            });
-
-        private static object CoerceSpectrogramSize(DependencyObject d, object value) {
-            int i = (int)value;
-            return i < 1 ? 1 : i;
-        }
-
-        private static void OnSpectrogramSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            DtwPath spectrogram = d as DtwPath;
-            spectrogram.InitializeBitmap(true);
-        }
-
-        public float Minimum {
-            get { return (float)GetValue(MinimumProperty); }
-            set { SetValue(MinimumProperty, value); }
-        }
-
-        public static readonly DependencyProperty MinimumProperty =
-            DependencyProperty.Register("Minimum", typeof(float), typeof(DtwPath), new UIPropertyMetadata(-100f));
-
-        public float Maximum {
-            get { return (float)GetValue(MaximumProperty); }
-            set { SetValue(MaximumProperty, value); }
-        }
-
-        public static readonly DependencyProperty MaximumProperty =
-            DependencyProperty.Register("Maximum", typeof(float), typeof(DtwPath), new UIPropertyMetadata(0f));
 
         public DtwPath() {
             ColorGradient gradient = new ColorGradient(0, 1);
@@ -99,7 +32,6 @@ namespace AudioAlign {
             undefColor = GetColorValue(Colors.White);
 
             ClipToBounds = true;
-            //mode = Mode;
         }
 
         public void Init(int size, IMatrix cellCostMatrix, IMatrix totalCostMatrix) {
@@ -158,17 +90,6 @@ namespace AudioAlign {
             }
         }
 
-        protected override void OnRenderSizeChanged(System.Windows.SizeChangedInfo sizeInfo) {
-            base.OnRenderSizeChanged(sizeInfo);
-
-            // recreate bitmap for current control size
-            //InitializeSpectrogramBitmap(true);
-        }
-
-        public void Reset() {
-            InitializeBitmap(true);
-        }
-
         private void InitializeBitmap(bool sizeChanged) {
             writeableBitmap = new WriteableBitmap(size, size, 96, 96, PixelFormats.Bgra32, null);
             pixels = new int[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight];
@@ -177,24 +98,6 @@ namespace AudioAlign {
 
         private static int GetColorValue(Color c) {
             return c.A << 24 | c.R << 16 | c.G << 8 | c.B;
-        }
-
-        private static void CopyPixels(WriteableBitmap src, WriteableBitmap dest) {
-            int twoThirds = src.PixelWidth / 3 * 2;
-            int third = src.PixelWidth / 3;
-            int height = src.PixelHeight;
-
-            Int32Rect srcRect = new Int32Rect(twoThirds, 0, third, height);
-            Int32Rect destRect = new Int32Rect(0, 0, third, height);
-
-            //// pixel copy with intermediate buffer
-            //int[] buffer = new int[twoThirds * height];
-            //src.CopyPixels(srcRect, buffer, third * 4, 0);
-            //dest.WritePixels(destRect, buffer, third * 4, 0);
-
-            // direct pixel copy
-            dest.WritePixels(srcRect, src.BackBuffer, src.BackBufferStride * src.PixelHeight, 
-                src.BackBufferStride, destRect.X, destRect.Y);
         }
     }
 }
