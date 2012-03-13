@@ -93,10 +93,10 @@ namespace AudioAlign {
             gradient.AddStop(Colors.White, 1);
             colorPalette = gradient.GetGradient(500).Select(c => GetColorValue(c)).ToArray();
 
-            pathColor = GetColorValue(Colors.Red);
-            minColor = GetColorValue(Colors.Green);
-            maxColor = GetColorValue(Colors.Magenta);
-            undefColor = GetColorValue(Colors.Blue);
+            pathColor = GetColorValue(Colors.Green);
+            minColor = GetColorValue(Colors.Magenta);
+            maxColor = GetColorValue(Colors.Red);
+            undefColor = GetColorValue(Colors.White);
 
             ClipToBounds = true;
             //mode = Mode;
