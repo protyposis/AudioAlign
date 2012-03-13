@@ -16,6 +16,8 @@ namespace AudioAlign {
         public static readonly RoutedUICommand ViewOrderTracksByOffset = new RoutedUICommand("Order tracks by offset", "ViewOrderTracksByOffset", typeof(MainWindow));
         public static readonly RoutedUICommand ViewDisplayMatches = new RoutedUICommand("Display matches", "ViewDisplayMatches", typeof(MainWindow));
         public static readonly RoutedUICommand ViewDisplayTrackHeaders = new RoutedUICommand("Display track headers", "ViewDisplayTrackHeaders", typeof(MainWindow));
+        public static readonly RoutedUICommand ViewTimelineScreenshotVisible = new RoutedUICommand("Copy visible timeline to clipboard", "ViewTimelineScreenshotVisible", typeof(MainWindow));
+        public static readonly RoutedUICommand ViewTimelineScreenshotFull = new RoutedUICommand("Copy full timeline to clipboard", "ViewTimelineScreenshotFull", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorMasterVolume = new RoutedUICommand("Master Volume", "MonitorMasterVolume", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorMasterCorrelation = new RoutedUICommand("Master Correlation", "MonitorMasterCorrelation", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorFrequencyGraph = new RoutedUICommand("Frequency Graph", "MonitorFrequencyGraph", typeof(MainWindow));

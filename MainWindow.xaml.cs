@@ -396,7 +396,7 @@ namespace AudioAlign {
         }
 
         private void CommandBinding_ViewFitTracksVertically(object sender, ExecutedRoutedEventArgs e) {
-            multiTrackViewer1.FitTracksVertically(40);
+            multiTrackViewer1.FitTracksVertically(multiTrackViewer1.DisplayTrackHeaders ? 40 : 25);
         }
 
         private void CommandBinding_ViewGroupMatchingTracks(object sender, ExecutedRoutedEventArgs e) {
@@ -428,6 +428,14 @@ namespace AudioAlign {
 
         private void CommandBinding_ViewDisplayTrackHeaders(object sender, ExecutedRoutedEventArgs e) {
             multiTrackViewer1.DisplayTrackHeaders = !multiTrackViewer1.DisplayTrackHeaders;
+        }
+
+        private void CommandBinding_ViewTimelineScreenshotVisible(object sender, ExecutedRoutedEventArgs e) {
+            multiTrackViewer1.CopyToClipboard(false);
+        }
+
+        private void CommandBinding_ViewTimelineScreenshotFull(object sender, ExecutedRoutedEventArgs e) {
+            multiTrackViewer1.CopyToClipboard(true);
         }
 
         private void CommandBinding_MonitorMasterVolume(object sender, ExecutedRoutedEventArgs e) {
