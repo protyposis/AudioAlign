@@ -26,7 +26,7 @@ namespace AudioAlign {
             gradient.AddStop(Colors.White, 1);
             colorPalette = gradient.GetGradient(256).Select(c => GetColorValue(c)).ToArray();
 
-            pathColor = GetColorValue(Colors.Green);
+            pathColor = GetColorValue(Colors.LimeGreen);
             minColor = GetColorValue(Colors.Magenta);
             maxColor = GetColorValue(Colors.Red);
             undefColor = GetColorValue(Colors.White);
