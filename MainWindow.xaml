@@ -109,6 +109,7 @@
                     </Button>
                     <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnFindMatches_Click" />
                     <Button Content="Alignment Analysis" Name="btnAnalyze" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnAnalyze_Click" />
+                    <Button Content="Alignment Graph" Name="btnAlignmentGraph" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnAlignmentGraph_Click" />
                 </StackPanel>
             </Grid>
         </Grid>

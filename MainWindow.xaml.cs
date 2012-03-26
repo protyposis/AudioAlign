@@ -261,6 +261,15 @@ namespace AudioAlign {
             }
         }
 
+
+        private void btnAlignmentGraph_Click(object sender, RoutedEventArgs e) {
+            List<MatchGroup> matchGroups = MatchProcessor.DetermineMatchGroups(MatchFilterMode.None, trackList, 
+                new List<Match>(multiTrackViewer1.Matches), false, TimeSpan.Zero);
+            AlignmentGraphWindow window = new AlignmentGraphWindow(matchGroups);
+            window.Owner = this;
+            window.Show();
+        }
+
         private void SaveProject(FileInfo targetFile) {
             Project p = new Project();
             foreach (AudioTrack track in trackList) {
