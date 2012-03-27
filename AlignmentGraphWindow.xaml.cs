@@ -22,22 +22,25 @@ namespace AudioAlign {
     /// </summary>
     public partial class AlignmentGraphWindow : Window {
 
-        private List<MatchGroup> matchGroups;
+        private static Brush[] COLORS = { Brushes.Red, Brushes.Blue, Brushes.Green, 
+                                            Brushes.Magenta, Brushes.DarkViolet, Brushes.CornflowerBlue, 
+                                            Brushes.Orange, Brushes.YellowGreen, Brushes.Cyan };
+
+        private List<MatchPair> matchPairs;
 
         private HorizontalTimeSpanAxis horizontalAxis;
         private VerticalTimeSpanAxis verticalAxis;
+        private int colorIndex = 0;
 
-        public AlignmentGraphWindow(List<MatchGroup> matchGroups) {
+        public AlignmentGraphWindow(List<MatchPair> matchPairs) {
             InitializeComponent();
 
-            this.matchGroups = matchGroups;
+            this.matchPairs = matchPairs;
         }
 
         private void FillGraph() {
-            foreach (MatchGroup matchGroup in matchGroups) {
-                foreach (MatchPair matchPair in matchGroup.MatchPairs) {
-                    AddGraphLine(matchPair);
-                }
+            foreach (MatchPair matchPair in matchPairs) {
+                AddGraphLine(matchPair);
             }
         }
 
@@ -46,8 +49,10 @@ namespace AudioAlign {
             EnumerableDataSource<Match> dataSource = new EnumerableDataSource<Match>(matchPair.Matches.OrderBy(match => match.Track1Time));
             dataSource.SetXMapping(match => horizontalAxis.ConvertToDouble(match.Track1.Offset + match.Track1Time));
             dataSource.SetYMapping(match => verticalAxis.ConvertToDouble((match.Track1.Offset + match.Track1Time) - (match.Track2.Offset + match.Track2Time)));
-            plotter.AddLineGraph(dataSource, 2.0d);
+            plotter.AddLineGraph(dataSource, new Pen(COLORS[colorIndex % COLORS.Length], 1d), 
+                new CirclePointMarker() { Size = 3d, Fill = COLORS[colorIndex % COLORS.Length] }, null);
             plotter.LegendVisible = false;
+            colorIndex++;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
