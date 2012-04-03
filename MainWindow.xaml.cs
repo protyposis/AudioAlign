@@ -281,13 +281,15 @@ namespace AudioAlign {
             this.project = p;
         }
 
-        private void OpenProject(Project project) {
+        private void OpenProject(Project project, bool clear) {
             this.project = project;
 
-            // clear current data
-            multiTrackViewer1.Matches.Clear();
-            multiTrackViewer1.Items.Clear();
-            trackList.Clear();
+            if (clear) {
+                // clear current data
+                multiTrackViewer1.Matches.Clear();
+                multiTrackViewer1.Items.Clear();
+                trackList.Clear();
+            }
 
             // load new data
             foreach (AudioTrack track in project.AudioTracks) {
@@ -329,7 +331,7 @@ namespace AudioAlign {
         }
 
         private void CommandBinding_New(object sender, ExecutedRoutedEventArgs e) {
-            OpenProject(new Project());
+            OpenProject(new Project(), true);
         }
 
         private void CommandBinding_Open(object sender, ExecutedRoutedEventArgs e) {
@@ -339,7 +341,7 @@ namespace AudioAlign {
             dlg.Multiselect = false;
 
             if (dlg.ShowDialog() == true) {
-                OpenProject(Project.Load(new FileInfo(dlg.FileName)));
+                OpenProject(Project.Load(new FileInfo(dlg.FileName)), e.Command == ApplicationCommands.Open);
             }
         }
 

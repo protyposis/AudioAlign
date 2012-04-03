@@ -14,6 +14,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="New" Executed="CommandBinding_New"/>
         <CommandBinding Command="Open" Executed="CommandBinding_Open"/>
+        <CommandBinding Command="local:Commands.FileProjectAdd" Executed="CommandBinding_Open"/>
         <CommandBinding Command="Save" Executed="CommandBinding_Save" CanExecute="CommandBinding_CanSave"/>
         <CommandBinding Command="SaveAs" Executed="CommandBinding_SaveAs"/>
         <CommandBinding Command="local:Commands.FileExportVegasEDL" Executed="CommandBinding_FileExportVegasEDL"/>
@@ -57,6 +58,7 @@
             <MenuItem Header="File">
                 <MenuItem Command="New"/>
                 <MenuItem Command="Open"/>
+                <MenuItem Command="local:Commands.FileProjectAdd"/>
                 <MenuItem Command="Save"/>
                 <MenuItem Command="SaveAs"/>
                 <Separator/>
