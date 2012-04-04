@@ -51,6 +51,7 @@
                         </StackPanel>
                         <CheckBox Content="median smoothing" Height="16" HorizontalAlignment="Left" IsChecked="{Binding Path=TimeWarpSmoothing, Mode=TwoWay}" Margin="245,31,0,0" Name="dtwSmoothingCheckBox" VerticalAlignment="Top" />
                         <CheckBox Content="display matrix" Height="16" HorizontalAlignment="Right" IsChecked="{Binding Path=TimeWarpDisplay, Mode=TwoWay}" Margin="0,0,87,9" Name="dtwDisplayMatrixCheckBox" VerticalAlignment="Bottom" />
+                        <CheckBox Content="in/out cue" Height="16" HorizontalAlignment="Left" IsChecked="{Binding Path=TimeWarpInOutCue, Mode=TwoWay}" Margin="368,32,0,0" Name="dtwInOutCue" VerticalAlignment="Top" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Cross-Correlation">

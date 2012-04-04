@@ -43,6 +43,7 @@ namespace AudioAlign {
         public TimeSpan MatchFilterWindowSize { get; set; }
         public int TimeWarpFilterSize { get; set; }
         public bool TimeWarpSmoothing { get; set; }
+        public bool TimeWarpInOutCue { get; set; }
         public TimeSpan TimeWarpSearchWidth { get; set; }
         public bool TimeWarpDisplay { get; set; }
         public TimeSpan CorrelationWindowSize { get; set; }
@@ -55,6 +56,7 @@ namespace AudioAlign {
             MatchFilterWindowSize = new TimeSpan(0, 0, 30);
             TimeWarpFilterSize = 100;
             TimeWarpSmoothing = true;
+            TimeWarpInOutCue = true;
             TimeWarpSearchWidth = new TimeSpan(0, 0, 10);
             TimeWarpDisplay = false;
             CorrelationWindowSize = new TimeSpan(0, 0, 5);
@@ -328,54 +330,60 @@ namespace AudioAlign {
                             TimeWarp(type,
                                 trackList[0], TimeSpan.Zero, trackList[0].Length,
                                 trackList[1], TimeSpan.Zero, trackList[1].Length,
-                                calculateSimilarity, normalizeSimilarity);
+                                calculateSimilarity, normalizeSimilarity,
+                                false, false);
                         });
                     }
                 }
                 else {
-                    List<MatchGroup> trackGroups = DetermineMatchGroups();
-                    foreach (MatchGroup trackGroup in trackGroups) {
-                        foreach (MatchPair trackPair in trackGroup.MatchPairs) {
-                            List<Match> matches = trackPair.Matches.OrderBy(match => { return match.Track1Time; }).ToList();
-                            Match first = matches.First();
-                            Match last = matches.Last();
+                    List<MatchGroup> trackGroups = DetermineMatchGroups(MatchFilterMode.None);
+                    Task.Factory.StartNew(() => {
+                        foreach (MatchGroup trackGroup in trackGroups) {
+                            foreach (MatchPair trackPair in trackGroup.MatchPairs) {
+                                List<Match> matches = trackPair.Matches.OrderBy(match => match.Track1Time).ToList();
+                                Match first = matches.First();
+                                Match last = matches.Last();
 
-                            Task.Factory.StartNew(() => {
-                                TimeSpan sectionLength = first.Track1Time > first.Track2Time ? first.Track2Time : first.Track1Time;
-                                TimeWarp(type,
-                                    first.Track1, first.Track1Time - sectionLength, first.Track1Time,
-                                    first.Track2, first.Track2Time - sectionLength, first.Track2Time,
-                                    calculateSimilarity, normalizeSimilarity);
-                            });
+                                //Task.Factory.StartNew(() => {
+                                    TimeSpan sectionLength = first.Track1Time > first.Track2Time ? first.Track2Time : first.Track1Time;
+                                    TimeWarp(type,
+                                        first.Track1, first.Track1Time - sectionLength, first.Track1Time,
+                                        first.Track2, first.Track2Time - sectionLength, first.Track2Time,
+                                        calculateSimilarity, normalizeSimilarity,
+                                        true, false);
+                                //});
 
-                            if (mode == TimeWarpMode.AllSections) {
-                                if (matches.Count > 1) {
-                                    for (int i = 0; i < matches.Count - 1; i++) {
-                                        Match from = matches[i];
-                                        Match to = matches[i + 1];
-                                        TimeWarp(type,
-                                            from.Track1, from.Track1Time, to.Track1Time,
-                                            from.Track2, from.Track2Time, to.Track2Time,
-                                            calculateSimilarity, normalizeSimilarity);
+                                if (mode == TimeWarpMode.AllSections) {
+                                    if (matches.Count > 1) {
+                                        for (int i = 0; i < matches.Count - 1; i++) {
+                                            Match from = matches[i];
+                                            Match to = matches[i + 1];
+                                            TimeWarp(type,
+                                                from.Track1, from.Track1Time, to.Track1Time,
+                                                from.Track2, from.Track2Time, to.Track2Time,
+                                                calculateSimilarity, normalizeSimilarity,
+                                                false, false);
+                                        }
                                     }
                                 }
-                            }
 
-                            Task.Factory.StartNew(() => {
-                                TimeSpan sectionLength = first.Track1.Length - first.Track1Time > first.Track2.Length - first.Track2Time ?
-                                    first.Track2.Length - first.Track2Time : first.Track1.Length - first.Track1Time;
-                                TimeWarp(type,
-                                    first.Track1, first.Track1Time, first.Track1Time + sectionLength,
-                                    first.Track2, first.Track2Time, first.Track2Time + sectionLength,
-                                    calculateSimilarity, normalizeSimilarity);
-                            });
+                                //Task.Factory.StartNew(() => {
+                                sectionLength = last.Track1.Length - last.Track1Time > last.Track2.Length - last.Track2Time ?
+                                        last.Track2.Length - last.Track2Time : last.Track1.Length - last.Track1Time;
+                                    TimeWarp(type,
+                                        last.Track1, last.Track1Time, last.Track1Time + sectionLength,
+                                        last.Track2, last.Track2Time, last.Track2Time + sectionLength,
+                                        calculateSimilarity, normalizeSimilarity,
+                                        false, true);
+                                //});
+                            }
                         }
-                    }
+                    });
                 }
             }
         }
 
-        private void TimeWarp(TimeWarpType type, AudioTrack t1, TimeSpan t1From, TimeSpan t1To, AudioTrack t2, TimeSpan t2From, TimeSpan t2To, bool calculateSimilarity, bool normalizeSimilarity) {
+        private void TimeWarp(TimeWarpType type, AudioTrack t1, TimeSpan t1From, TimeSpan t1To, AudioTrack t2, TimeSpan t2From, TimeSpan t2To, bool calculateSimilarity, bool normalizeSimilarity, bool cueIn, bool cueOut) {
             IAudioStream s1 = t1.CreateAudioStream();
             IAudioStream s2 = t2.CreateAudioStream();
             s1 = new CropStream(s1, TimeUtil.TimeSpanToBytes(t1From, s1.Properties), TimeUtil.TimeSpanToBytes(t1To, s1.Properties));
@@ -425,11 +433,38 @@ namespace AudioAlign {
             int filterSize = TimeWarpFilterSize; // take every n-th match and drop the rest
             bool smoothing = TimeWarpSmoothing;
             int smoothingWidth = Math.Min(filterSize / 10, filterSize);
+            bool inOutCue = TimeWarpInOutCue;
+            TimeSpan inOutCueSpan = TimeWarpSearchWidth;
             List<Match> matches = new List<Match>();
             float maxSimilarity = 0; // needed for normalization
             IProgressReporter progressReporter = progressMonitor.BeginTask("post-process resulting path...", true);
             double totalProgress = path.Count;
             double progress = 0;
+
+            /* Leave out matches in the in/out cue areas...
+             * The matches in the interval at the beginning and end of the calculated time warping path with a width
+             * equal to the search width should be left out because they might not be correct - since the time warp
+             * path needs to start at (0,0) in the matrix and end at (m,n), they would only be correct if the path gets
+             * calculated between two synchronization points. Paths calculated from the start of a track to the first
+             * sync point, or from the last sync point to end of the track are probably wrong in this interval since
+             * the start and end points don't match if there is time drift so it is better to leave them out in those
+             * areas... in those short a few second long intervals the drict actually will never be that extreme that
+             * someone would notice it anyway. */
+            if (inOutCue) {
+                int startIndex = 0;
+                int endIndex = path.Count;
+
+                // this needs a temporally ordered mapping path (no matter if ascending or descending)
+                foreach(Tuple<TimeSpan, TimeSpan> mapping in path) {
+                    if(cueIn && (mapping.Item1 < inOutCueSpan || mapping.Item2 < inOutCueSpan)) {
+                        startIndex++;
+                    }
+                    if(cueOut && (mapping.Item1 > (t1To - t1From - inOutCueSpan) || mapping.Item2 > (t2To - t2From - inOutCueSpan))) {
+                        endIndex--;
+                    }
+                }
+                path = path.GetRange(startIndex, endIndex - startIndex);
+            }
 
             for (int i = 0; i < path.Count; i += filterSize) {
                 //List<Tuple<TimeSpan, TimeSpan>> section = path.GetRange(i, Math.Min(path.Count - i, filterSize));
@@ -497,6 +532,12 @@ namespace AudioAlign {
             });
         }
 
+        private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode) {
+            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
+            return MatchProcessor.DetermineMatchGroups(matchFilterMode, trackList, matches,
+                (bool)windowedModeCheckBox.IsChecked, MatchFilterWindowSize);
+        }
+
         private List<MatchGroup> DetermineMatchGroups() {
             MatchFilterMode matchFilterMode = MatchFilterMode.None;
 
@@ -513,9 +554,7 @@ namespace AudioAlign {
                 matchFilterMode = MatchFilterMode.Last;
             }
 
-            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
-            return MatchProcessor.DetermineMatchGroups(matchFilterMode, trackList, matches,
-                (bool)windowedModeCheckBox.IsChecked, MatchFilterWindowSize);
+            return DetermineMatchGroups(matchFilterMode);
         }
 
         private void addManualMatchButton_Click(object sender, RoutedEventArgs e) {
