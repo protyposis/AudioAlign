@@ -236,6 +236,13 @@ namespace AudioAlign {
             }
         }
 
+        private void matchSyncButton_Click(object sender, RoutedEventArgs e) {
+            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
+            foreach (Match match in matches) {
+                MatchProcessor.Align(match);
+            }
+        }
+
         private void matchGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             multiTrackViewer.SelectedMatch = matchGrid.SelectedItem as Match;
         }
