@@ -80,7 +80,7 @@ namespace AudioAlign {
             ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
 
             bestMatchRadioButton.IsChecked = true;
-            dtwRadioButton.IsChecked = true;
+            oltwRadioButton.IsChecked = true;
             timeWarpModeBorderSectionsRadioButton.IsChecked = true;
 
             matchGrid.ItemsSource = multiTrackViewer.Matches;
@@ -432,7 +432,7 @@ namespace AudioAlign {
             // convert resulting path to matches and filter them
             int filterSize = TimeWarpFilterSize; // take every n-th match and drop the rest
             bool smoothing = TimeWarpSmoothing;
-            int smoothingWidth = Math.Min(filterSize / 10, filterSize);
+            int smoothingWidth = Math.Max(1, Math.Min(filterSize / 10, filterSize));
             bool inOutCue = TimeWarpInOutCue;
             TimeSpan inOutCueSpan = TimeWarpSearchWidth;
             List<Match> matches = new List<Match>();

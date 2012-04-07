@@ -79,7 +79,7 @@ namespace AudioAlign {
             resultPlotter.HorizontalAxis = timeSpanAxis;
             
             // setup plotter viewport
-            resultPlotter.Viewport.Visible = new Rect(0, -1.1, timeSpanAxis.ConvertToDouble(trackList.End - trackList.Start), 2.2);
+            resultPlotter.Viewport.Visible = new Rect(0, -0.1, timeSpanAxis.ConvertToDouble(trackList.End - trackList.Start), 1.2);
 
             // setup plotter graph lines
             for (int i = 1; i < dataTable.Columns.Count; i++) {
@@ -92,6 +92,8 @@ namespace AudioAlign {
                     graphStyles[i - 1].Item2,
                     new PenDescription(column.ColumnName));
             }
+
+            resultPlotter.LegendVisible = false;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
