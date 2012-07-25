@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
         xmlns:local="clr-namespace:AudioAlign"
-        Title="AudioAlign" Height="602" Width="1179" FontSize="11" 
+        Title="AudioAlign" Height="602" Width="1024" FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" 
         Icon="{StaticResource IconWave}"
         Loaded="Window_Loaded" Closed="Window_Closed">

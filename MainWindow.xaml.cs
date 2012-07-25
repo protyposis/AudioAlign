@@ -22,6 +22,7 @@ using AudioAlign.Audio.Matching;
 using AudioAlign.Audio.Matching.HaitsmaKalker2002;
 using AudioAlign.Audio.Streams;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace AudioAlign {
     /// <summary>
@@ -35,6 +36,7 @@ namespace AudioAlign {
         private FFTAnalyzer fftAnalyzer;
         private MatchingWindow matchingWindow;
         private AnalysisWindow analysisWindow;
+        private ObservableCollection<AudioTrack> trackList2;
 
         private int fftAnalyzerConsumer;
         private int correlationConsumer;
@@ -62,6 +64,8 @@ namespace AudioAlign {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            trackList2 = multiTrackViewer1.ItemsSource;
+
             // INIT COMMAND BINDINGS
             CommandBinding playBinding = new CommandBinding(MediaCommands.Play);
             CommandBindings.Add(playBinding);
@@ -144,7 +148,7 @@ namespace AudioAlign {
                 if (e2.Key == Key.Delete) {
                     AudioTrack audioTrack = multiTrackViewer1.SelectedItem as AudioTrack;
                     if (audioTrack != null) {
-                        multiTrackViewer1.Items.Remove(audioTrack);
+                        trackList2.Remove(audioTrack);
                         trackList.Remove(audioTrack);
                     }
                     e2.Handled = true;
@@ -287,14 +291,14 @@ namespace AudioAlign {
             if (clear) {
                 // clear current data
                 multiTrackViewer1.Matches.Clear();
-                multiTrackViewer1.Items.Clear();
+                trackList2.Clear();
                 trackList.Clear();
             }
 
             // load new data
             foreach (AudioTrack track in project.AudioTracks) {
                 trackList.Add(track);
-                multiTrackViewer1.Items.Add(track);
+                trackList2.Add(track);
             }
             foreach (Match match in project.Matches) {
                 multiTrackViewer1.Matches.Add(match);
@@ -316,7 +320,7 @@ namespace AudioAlign {
         private void AddFile(FileInfo fileInfo) {
             if (AudioStreamFactory.IsSupportedFile(fileInfo.FullName)) {
                 AudioTrack audioTrack = new AudioTrack(fileInfo);
-                multiTrackViewer1.Items.Add(audioTrack);
+                trackList2.Add(audioTrack);
                 trackList.Add(audioTrack);
             }
         }
@@ -328,6 +332,18 @@ namespace AudioAlign {
             foreach (DirectoryInfo subDirInfo in dirInfo.EnumerateDirectories()) {
                 AddDirectory(subDirInfo);
             }
+        }
+
+        private void SortTracks(IEnumerable<AudioTrack> order) {
+            var sortedTracks = order;
+            int index = 0;
+            foreach (AudioTrack t in sortedTracks) {
+                int oldIndex = trackList.IndexOf(t);
+                int newIndex = index++;
+                trackList.Move(oldIndex, newIndex);
+                trackList2.Move(oldIndex, newIndex);
+            }
+            multiTrackViewer1.RefreshAdornerLayer();
         }
 
         private void CommandBinding_New(object sender, ExecutedRoutedEventArgs e) {
@@ -413,24 +429,19 @@ namespace AudioAlign {
         private void CommandBinding_ViewGroupMatchingTracks(object sender, ExecutedRoutedEventArgs e) {
             List<MatchGroup> matchGroups = MatchProcessor.DetermineMatchGroups(
                 MatchFilterMode.First, trackList, new List<Match>(multiTrackViewer1.Matches), false, TimeSpan.Zero);
+            List<AudioTrack> order = new List<AudioTrack>();
 
             foreach (MatchGroup matchGroup in matchGroups) {
                 foreach (AudioTrack track in matchGroup.TrackList) {
-                    multiTrackViewer1.Items.Remove(track);
-                    trackList.Remove(track);
-                    trackList.Add(track);
-                    multiTrackViewer1.Items.Add(track);
+                    order.Add(track);
                 }
             }
+
+            SortTracks(order);
         }
 
         private void CommandBinding_ViewOrderTracksByOffset(object sender, ExecutedRoutedEventArgs e) {
-            foreach (AudioTrack track in trackList.OrderBy(track => track.Offset)) {
-                multiTrackViewer1.Items.Remove(track);
-                trackList.Remove(track);
-                trackList.Add(track);
-                multiTrackViewer1.Items.Add(track);
-            }
+            SortTracks(trackList.OrderBy(track => track.Offset));
         }
 
         private void CommandBinding_ViewDisplayMatches(object sender, ExecutedRoutedEventArgs e) {

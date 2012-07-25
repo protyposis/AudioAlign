@@ -307,6 +307,17 @@ namespace AudioAlign {
                 TimeSpan t2 = match.Track2.Offset + match.Track2Time;
                 TimeSpan diff = t1 - t2;
                 multiTrackViewer.Display(t1 - new TimeSpan(diff.Ticks / 2), true);
+
+                if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
+                    // sync
+                    MatchProcessor.Align(match);
+                }
+
+                if (Keyboard.IsKeyDown(Key.LeftAlt)) {
+                    // start playback
+                    MediaCommands.Pause.Execute(null, multiTrackViewer);
+                    MediaCommands.Play.Execute(null, multiTrackViewer);
+                }
             }
         }
 
