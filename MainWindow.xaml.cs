@@ -444,6 +444,14 @@ namespace AudioAlign {
             SortTracks(trackList.OrderBy(track => track.Offset));
         }
 
+        private void CommandBinding_ViewOrderTracksByLength(object sender, ExecutedRoutedEventArgs e) {
+            SortTracks(trackList.OrderBy(track => track.Length));
+        }
+
+        private void CommandBinding_ViewOrderTracksByName(object sender, ExecutedRoutedEventArgs e) {
+            SortTracks(trackList.OrderBy(track => track.Name));
+        }
+
         private void CommandBinding_ViewDisplayMatches(object sender, ExecutedRoutedEventArgs e) {
             multiTrackViewer1.DisplayMatches = !multiTrackViewer1.DisplayMatches;
         }

@@ -25,6 +25,8 @@
         <CommandBinding Command="local:Commands.ViewFitTracksVertically" Executed="CommandBinding_ViewFitTracksVertically"/>
         <CommandBinding Command="local:Commands.ViewGroupMatchingTracks" Executed="CommandBinding_ViewGroupMatchingTracks"/>
         <CommandBinding Command="local:Commands.ViewOrderTracksByOffset" Executed="CommandBinding_ViewOrderTracksByOffset"/>
+        <CommandBinding Command="local:Commands.ViewOrderTracksByLength" Executed="CommandBinding_ViewOrderTracksByLength"/>
+        <CommandBinding Command="local:Commands.ViewOrderTracksByName" Executed="CommandBinding_ViewOrderTracksByName"/>
         <CommandBinding Command="local:Commands.ViewDisplayMatches" Executed="CommandBinding_ViewDisplayMatches"/>
         <CommandBinding Command="local:Commands.ViewDisplayTrackHeaders" Executed="CommandBinding_ViewDisplayTrackHeaders"/>
         <CommandBinding Command="local:Commands.ViewTimelineScreenshotVisible" Executed="CommandBinding_ViewTimelineScreenshotVisible"/>
@@ -73,7 +75,11 @@
                 <MenuItem Command="local:Commands.ViewFitTracksVertically"/>
                 <Separator/>
                 <MenuItem Command="local:Commands.ViewGroupMatchingTracks"/>
-                <MenuItem Command="local:Commands.ViewOrderTracksByOffset"/>
+                <MenuItem Header="Order tracks">
+                    <MenuItem Command="local:Commands.ViewOrderTracksByOffset"/>
+                    <MenuItem Command="local:Commands.ViewOrderTracksByLength"/>
+                    <MenuItem Command="local:Commands.ViewOrderTracksByName"/>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Command="local:Commands.ViewDisplayMatches" IsCheckable="True" IsChecked="True"/>
                 <MenuItem Command="local:Commands.ViewDisplayTrackHeaders" IsCheckable="True" IsChecked="True"/>
