@@ -134,12 +134,12 @@ namespace AudioAlign {
                 DateTime startTime = DateTime.Now;
                 IProgressReporter progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
 
-                FingerprintGenerator fpg = new FingerprintGenerator(profile, audioTrack, 3, true);
+                FingerprintGenerator fpg = new FingerprintGenerator(profile, audioTrack, 3);
                 int subFingerprintsCalculated = 0;
                 fpg.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
                     subFingerprintsCalculated++;
-                    progressReporter.ReportProgress((double)e2.Timestamp.Ticks / audioTrack.Length.Ticks * 100);
-                    fingerprintStore.Add(e2.AudioTrack, e2.SubFingerprint, e2.Timestamp, e2.IsVariation);
+                    progressReporter.ReportProgress((double)e2.Index / e2.Indices * 100);
+                    fingerprintStore.Add(e2.AudioTrack, e2.SubFingerprint, e2.Index, e2.IsVariation);
                 });
                 fpg.Completed += new EventHandler(FingerprintGenerator_Completed);
                 fpg.Generate();
