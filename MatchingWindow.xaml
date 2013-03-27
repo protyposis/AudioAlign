@@ -19,10 +19,7 @@
                         <Label Content="Profile" Height="17" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" />
                         <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" Margin="46,6,0,0" Name="profileComboBox" VerticalAlignment="Top" Width="120" />
                         <Button Name="scanTracksButton" Content="Start" Height="23" Width="75" Click="scanTracksButton_Click" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
-                        <Button Name="findPossibleMatchesButton" Content="Analyze" Height="23" Width="65" Margin="373,0,0,7" Click="findPossibleMatchesButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-                        <Button Name="clearStoreButton" Content="Clear Store" Height="23" Width="85" Margin="6,0,0,6" Click="clearStoreButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
-                        <Button Name="findMatchingMatchesButton" Content="Find Direct Matches (default)" Height="23" Margin="97,0,0,6" Click="findMatchingMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="154" />
-                        <Button Name="findSoftMatchesButton" Content="Find Soft Matches" Height="23" Width="110" Margin="257,0,0,7" Click="findSoftMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                        <Button Name="findMatchingMatchesButton" Content="Find Matches" Height="23" Margin="6,0,0,7" Click="findMatchingMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="154" />
                         <Label Content="Error Threshold" Height="17" HorizontalAlignment="Left" Margin="188,10,0,0" VerticalAlignment="Top" />
                         <TextBox Height="23" HorizontalAlignment="Left" Margin="269,7,0,0" VerticalAlignment="Top" Width="60" Text="{Binding Path=FingerprintBerThreshold, Mode=TwoWay}" />
                         <Label Content="Fingerprint Size" Height="17" HorizontalAlignment="Left" Margin="349,10,0,0" VerticalAlignment="Top" />

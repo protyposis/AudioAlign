@@ -33,6 +33,7 @@ namespace AudioAlign {
         private FingerprintStore fingerprintStore;
         private TrackList<AudioTrack> trackList;
         private MultiTrackViewer multiTrackViewer;
+        private Stopwatch stopwatch;
 
         private volatile int numTasksRunning;
 
@@ -128,6 +129,9 @@ namespace AudioAlign {
             IProfile profile = (IProfile)profileComboBox.SelectedItem;
             fingerprintStore = new FingerprintStore(profile);
 
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, 
                 new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, 
                 audioTrack => {
@@ -155,6 +159,8 @@ namespace AudioAlign {
                 multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
                     // calculate fingerprints / matches after processing of all tracks has finished
                     //ClearAllMatches();
+                    stopwatch.Stop();
+                    Debug.WriteLine("fingerprint generation finished in " + stopwatch.Elapsed);
                     FindAllDirectMatches();
                 });
             }
@@ -264,7 +270,7 @@ namespace AudioAlign {
             fingerprintStore.FingerprintSize = FingerprintSize;
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            List<Match> matches = fingerprintStore.FindAllMatchingMatches();
+            List<Match> matches = fingerprintStore.FindAllMatches();
             sw.Stop();
             Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
             matches = FingerprintStore.FilterDuplicateMatches(matches);
@@ -272,32 +278,6 @@ namespace AudioAlign {
             foreach (Match match in matches) {
                 multiTrackViewer.Matches.Add(match);
             }
-        }
-
-        private void FindAllSoftMatches() {
-            fingerprintStore.Threshold = FingerprintBerThreshold;
-            fingerprintStore.FingerprintSize = FingerprintSize;
-            List<Match> matches = fingerprintStore.FindAllMatches();
-            Debug.WriteLine(matches.Count + " matches found");
-            matches = FingerprintStore.FilterDuplicateMatches(matches);
-            Debug.WriteLine(matches.Count + " matches found (filtered)");
-            foreach (Match match in matches) {
-                multiTrackViewer.Matches.Add(match);
-            }
-        }
-
-        private void findSoftMatchesButton_Click(object sender, RoutedEventArgs e) {
-            FindAllSoftMatches();
-        }
-
-        private void findPossibleMatchesButton_Click(object sender, RoutedEventArgs e) {
-            fingerprintStore.Threshold = FingerprintBerThreshold;
-            fingerprintStore.FingerprintSize = FingerprintSize;
-            fingerprintStore.FindAllMatches(3, 0.35f);
-        }
-
-        private void clearStoreButton_Click(object sender, RoutedEventArgs e) {
-            if (fingerprintStore != null) fingerprintStore.Clear();
         }
 
         private void matchGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
