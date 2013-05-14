@@ -33,7 +33,6 @@ namespace AudioAlign {
         private FingerprintStore fingerprintStore;
         private TrackList<AudioTrack> trackList;
         private MultiTrackViewer multiTrackViewer;
-        private Stopwatch stopwatch;
 
         private volatile int numTasksRunning;
 
@@ -129,8 +128,10 @@ namespace AudioAlign {
             IProfile profile = (IProfile)profileComboBox.SelectedItem;
             fingerprintStore = new FingerprintStore(profile);
 
-            stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+
+            long startMemory = GC.GetTotalMemory(false);
 
             Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, 
                 new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, 
@@ -145,25 +146,24 @@ namespace AudioAlign {
                     progressReporter.ReportProgress((double)e2.Index / e2.Indices * 100);
                     fingerprintStore.Add(e2.AudioTrack, e2.SubFingerprint, e2.Index, e2.IsVariation);
                 });
-                fpg.Completed += new EventHandler(FingerprintGenerator_Completed);
+                fpg.Completed += delegate {
+                    if (--numTasksRunning == 0) {
+                        // all running generator tasks have finished
+                        multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
+                            // calculate fingerprints / matches after processing of all tracks has finished
+                            //ClearAllMatches();
+                            stopwatch.Stop();
+                            long memory = GC.GetTotalMemory(false) - startMemory;
+                            Debug.WriteLine("fingerprint generation finished in " + stopwatch.Elapsed + " (mem: " + (memory/1024/1024) + " MB)");
+                            FindAllDirectMatches();
+                        });
+                    }
+                };
                 fpg.Generate();
 
                 progressReporter.Finish();
                 Debug.WriteLine("subfingerprint generation finished - " + (DateTime.Now - startTime));
             }));
-        }
-
-        private void FingerprintGenerator_Completed(object sender, EventArgs e) {
-            if (--numTasksRunning == 0) {
-                // all running generator tasks have finished
-                multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
-                    // calculate fingerprints / matches after processing of all tracks has finished
-                    //ClearAllMatches();
-                    stopwatch.Stop();
-                    Debug.WriteLine("fingerprint generation finished in " + stopwatch.Elapsed);
-                    FindAllDirectMatches();
-                });
-            }
         }
 
         private void filterMatchesButton_Click(object sender, RoutedEventArgs e) {
