@@ -2,6 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:wc="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls">
 
+    <Style TargetType="{x:Type wc:MultiTrackListBox}">
+        <Setter Property="Background" Value="{DynamicResource NormalBrush}"/>
+    </Style>
+
     <Style TargetType="{x:Type wc:MultiTrackViewer}">
         <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
         <Setter Property="Background" Value="{DynamicResource NormalBrush}"/>
