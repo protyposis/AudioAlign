@@ -204,6 +204,10 @@ namespace AudioAlign {
 
                     TrackList<AudioTrack> alignedTracks = new TrackList<AudioTrack>();
                     TimeSpan componentStartTime = TimeSpan.Zero;
+
+                    string[] colors = { "#00aeef", "#00a651", "#8A2BE2", "#5F9EA0", "#D2691E", "#B8860B", "#483D8B", "#FF69B4", "#B0C4DE", "#6B8E23", "#F4A460" };
+                    int colorIndex = 0;
+
                     foreach (MatchGroup trackGroup in trackGroups) {
                         if (removeUnusedMatchingPoints) {
                             foreach (MatchPair trackPair in trackGroup.MatchPairs) {
@@ -218,6 +222,11 @@ namespace AudioAlign {
                         MatchProcessor.MoveToStartTime(trackGroup.TrackList, componentStartTime);
                         alignedTracks.Add(trackGroup.TrackList);
                         componentStartTime = trackGroup.TrackList.End;
+
+                        foreach (AudioTrack t in trackGroup.TrackList) {
+                            t.Color = colors[colorIndex % colors.Length];
+                        }
+                        colorIndex++;
                     }
 
                     // process unaligned tracks (= tracks without matching points)
