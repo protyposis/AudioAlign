@@ -42,10 +42,14 @@ namespace AudioAlign {
         private int correlationConsumer;
 
         public MainWindow() {
-            InitializeComponent();
-
             project = new Project();
             trackList = new TrackList<AudioTrack>();
+
+            InitializeComponent();
+        }
+
+        public TrackList<AudioTrack> TrackList {
+            get { return trackList; }
         }
 
         private void multiTrackViewer1_Drop(object sender, DragEventArgs e) {

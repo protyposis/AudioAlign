@@ -6,7 +6,8 @@
         Title="AudioAlign" Height="602" Width="1024" FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" 
         Icon="{StaticResource IconWave}"
-        Loaded="Window_Loaded" Closed="Window_Closed">
+        Loaded="Window_Loaded" Closed="Window_Closed"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <my:TimeSpanConverter x:Key="TimeSpanConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -163,6 +164,12 @@
                         <TextBlock Name="progressBar1Label" TextTrimming="CharacterEllipsis" />
                     </Label>
                 </Grid>
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label Content="{Binding Path=TrackList.Count}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label Content="{Binding Path=TrackList.TotalLength, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" />
             </StatusBarItem>
             <StatusBarItem Visibility="{Binding ElementName=MultiTrackViewerDebugCheckbox, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth}" ContentStringFormat="VVW: {0}" Width="130" />
