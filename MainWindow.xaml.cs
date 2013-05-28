@@ -338,7 +338,11 @@ namespace AudioAlign {
             }
         }
 
-        private void SortTracks(IEnumerable<AudioTrack> order) {
+        /// <summary>
+        /// (Re)orders tracks in the tracklist (and timeline) according to a passed in order.
+        /// </summary>
+        /// <param name="order">the target order of tracks</param>
+        private void OrderTracks(IEnumerable<AudioTrack> order) {
             var sortedTracks = order;
             int index = 0;
             foreach (AudioTrack t in sortedTracks) {
@@ -433,27 +437,31 @@ namespace AudioAlign {
         private void CommandBinding_ViewGroupMatchingTracks(object sender, ExecutedRoutedEventArgs e) {
             List<MatchGroup> matchGroups = MatchProcessor.DetermineMatchGroups(
                 MatchFilterMode.First, trackList, new List<Match>(multiTrackViewer1.Matches), false, TimeSpan.Zero);
-            List<AudioTrack> order = new List<AudioTrack>();
+            List<AudioTrack> currentOrder = new List<AudioTrack>(trackList);
+            List<AudioTrack> targetOrder = new List<AudioTrack>();
 
             foreach (MatchGroup matchGroup in matchGroups) {
-                foreach (AudioTrack track in matchGroup.TrackList) {
-                    order.Add(track);
-                }
+                /* Extract all tracks belonging to a matching group in the order they're contained
+                 * in the current tracklist and add them to the target order list. This groups
+                 * tracks by their mathing groups while preserving their relative order inside their
+                 * group. E.g., if the tracks have been sorted by offset (start time), their intra group
+                 * ordering by offset will be kept after being grouped together. */
+                targetOrder.AddRange(currentOrder.FindAll(t => matchGroup.TrackList.Contains(t)));
             }
 
-            SortTracks(order);
+            OrderTracks(targetOrder);
         }
 
         private void CommandBinding_ViewOrderTracksByOffset(object sender, ExecutedRoutedEventArgs e) {
-            SortTracks(trackList.OrderBy(track => track.Offset));
+            OrderTracks(trackList.OrderBy(track => track.Offset));
         }
 
         private void CommandBinding_ViewOrderTracksByLength(object sender, ExecutedRoutedEventArgs e) {
-            SortTracks(trackList.OrderBy(track => track.Length));
+            OrderTracks(trackList.OrderBy(track => track.Length));
         }
 
         private void CommandBinding_ViewOrderTracksByName(object sender, ExecutedRoutedEventArgs e) {
-            SortTracks(trackList.OrderBy(track => track.Name));
+            OrderTracks(trackList.OrderBy(track => track.Name));
         }
 
         private void CommandBinding_ViewDisplayMatches(object sender, ExecutedRoutedEventArgs e) {
