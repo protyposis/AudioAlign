@@ -296,6 +296,7 @@ namespace AudioAlign {
                 TimeSpan t2 = match.Track2.Offset + match.Track2Time;
                 TimeSpan diff = t1 - t2;
                 multiTrackViewer.Display(t1 - new TimeSpan(diff.Ticks / 2), true);
+                multiTrackViewer.Display(match);
 
                 if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                     // sync
@@ -303,6 +304,14 @@ namespace AudioAlign {
                 }
 
                 if (Keyboard.IsKeyDown(Key.LeftAlt)) {
+                    if (Keyboard.IsKeyDown(Key.LeftShift)) {
+                        // mute all but selected tracks
+                        foreach (AudioTrack t in trackList) {
+                            t.Mute = true;
+                        }
+                        match.Track1.Mute = false;
+                        match.Track2.Mute = false;
+                    }
                     // start playback
                     MediaCommands.Pause.Execute(null, multiTrackViewer);
                     MediaCommands.Play.Execute(null, multiTrackViewer);
