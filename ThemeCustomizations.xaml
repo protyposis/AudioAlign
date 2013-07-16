@@ -26,4 +26,18 @@
     <!-- this is a workaround to generally apply the Slider style from the ExpressionDark theme -->
     <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource DarkSlider}"/>
 
+    <!-- Override almost invisible selected inactive cell background color with darker more visible gray -->
+    <Style TargetType="{x:Type DataGridCell}">
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="true"/>
+                    <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="LightGray"/>
+                <Setter Property="BorderBrush" Value="LightGray"/>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>
