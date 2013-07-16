@@ -170,6 +170,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MatchDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MatchingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -192,6 +196,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MatchDetails.xaml.cs">
+      <DependentUpon>MatchDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MatchingWindow.xaml.cs">
       <DependentUpon>MatchingWindow.xaml</DependentUpon>
     </Compile>

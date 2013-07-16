@@ -258,6 +258,13 @@ namespace AudioAlign {
             }
         }
 
+        private void matchDetailsButton_Click(object sender, RoutedEventArgs e) {
+            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
+            foreach (Match match in matches) {
+                new MatchDetails(match) { Owner = this }.Show();
+            }
+        }
+
         private void matchGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             multiTrackViewer.SelectedMatch = matchGrid.SelectedItem as Match;
         }
