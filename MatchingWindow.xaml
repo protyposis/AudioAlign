@@ -81,7 +81,8 @@
                             <DataGridTextColumn Header="Track A Position" Binding="{Binding Track1Time}" IsReadOnly="False"/>
                             <DataGridTextColumn Header="Track B Position" Binding="{Binding Track2Time}" IsReadOnly="False"/>
                             <DataGridTextColumn Header="Similarity" Binding="{Binding Similarity}" IsReadOnly="False"/>
-                            <DataGridTextColumn Header="Offset" Binding="{Binding Offset}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Offset" Binding="{Binding Offset}" IsReadOnly="False"/>
+                            <DataGridTextColumn Header="Source" Binding="{Binding Source}" IsReadOnly="False"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <DockPanel Grid.Row="1" Margin="0,3,0,0">

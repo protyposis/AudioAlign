@@ -183,6 +183,7 @@ namespace AudioAlign {
             bool removeUnusedMatchingPoints = (bool)removeUnusedMatchingPointsCheckBox.IsChecked;
 
             List<Match> matches = new List<Match>(multiTrackViewer.Matches);
+            List<Match> newMatches = new List<Match>();
             List<MatchGroup> trackGroups = DetermineMatchGroups();
 
             Task.Factory.StartNew(() => {
@@ -191,13 +192,15 @@ namespace AudioAlign {
                         Parallel.ForEach(trackGroup.MatchPairs, trackPair => {
                             MatchProcessor.ValidatePairOrder(trackPair.Matches);
                             foreach (Match match in trackPair.Matches) {
-                                CrossCorrelation.Adjust(match, progressMonitor);
+                                newMatches.Add(CrossCorrelation.Adjust(match, progressMonitor));
                             }
                         });
                     }
                 });
 
                 Dispatcher.BeginInvoke((Action)delegate {
+                    newMatches.ForEach((m) => multiTrackViewer.Matches.Add(m));
+
                     if (removeUnusedMatchingPoints) {
                         multiTrackViewer.Matches.Clear();
                     }
@@ -242,8 +245,9 @@ namespace AudioAlign {
             foreach (Match matchFE in matches) {
                 Match match = matchFE; // needed as reference for async task
                 Task.Factory.StartNew(() => {
-                    CrossCorrelation.Adjust(match, progressMonitor);
+                    Match ccm = CrossCorrelation.Adjust(match, progressMonitor);
                     Dispatcher.BeginInvoke((Action)delegate {
+                        multiTrackViewer.Matches.Add(ccm);
                         matchGrid.Items.Refresh();
                         multiTrackViewer.RefreshAdornerLayer();
                     });
@@ -525,7 +529,8 @@ namespace AudioAlign {
                     Track1Time = match.Item1 + t1From,
                     Track2 = t2,
                     Track2Time = match.Item2 + t2From,
-                    Similarity = similarity
+                    Similarity = similarity,
+                    Source = type.ToString()
                 });
 
                 progressReporter.ReportProgress(progress / totalProgress * 100);
@@ -540,7 +545,8 @@ namespace AudioAlign {
                     Track1Time = lastMatch.Item1 + t1From,
                     Track2 = t2,
                     Track2Time = lastMatch.Item2 + t2From,
-                    Similarity = 1
+                    Similarity = 1,
+                    Source = type.ToString()
                 });
             }
             progressReporter.Finish();
@@ -611,7 +617,8 @@ namespace AudioAlign {
                 Match match = new Match {
                     Track1 = t1, Track1Time = position - t1.Offset,
                     Track2 = t2, Track2Time = position - t2.Offset,
-                    Similarity = 1
+                    Similarity = 1,
+                    Source = "User"
                 };
                 multiTrackViewer.Matches.Add(match);
                 matchGrid.SelectedItem = match;
@@ -667,7 +674,8 @@ namespace AudioAlign {
                             computedMatches.Add(new Match {
                                 Track1 = localMP.Track1, Track1Time = t1Offset + position + (offset < TimeSpan.Zero ? -offset : TimeSpan.Zero),
                                 Track2 = localMP.Track2, Track2Time = t2Offset + position + (offset >= TimeSpan.Zero ? offset : TimeSpan.Zero),
-                                Similarity = (float)maxVal
+                                Similarity = (float)maxVal,
+                                Source = "CC"
                             });
                         }
 
