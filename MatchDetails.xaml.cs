@@ -30,7 +30,12 @@ namespace AudioAlign {
 
         public MatchDetails(Match match) {
             InitializeComponent();
+
             this.match = match;
+            
+            trackList = new TrackList<AudioTrack>();
+            trackList.Add(match.Track1);
+            trackList.Add(match.Track2);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
@@ -51,26 +56,17 @@ namespace AudioAlign {
 
             // Execute the following code after window and controls are fully loaded and initialized
             // http://stackoverflow.com/a/1746975
-            Dispatcher.BeginInvoke((Action)delegate {
-                multiTrackViewer1.ItemsSource.Add(match.Track1);
-                multiTrackViewer1.ItemsSource.Add(match.Track2);
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (Action)delegate {
+                multiTrackViewer1.ItemsSource = trackList;
                 multiTrackViewer1.Matches.Add(match);
                 multiTrackViewer1.SelectedMatch = match;
-
-                trackList.Add(match.Track1);
-                trackList.Add(match.Track2);
-
                 this.Focus();
             });
-
-            DispatcherTimer dt = new DispatcherTimer(DispatcherPriority.ContextIdle);
-            dt.Tick += delegate {
-                dt.Stop();
+            // the following must be called separately on the dispatcher, else the track controls are not initialized yet
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (Action)delegate {
                 ZoomToMatch();
-            };
-            dt.Start();
+            });
 
-            trackList = new TrackList<AudioTrack>();
 
             // INIT PLAYER
             player = new MultitrackPlayer(trackList);

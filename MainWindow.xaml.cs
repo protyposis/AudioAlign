@@ -36,7 +36,6 @@ namespace AudioAlign {
         private FFTAnalyzer fftAnalyzer;
         private MatchingWindow matchingWindow;
         private AnalysisWindow analysisWindow;
-        private ObservableCollection<AudioTrack> trackList2;
 
         private int fftAnalyzerConsumer;
         private int correlationConsumer;
@@ -68,7 +67,7 @@ namespace AudioAlign {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            trackList2 = multiTrackViewer1.ItemsSource;
+            multiTrackViewer1.ItemsSource = trackList;
 
             // INIT COMMAND BINDINGS
             CommandBinding playBinding = new CommandBinding(MediaCommands.Play);
@@ -152,7 +151,6 @@ namespace AudioAlign {
                 if (e2.Key == Key.Delete) {
                     AudioTrack audioTrack = multiTrackViewer1.SelectedItem as AudioTrack;
                     if (audioTrack != null) {
-                        trackList2.Remove(audioTrack);
                         trackList.Remove(audioTrack);
                     }
                     e2.Handled = true;
@@ -295,14 +293,12 @@ namespace AudioAlign {
             if (clear) {
                 // clear current data
                 multiTrackViewer1.Matches.Clear();
-                trackList2.Clear();
                 trackList.Clear();
             }
 
             // load new data
             foreach (AudioTrack track in project.AudioTracks) {
                 trackList.Add(track);
-                trackList2.Add(track);
             }
             foreach (Match match in project.Matches) {
                 multiTrackViewer1.Matches.Add(match);
@@ -324,7 +320,6 @@ namespace AudioAlign {
         private void AddFile(FileInfo fileInfo) {
             if (AudioStreamFactory.IsSupportedFile(fileInfo.FullName)) {
                 AudioTrack audioTrack = new AudioTrack(fileInfo);
-                trackList2.Add(audioTrack);
                 trackList.Add(audioTrack);
             }
         }
@@ -349,7 +344,6 @@ namespace AudioAlign {
                 int oldIndex = trackList.IndexOf(t);
                 int newIndex = index++;
                 trackList.Move(oldIndex, newIndex);
-                trackList2.Move(oldIndex, newIndex);
             }
             multiTrackViewer1.RefreshAdornerLayer();
         }
