@@ -24,8 +24,15 @@ namespace AudioAlign {
         public CrossCorrelationResult(CrossCorrelation.Result ccr) {
             InitializeComponent();
 
+            PlotResult(ccr);
+            //PlotResult(ccr.AbsoluteResult());
+        }
+
+        private void PlotResult(CrossCorrelation.Result ccr) {
+
+
             int[] xValues = new int[ccr.Correlations.Length];
-            for(int i = 0; i < xValues.Length; i++) {
+            for (int i = 0; i < xValues.Length; i++) {
                 xValues[i] = i;
             }
 
