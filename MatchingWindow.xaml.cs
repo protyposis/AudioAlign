@@ -663,18 +663,18 @@ namespace AudioAlign {
                                 break;
                             }
 
-                            double maxVal;
+                            CrossCorrelation.Result ccr;
                             TimeSpan offset = CrossCorrelation.Calculate(
                                 localMP.Track1.CreateAudioStream(), t1Interval,
                                 localMP.Track2.CreateAudioStream(), t2Interval,
-                                progressMonitor, out maxVal);
+                                progressMonitor, out ccr);
                             // always apply a positive offset that moves the match position inside the corelation interval,
                             // else it can happen that a negative offset is applied to a match at the beginning of the stream
                             // which means that the matching point would be at a negative position in the audio stream
                             computedMatches.Add(new Match {
                                 Track1 = localMP.Track1, Track1Time = t1Offset + position + (offset < TimeSpan.Zero ? -offset : TimeSpan.Zero),
                                 Track2 = localMP.Track2, Track2Time = t2Offset + position + (offset >= TimeSpan.Zero ? offset : TimeSpan.Zero),
-                                Similarity = (float)maxVal,
+                                Similarity = ccr.MaxValue,
                                 Source = "CC"
                             });
                         }

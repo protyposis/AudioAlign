@@ -135,6 +135,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CrossCorrelationResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DtwPathViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -162,6 +166,9 @@
     </Compile>
     <Compile Include="Chart\TrianglePointMarker.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="CrossCorrelationResult.xaml.cs">
+      <DependentUpon>CrossCorrelationResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DtwPath.cs" />
     <Compile Include="DtwPathViewer.xaml.cs">
       <DependentUpon>DtwPathViewer.xaml</DependentUpon>

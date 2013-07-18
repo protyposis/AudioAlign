@@ -48,6 +48,7 @@
                 <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-pause}"/>
             </Button>
             <Button Content="Goto Match" Margin="2,2,0,2" Padding="5,2" Click="btnViewMatch_Click"/>
+            <Button Content="Cross-correlate" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="crossCorrelateButton_Click" />
             <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Width="127" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0" />
         </StackPanel>
     </Grid>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,6 +18,7 @@ using AudioAlign.Audio;
 using AudioAlign.Audio.Matching;
 using AudioAlign.Audio.Project;
 using AudioAlign.Audio.Streams;
+using AudioAlign.Audio.TaskMonitor;
 
 namespace AudioAlign {
     /// <summary>
@@ -148,6 +150,21 @@ namespace AudioAlign {
             multiTrackViewer1.VirtualViewportWidth = new TimeSpan(0, 0, 5).Ticks;
             multiTrackViewer1.Display(matchPosition, true);
             multiTrackViewer1.FitTracksVertically(50);
+        }
+
+        private void crossCorrelateButton_Click(object sender, RoutedEventArgs e) {
+            Task.Factory.StartNew(() => {
+                CrossCorrelation.Result result;
+                Match ccm = CrossCorrelation.Adjust(match, ProgressMonitor.GlobalInstance, out result);
+                Dispatcher.BeginInvoke((Action)delegate {
+                    multiTrackViewer1.Matches.Add(ccm);
+                    multiTrackViewer1.RefreshAdornerLayer();
+                        
+                    new CrossCorrelationResult(result) {
+                        Owner = this
+                    }.Show();
+                });
+            });
         }
     }
 }
