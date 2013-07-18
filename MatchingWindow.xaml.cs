@@ -674,7 +674,7 @@ namespace AudioAlign {
                             computedMatches.Add(new Match {
                                 Track1 = localMP.Track1, Track1Time = t1Offset + position + (offset < TimeSpan.Zero ? -offset : TimeSpan.Zero),
                                 Track2 = localMP.Track2, Track2Time = t2Offset + position + (offset >= TimeSpan.Zero ? offset : TimeSpan.Zero),
-                                Similarity = ccr.MaxValue,
+                                Similarity = ccr.AbsoluteMaxValue,
                                 Source = "CC"
                             });
                         }

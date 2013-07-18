@@ -5,10 +5,22 @@
         xmlns:local="clr-namespace:AudioAlign"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         FontSize="11" 
-        Title="Cross Correlation Result" Height="300" Width="300"
+        Title="Cross Correlation Result" Height="300" Width="689"
         Background="{StaticResource NormalBorderBrush}" WindowStyle="ToolWindow">
     <Grid>
-        <d3:ChartPlotter Grid.Column="1" Name="resultPlotter" Margin="3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <d3:ChartPlotter Grid.Column="0" Name="plotter1" Margin="3">
+            <d3:ChartPlotter.Style>
+                <Style>
+                    <Setter Property="Control.Background" Value="White"/>
+                    <Setter Property="Control.Foreground" Value="Black"/>
+                </Style>
+            </d3:ChartPlotter.Style>
+        </d3:ChartPlotter>
+        <d3:ChartPlotter Grid.Column="1" Name="plotter2" Margin="3">
             <d3:ChartPlotter.Style>
                 <Style>
                     <Setter Property="Control.Background" Value="White"/>

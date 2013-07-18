@@ -24,11 +24,14 @@ namespace AudioAlign {
         public CrossCorrelationResult(CrossCorrelation.Result ccr) {
             InitializeComponent();
 
-            PlotResult(ccr);
-            //PlotResult(ccr.AbsoluteResult());
+            PlotResult(plotter1, ccr);
+            PlotResult(plotter2, ccr.AbsoluteResult());
+
+            plotter1.Viewport.SetBinding(Viewport2D.VisibleProperty,
+                                         new Binding("Visible") {Source = plotter2.Viewport, Mode = BindingMode.TwoWay});
         }
 
-        private void PlotResult(CrossCorrelation.Result ccr) {
+        private void PlotResult(ChartPlotter plotter, CrossCorrelation.Result ccr) {
             int[] xValues = new int[ccr.Correlations.Length];
             for (int i = 0; i < xValues.Length; i++) {
                 xValues[i] = i;
@@ -39,25 +42,24 @@ namespace AudioAlign {
             var ds = new CompositeDataSource(dsx, dsy);
             dsx.SetXMapping(x => x);
             dsy.SetYMapping(y => y);
-            //new CompositeDataSource()
-            resultPlotter.AddLineGraph(ds, Colors.CornflowerBlue, 1d, "Correlation");
+            plotter.AddLineGraph(ds, Colors.CornflowerBlue, 1d, "Correlation");
 
             var dsmax = new RawDataSource(new Point(0, ccr.MaxValue), new Point(xValues.Length - 1, ccr.MaxValue));
-            resultPlotter.AddLineGraph(dsmax, Colors.Green, 1d, "Max");
+            plotter.AddLineGraph(dsmax, Colors.Green, 1d, "Max");
 
             var dsmaxmarker = new RawDataSource(new Point(ccr.MaxIndex, ccr.MaxValue));
-            resultPlotter.AddLineGraph(dsmaxmarker, new Pen(Brushes.Magenta, 1d), new CirclePointMarker(), new PenDescription("Max"));
+            plotter.AddLineGraph(dsmaxmarker, new Pen(Brushes.Magenta, 1d), new CirclePointMarker(), new PenDescription("Max"));
 
             var avg = ccr.Correlations.Average();
             var dsavg = new RawDataSource(new Point(0, avg), new Point(xValues.Length - 1, avg));
-            resultPlotter.AddLineGraph(dsavg, Colors.Red, 1d, "Avg");
+            plotter.AddLineGraph(dsavg, Colors.Red, 1d, "Avg");
 
             var absavg = ccr.Correlations.Average(f => Math.Abs(f));
             var dsabsavg = new RawDataSource(new Point(0, absavg), new Point(xValues.Length - 1, absavg));
-            resultPlotter.AddLineGraph(dsabsavg, Colors.Orange, 1d, "Abs Avg");
+            plotter.AddLineGraph(dsabsavg, Colors.Orange, 1d, "Abs Avg");
 
-            resultPlotter.LegendVisible = false;
-            resultPlotter.Viewport.Visible = new Rect(0, -1, xValues.Length, 2);
+            plotter.LegendVisible = false;
+            plotter.Viewport.Visible = new Rect(0, -1, xValues.Length, 2);
         }
     }
 }
