@@ -6,7 +6,7 @@
         Title="Match Details" Height="553.409" Width="996.591"
         FontSize="11" 
         Background="{StaticResource NormalBorderBrush}" WindowStyle="ToolWindow"
-        Loaded="Window_Loaded" Closed="Window_Closed">
+        Loaded="Window_Loaded" Unloaded="Window_Unloaded" Closed="Window_Closed">
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
     </Window.InputBindings>
@@ -47,9 +47,12 @@
             <Button Command="MediaCommands.Pause" Width="20" Margin="2,2,0,2">
                 <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-pause}"/>
             </Button>
-            <Button Content="Goto Match" Margin="2,2,0,2" Padding="5,2" Click="btnViewMatch_Click"/>
+            <Button Content="Goto Match" Margin="2,2,0,2" Padding="5,2" Width="95" Click="btnViewMatch_Click"/>
             <Button Content="Cross-correlate" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="crossCorrelateButton_Click" />
+            <Button Content="Sync" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="syncButton_Click" />
+            <Button Content="Sync CC" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="syncCCButton_Click" />
             <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Width="127" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0" />
+            <ProgressBar Name="progressBar" Margin="2,2,0,2" HorizontalAlignment="Stretch" Width="200" />
         </StackPanel>
     </Grid>
 </Window>

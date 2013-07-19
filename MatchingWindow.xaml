@@ -112,7 +112,7 @@
                                 </Border>
                             </Popup>
                             <Button Name="crossCorrelateButton" Content="Cross-correlate selection" Height="23" Margin="3,0,0,0" Width="135" Click="crossCorrelateButton_Click" />
-                            <Button Name="matchSyncButton" Content="Sync match" Height="23" Margin="3,0,0,0" Width="73" Click="matchSyncButton_Click" />
+                            <Button Name="matchSyncButton" Content="Sync match" Height="23" Margin="3,0,0,0" Width="73" Click="matchSyncButton_Click" VerticalAlignment="Bottom" />
                             <Button Name="matchDetailsButton" Content="Match details" Height="23" Margin="3,0,0,0" Width="80" Click="matchDetailsButton_Click" />
                         </StackPanel>
                     </DockPanel>

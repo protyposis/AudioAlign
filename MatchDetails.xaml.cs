@@ -29,81 +29,82 @@ namespace AudioAlign {
         private Match match;
         private TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
+        private CrossCorrelation.Result ccr;
+        private ProgressMonitor progressMonitor;
 
         public MatchDetails(Match match) {
             InitializeComponent();
 
             this.match = match;
-            
-            trackList = new TrackList<AudioTrack>();
-            trackList.Add(match.Track1);
-            trackList.Add(match.Track2);
+
+            trackList = new TrackList<AudioTrack> {match.Track1, match.Track2};
+
+            progressMonitor = new ProgressMonitor();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             // INIT COMMAND BINDINGS
             CommandBinding playBinding = new CommandBinding(MediaCommands.Play);
             CommandBindings.Add(playBinding);
-            playBinding.CanExecute += new CanExecuteRoutedEventHandler(playCommandBinding_CanExecute);
-            playBinding.Executed += new ExecutedRoutedEventHandler(playCommandBinding_Executed);
+            playBinding.CanExecute += playCommandBinding_CanExecute;
+            playBinding.Executed += playCommandBinding_Executed;
 
             CommandBinding pauseBinding = new CommandBinding(MediaCommands.Pause);
             CommandBindings.Add(pauseBinding);
-            pauseBinding.CanExecute += new CanExecuteRoutedEventHandler(pauseCommandBinding_CanExecute);
-            pauseBinding.Executed += new ExecutedRoutedEventHandler(pauseCommandBinding_Executed);
+            pauseBinding.CanExecute += pauseCommandBinding_CanExecute;
+            pauseBinding.Executed += pauseCommandBinding_Executed;
 
             CommandBinding playToggleBinding = new CommandBinding(Commands.PlayToggle);
             CommandBindings.Add(playToggleBinding);
-            playToggleBinding.Executed += new ExecutedRoutedEventHandler(playToggleBinding_Executed);
+            playToggleBinding.Executed += playToggleBinding_Executed;
 
             // Execute the following code after window and controls are fully loaded and initialized
             // http://stackoverflow.com/a/1746975
-            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (Action)delegate {
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (Action)(() => {
                 multiTrackViewer1.ItemsSource = trackList;
                 multiTrackViewer1.Matches.Add(match);
                 multiTrackViewer1.SelectedMatch = match;
                 this.Focus();
-            });
+            }));
             // the following must be called separately on the dispatcher, else the track controls are not initialized yet
-            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (Action)delegate {
-                ZoomToMatch();
-            });
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (Action)ZoomToMatch);
 
 
             // INIT PLAYER
             player = new MultitrackPlayer(trackList);
-            player.VolumeAnnounced += new EventHandler<StreamVolumeEventArgs>(delegate(object sender2, StreamVolumeEventArgs e2) {
-                Dispatcher.BeginInvoke((Action)delegate {
-                    if (e2.MaxSampleValues.Length >= 2) {
-                        stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
-                        stereoVUMeter1.AmplitudeRight = e2.MaxSampleValues[1];
-                    }
-                });
-            });
+            player.VolumeAnnounced += (sender2, e2) => Dispatcher.BeginInvoke((Action) (() => {
+                if (e2.MaxSampleValues.Length >= 2) {
+                    stereoVUMeter1.AmplitudeLeft = e2.MaxSampleValues[0];
+                    stereoVUMeter1.AmplitudeRight = e2.MaxSampleValues[1];
+                }
+            }));
 
-            player.CurrentTimeChanged += new EventHandler<ValueEventArgs<TimeSpan>>(
-                delegate(object sender2, ValueEventArgs<TimeSpan> e2) {
-                    multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
-                        multiTrackViewer1.VirtualCaretOffset = e2.Value.Ticks;
-                        // autoscroll
-                        if (multiTrackViewer1.VirtualViewportInterval.To <= multiTrackViewer1.VirtualCaretOffset) {
-                            multiTrackViewer1.VirtualViewportOffset = multiTrackViewer1.VirtualCaretOffset;
-                        }
-                    });
-                });
+            player.CurrentTimeChanged += (sender2, e2) => multiTrackViewer1.Dispatcher.BeginInvoke((Action) (() => {
+                multiTrackViewer1.VirtualCaretOffset = e2.Value.Ticks;
+                // autoscroll
+                if (multiTrackViewer1.VirtualViewportInterval.To <= multiTrackViewer1.VirtualCaretOffset) {
+                    multiTrackViewer1.VirtualViewportOffset = multiTrackViewer1.VirtualCaretOffset;
+                }
+            }));
 
-            player.PlaybackStateChanged += new EventHandler(
-                delegate(object sender2, EventArgs e2) {
-                    multiTrackViewer1.Dispatcher.BeginInvoke((Action)delegate {
-                        // CommandManager must be called on the GUI-thread, else it won't do anything
-                        CommandManager.InvalidateRequerySuggested();
-                    });
-                });
+            player.PlaybackStateChanged += (sender2, e2) =>
+                multiTrackViewer1.Dispatcher.BeginInvoke((Action) CommandManager.InvalidateRequerySuggested);
 
-            volumeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(
-                delegate(object sender2, RoutedPropertyChangedEventArgs<double> e2) {
-                    player.Volume = (float)e2.NewValue;
-                });
+            volumeSlider.ValueChanged += (sender2, e2) => player.Volume = (float) e2.NewValue;
+
+            // INIT PROGRESSBAR
+            progressBar.IsEnabled = false;
+            progressMonitor.ProcessingStarted += Instance_ProcessingStarted;
+            progressMonitor.ProcessingProgressChanged += Instance_ProcessingProgressChanged;
+            progressMonitor.ProcessingFinished += Instance_ProcessingFinished;
+            ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
+        }
+
+        private void Window_Unloaded(object sender, RoutedEventArgs e) {
+            ProgressMonitor.GlobalInstance.RemoveChild(progressMonitor);
+            progressMonitor.ProcessingStarted -= Instance_ProcessingStarted;
+            progressMonitor.ProcessingProgressChanged -= Instance_ProcessingProgressChanged;
+            progressMonitor.ProcessingFinished -= Instance_ProcessingFinished;
         }
 
         private void Window_Closed(object sender, EventArgs e) {
@@ -153,18 +154,50 @@ namespace AudioAlign {
         }
 
         private void crossCorrelateButton_Click(object sender, RoutedEventArgs e) {
-            Task.Factory.StartNew(() => {
-                CrossCorrelation.Result result;
-                Match ccm = CrossCorrelation.Adjust(match, ProgressMonitor.GlobalInstance, out result);
-                Dispatcher.BeginInvoke((Action)delegate {
-                    multiTrackViewer1.Matches.Add(ccm);
-                    multiTrackViewer1.RefreshAdornerLayer();
-                        
-                    new CrossCorrelationResult(result) {
-                        Owner = this
-                    }.Show();
+            if (ccr == null) {
+                Task.Factory.StartNew(() => {
+                    Match ccm = CrossCorrelation.Adjust(match, progressMonitor, out ccr);
+                    Dispatcher.BeginInvoke((Action) delegate {
+                        multiTrackViewer1.Matches.Add(ccm);
+                        multiTrackViewer1.RefreshAdornerLayer();
+
+                        ShowCCResult(ccr);
+                    });
                 });
-            });
+            } else {
+                ShowCCResult(ccr);
+            }
+        }
+
+        private void syncButton_Click(object sender, RoutedEventArgs e) {
+            MatchProcessor.Align(match);
+        }
+
+        private void syncCCButton_Click(object sender, RoutedEventArgs e) {
+            if (multiTrackViewer1.Matches.Count > 1) {
+                MatchProcessor.Align(multiTrackViewer1.Matches[1]);
+            }
+        }
+
+        private void ShowCCResult(CrossCorrelation.Result ccr) {
+            new CrossCorrelationResult(ccr) {
+                Owner = this
+            }.Show();
+        }
+
+        private void Instance_ProcessingStarted(object sender, EventArgs e) {
+            progressBar.Dispatcher.BeginInvoke((Action)(() => progressBar.IsEnabled = true));
+        }
+
+        private void Instance_ProcessingProgressChanged(object sender, ValueEventArgs<float> e) {
+            progressBar.Dispatcher.BeginInvoke((Action)(() => progressBar.Value = e.Value));
+        }
+
+        private void Instance_ProcessingFinished(object sender, EventArgs e) {
+            progressBar.Dispatcher.BeginInvoke((Action)(() => {
+                progressBar.Value = 0;
+                progressBar.IsEnabled = false;
+            }));
         }
     }
 }
