@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,6 +23,7 @@ using System.Windows.Interop;
 using AudioAlign.Audio.Matching.Graph;
 using AudioAlign.Audio.Matching.Dixon2005;
 using AudioAlign.Audio.Streams;
+using Match = AudioAlign.Audio.Matching.Match;
 
 namespace AudioAlign {
     /// <summary>
@@ -686,6 +688,24 @@ namespace AudioAlign {
                         });
                     });
                 }
+            }
+        }
+
+        private void jikuButton_Click(object sender, RoutedEventArgs e) {
+            Dictionary<Track, long> offsets = new Dictionary<Track, long>(trackList.Count);
+            long minOffset = long.MaxValue;
+
+            foreach(Track t in trackList) {
+                System.Text.RegularExpressions.Match m = Regex.Match(t.Name, "[0-9]{10,}");
+                if(m.Success) {
+                    long offset = long.Parse(m.Value);
+                    minOffset = Math.Min(minOffset, offset);
+                    offsets.Add(t, offset);
+                }
+            }
+
+            foreach(Track t in offsets.Keys) {
+                t.Offset = new TimeSpan((offsets[t] - minOffset)*TimeUtil.MILLISECS_TO_TICKS);
             }
         }
     }

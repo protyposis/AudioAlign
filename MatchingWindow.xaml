@@ -60,6 +60,11 @@
                         <Button Content="Start" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" Name="correlationButton" VerticalAlignment="Bottom" Width="75" Click="correlationButton_Click" />
                     </Grid>
                 </TabItem>
+                <TabItem Header="Jiku">
+                    <Grid>
+                        <Button Content="Start" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" Name="jikuButton" VerticalAlignment="Bottom" Width="75" Click="jikuButton_Click" />
+                    </Grid>
+                </TabItem>
             </TabControl>
             <Grid Grid.Row="1" Margin="0,3,0,0" Height="25">
                 <ProgressBar Name="progressBar" />
@@ -123,7 +128,7 @@
                     <RadioButton Content="best" Height="16" Margin="43,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="bestMatchRadioButton" />
                     <RadioButton Content="last" Height="16" Margin="182,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="lastMatchRadioButton" />
                     <RadioButton Content="all *" Height="16" Margin="226,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="allMatchRadioButton" />
-                    <Button Name="alignTracksButton" Content="Align Tracks" Height="23" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="alignTracksButton_Click" />
+                    <Button Name="alignTracksButton" Content="Align Tracks" Height="23" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Click="alignTracksButton_Click" Margin="0,50,0,0" />
                     <Button Name="filterMatchesButton" Content="Filter Matches" Height="23" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="filterMatchesButton_Click" Margin="0,0,81,0" />
                     <TextBox Height="23" Margin="106,26,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Text="{Binding Path=MatchFilterWindowSize, Mode=TwoWay}" />
                     <RadioButton Content="first" Height="16" HorizontalAlignment="Left" Margin="91,6,0,0" VerticalAlignment="Top" Name="firstMatchRadioButton" />
