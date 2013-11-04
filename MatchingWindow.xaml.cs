@@ -696,6 +696,7 @@ namespace AudioAlign {
             long minOffset = long.MaxValue;
 
             foreach(Track t in trackList) {
+                if(t.Locked) continue;
                 System.Text.RegularExpressions.Match m = Regex.Match(t.Name, "[0-9]{10,}");
                 if(m.Success) {
                     long offset = long.Parse(m.Value);
