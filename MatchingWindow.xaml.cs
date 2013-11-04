@@ -716,7 +716,7 @@ namespace AudioAlign {
                 TimeSpan offset = TimeSpan.Parse(trackMoveTime.Text);
 
                 foreach (AudioTrack t in trackList) {
-                    if (Regex.IsMatch(t.Name, pattern)) {
+                    if (!t.Locked && Regex.IsMatch(t.Name, pattern)) {
                         t.Offset += offset;
                     }
                 }
