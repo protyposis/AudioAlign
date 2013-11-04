@@ -709,5 +709,22 @@ namespace AudioAlign {
                 t.Offset = new TimeSpan((offsets[t] - minOffset)*TimeUtil.MILLISECS_TO_TICKS);
             }
         }
+
+        private void moveButton_Click(object sender, RoutedEventArgs e) {
+            try {
+                string pattern = tracknameRegex.Text;
+                TimeSpan offset = TimeSpan.Parse(trackMoveTime.Text);
+
+                foreach (AudioTrack t in trackList) {
+                    if (Regex.IsMatch(t.Name, pattern)) {
+                        t.Offset += offset;
+                    }
+                }
+            }
+            catch(Exception ex) {
+                Console.WriteLine("moving failed:");
+                Console.WriteLine(ex);
+            }
+        }
     }
 }

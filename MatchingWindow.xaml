@@ -63,6 +63,9 @@
                 <TabItem Header="Jiku">
                     <Grid>
                         <Button Content="Start" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" Name="jikuButton" VerticalAlignment="Bottom" Width="75" Click="jikuButton_Click" />
+                        <TextBox Name="tracknameRegex" Height="23" TextWrapping="Wrap" Text="GT_\d+_0_\d+.wav" Margin="10,10,661,46"/>
+                        <TextBox Name="trackMoveTime" Text="00:00:00.00" Width="127" Height="23" Margin="169,10,529,46" />
+                        <Button Content="Move" Height="23" HorizontalAlignment="Right" Margin="0,0,449,47" Name="moveButton" VerticalAlignment="Bottom" Width="75" Click="moveButton_Click" />
                     </Grid>
                 </TabItem>
             </TabControl>
