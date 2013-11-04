@@ -517,5 +517,11 @@ namespace AudioAlign {
                 spectrogram.Reset();
             }
         }
+
+        private void CommandBinding_TracksUnlockAll(object sender, ExecutedRoutedEventArgs e) {
+            foreach (AudioTrack track in trackList) {
+                track.Locked = false;
+            }
+        }
     }
 }

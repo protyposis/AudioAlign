@@ -36,6 +36,7 @@
         <CommandBinding Command="local:Commands.MonitorMasterCorrelation" Executed="CommandBinding_MonitorMasterCorrelation"/>
         <CommandBinding Command="local:Commands.MonitorFrequencyGraph" Executed="CommandBinding_MonitorFrequencyGraph"/>
         <CommandBinding Command="local:Commands.MonitorSpectrogram" Executed="CommandBinding_MonitorSpectrogram"/>
+        <CommandBinding Command="local:Commands.TracksUnlockAll" Executed="CommandBinding_TracksUnlockAll"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
@@ -87,6 +88,9 @@
                 <Separator/>
                 <MenuItem Command="local:Commands.ViewTimelineScreenshotVisible"/>
                 <MenuItem Command="local:Commands.ViewTimelineScreenshotFull"/>
+            </MenuItem>
+            <MenuItem Header="Tracks">
+                <MenuItem Command="local:Commands.TracksUnlockAll"/>
             </MenuItem>
             <MenuItem Header="Monitor">
                 <MenuItem Command="local:Commands.MonitorMasterVolume" Name="menuItemMonitorMasterVolume" IsCheckable="True" IsChecked="True"/>
