@@ -518,6 +518,12 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_TracksUnmuteAll(object sender, ExecutedRoutedEventArgs e) {
+            foreach (AudioTrack track in trackList) {
+                track.Mute = false;
+            }
+        }
+
         private void CommandBinding_TracksUnlockAll(object sender, ExecutedRoutedEventArgs e) {
             foreach (AudioTrack track in trackList) {
                 track.Locked = false;

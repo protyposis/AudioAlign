@@ -36,6 +36,7 @@
         <CommandBinding Command="local:Commands.MonitorMasterCorrelation" Executed="CommandBinding_MonitorMasterCorrelation"/>
         <CommandBinding Command="local:Commands.MonitorFrequencyGraph" Executed="CommandBinding_MonitorFrequencyGraph"/>
         <CommandBinding Command="local:Commands.MonitorSpectrogram" Executed="CommandBinding_MonitorSpectrogram"/>
+        <CommandBinding Command="local:Commands.TracksUnmuteAll" Executed="CommandBinding_TracksUnmuteAll"/>
         <CommandBinding Command="local:Commands.TracksUnlockAll" Executed="CommandBinding_TracksUnlockAll"/>
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -90,6 +91,7 @@
                 <MenuItem Command="local:Commands.ViewTimelineScreenshotFull"/>
             </MenuItem>
             <MenuItem Header="Tracks">
+                <MenuItem Command="local:Commands.TracksUnmuteAll"/>
                 <MenuItem Command="local:Commands.TracksUnlockAll"/>
             </MenuItem>
             <MenuItem Header="Monitor">

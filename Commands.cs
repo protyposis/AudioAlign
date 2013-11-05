@@ -25,6 +25,7 @@ namespace AudioAlign {
         public static readonly RoutedUICommand MonitorMasterCorrelation = new RoutedUICommand("Master Correlation", "MonitorMasterCorrelation", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorFrequencyGraph = new RoutedUICommand("Frequency Graph", "MonitorFrequencyGraph", typeof(MainWindow));
         public static readonly RoutedUICommand MonitorSpectrogram = new RoutedUICommand("Spectrogram", "MonitorSpectrogram", typeof(MainWindow));
+        public static readonly RoutedUICommand TracksUnmuteAll = new RoutedUICommand("Unmute All", "TracksUnmuteAll", typeof(MainWindow));
         public static readonly RoutedUICommand TracksUnlockAll = new RoutedUICommand("Unlock All", "TracksUnlockAll", typeof(MainWindow));
     }
 }
