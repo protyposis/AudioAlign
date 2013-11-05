@@ -694,9 +694,11 @@ namespace AudioAlign {
         private void jikuButton_Click(object sender, RoutedEventArgs e) {
             Dictionary<Track, long> offsets = new Dictionary<Track, long>(trackList.Count);
             long minOffset = long.MaxValue;
+            string pattern = tracknameRegex.Text;
+            bool patternSelect = !(String.IsNullOrEmpty(pattern) || pattern.Trim().Equals("*"));
 
             foreach(Track t in trackList) {
-                if(t.Locked) continue;
+                if(t.Locked || (patternSelect && !Regex.IsMatch(t.Name, pattern))) continue;
                 System.Text.RegularExpressions.Match m = Regex.Match(t.Name, "[0-9]{10,}");
                 if(m.Success) {
                     long offset = long.Parse(m.Value);
