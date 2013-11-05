@@ -175,7 +175,7 @@
                 <Label Content="{Binding Path=TrackList.Count}" />
             </StatusBarItem>
             <StatusBarItem>
-                <Label Content="{Binding Path=TrackList.TotalLength, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" />
+                <Label Content="{Binding Path=TrackList.TotalLength, Converter={StaticResource TimeSpanConverter}}" />
             </StatusBarItem>
             <StatusBarItem Visibility="{Binding ElementName=MultiTrackViewerDebugCheckbox, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportWidth}" ContentStringFormat="VVW: {0}" Width="130" />
@@ -184,7 +184,7 @@
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset}" ContentStringFormat="VVO: {0}" Width="130" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Width="127" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" Padding="0" />
+                <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}}" Width="127" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" Padding="0" />
             </StatusBarItem>
         </StatusBar>
     </Grid>
