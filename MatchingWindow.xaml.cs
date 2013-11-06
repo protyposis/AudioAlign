@@ -271,8 +271,37 @@ namespace AudioAlign {
             }
         }
 
+        private void driftCalcButton_Click(object sender, RoutedEventArgs e) {
+            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
+            if(matches.Count != 2 || new HashSet<AudioTrack> { matches[0].Track1, matches[0].Track2, matches[1].Track1, matches[1].Track2 }.Count != 2) {
+                MessageBox.Show("Please select two matches between two tracks!", "Drift calculation failed",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Match m1 = matches[0];
+            Match m2 = matches[1];
+            bool crossed = m1.Track1 == m2.Track2;
+
+            TimeSpan d1 = (crossed ? m2.Track2Time : m2.Track1Time) - m1.Track1Time;
+            TimeSpan d2 = (crossed ? m2.Track1Time : m2.Track2Time) - m1.Track2Time;
+
+            //TimeSpan diff = d2 - d1;
+            double driftPercentage = 100d/d1.Ticks*d2.Ticks;
+
+            MessageBox.Show(
+                String.Format("Speed of track '{0}' is {2}% compared to track '{1}", m1.Track2.Name, m1.Track2.Name,
+                    driftPercentage), "Drift calculation", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         private void matchGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            multiTrackViewer.SelectedMatch = matchGrid.SelectedItem as Match;
+            // TODO check for performance / how often it gets called
+            foreach(Match m in e.RemovedItems) {
+                multiTrackViewer.SelectedMatches.Remove(m);
+            }
+            foreach (Match m in e.AddedItems) {
+                multiTrackViewer.SelectedMatches.Add(m);
+            }
         }
 
         private void clearMatchesButton_Click(object sender, RoutedEventArgs e) {
