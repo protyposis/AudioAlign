@@ -113,8 +113,8 @@
                                         </Grid.RowDefinitions>
                                         <Label Margin="3" Grid.Column="0" Grid.Row="0" Content="Track A:" VerticalAlignment="Center"/>
                                         <Label Margin="3" Grid.Column="0" Grid.Row="1" Content="Track B:" VerticalAlignment="Center"/>
-                                        <ComboBox Margin="3" Grid.Column="1" Grid.Row="0" Name="addManualMatchPopupComboBoxA"/>
-                                        <ComboBox Margin="3" Grid.Column="1" Grid.Row="1" Name="addManualMatchPopupComboBoxB"/>
+                                        <ComboBox Margin="3" Grid.Column="1" Grid.Row="0" Name="addManualMatchPopupComboBoxA" SelectionChanged="AddManualMatchPopupComboBoxA_OnSelectionChanged"/>
+                                        <ComboBox Margin="3" Grid.Column="1" Grid.Row="1" Name="addManualMatchPopupComboBoxB" SelectionChanged="AddManualMatchPopupComboBoxB_OnSelectionChanged"/>
                                         <Button Margin="3" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Content="Add" Height="23" Width="40" Click="addManualMatchPopupAddButton_Click"/>
                                     </Grid>
                                 </Border>

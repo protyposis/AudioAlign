@@ -624,6 +624,9 @@ namespace AudioAlign {
             addManualMatchPopupComboBoxA.SelectedItem = null;
             addManualMatchPopupComboBoxB.SelectedItem = null;
 
+            addManualMatchPopupComboBoxA.Tag = false;
+            addManualMatchPopupComboBoxB.Tag = false;
+
             addManualMatchPopupComboBoxA.ItemsSource = trackList.EnumerateAtPosition(position);
             addManualMatchPopupComboBoxB.ItemsSource = trackList.EnumerateAtPosition(position);
 
@@ -638,6 +641,19 @@ namespace AudioAlign {
             }
 
             addManualMatchPopup.IsOpen = true;
+        }
+
+        private void AddManualMatchPopupComboBoxA_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (addManualMatchPopupComboBoxB.Tag as bool? != true // user hasn't done a manual selection in B
+                && addManualMatchPopupComboBoxB.Items.Count >= addManualMatchPopupComboBoxA.SelectedIndex) { // the selected item isn't the last one in the list
+                addManualMatchPopupComboBoxB.SelectedIndex = addManualMatchPopupComboBoxA.SelectedIndex + 1; // preset the following item in B
+            }
+        }
+
+        private void AddManualMatchPopupComboBoxB_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if(addManualMatchPopupComboBoxB.IsDropDownOpen) { // user-initiated change
+                addManualMatchPopupComboBoxB.Tag = true;
+            }
         }
 
         private void addManualMatchPopupAddButton_Click(object sender, RoutedEventArgs e) {
