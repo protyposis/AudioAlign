@@ -370,6 +370,7 @@ namespace AudioAlign {
         private void CommandBinding_Save(object sender, ExecutedRoutedEventArgs e) {
             if (project.File != null) {
                 SaveProject(project.File);
+                ShowStatus("Saved", true);
             }
         }
 
@@ -380,6 +381,7 @@ namespace AudioAlign {
 
             if (dlg.ShowDialog() == true) {
                 SaveProject(new FileInfo(dlg.FileName));
+                ShowStatus("Saved", true);
             }
         }
 
@@ -390,6 +392,7 @@ namespace AudioAlign {
 
             if (dlg.ShowDialog() == true) {
                 Project.ExportEDL(trackList, new FileInfo(dlg.FileName));
+                ShowStatus("Exported", true);
             }
         }
 
@@ -534,6 +537,33 @@ namespace AudioAlign {
             foreach (AudioTrack track in trackList) {
                 track.Locked = false;
             }
+        }
+
+        /// <summary>
+        /// Displays a status message in the status bar to provide the user feedback for operations
+        /// without visible results. The message disappears automatically after a few seconds.
+        /// </summary>
+        /// <param name="text">the text to display</param>
+        /// <param name="displayTime">if true, the current time is attached to the text</param>
+        public void ShowStatus(string text, bool displayTime) {
+            statusLabel.Content = (displayTime ? DateTime.Now.ToShortTimeString() + " " : " ") + text;
+            statusLabel.Visibility = System.Windows.Visibility.Visible;
+            var timer = statusLabel.Tag as DispatcherTimer;
+            if (timer == null)
+            {
+                statusLabel.Tag = timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 3) };
+                timer.Tick += delegate(object sender, EventArgs e)
+                {
+                    timer.Stop();
+                    statusLabel.Content = "";
+                    statusLabel.Visibility = System.Windows.Visibility.Collapsed;
+                };
+            }
+            else
+            {
+                timer.Stop(); // stop the timer if it is still active from the previous call
+            }
+            timer.Start();
         }
     }
 }
