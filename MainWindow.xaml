@@ -37,6 +37,7 @@
         <CommandBinding Command="local:Commands.MonitorFrequencyGraph" Executed="CommandBinding_MonitorFrequencyGraph"/>
         <CommandBinding Command="local:Commands.MonitorSpectrogram" Executed="CommandBinding_MonitorSpectrogram"/>
         <CommandBinding Command="local:Commands.TracksUnmuteAll" Executed="CommandBinding_TracksUnmuteAll"/>
+        <CommandBinding Command="local:Commands.TracksUnsoloAll" Executed="CommandBinding_TracksUnsoloAll"/>
         <CommandBinding Command="local:Commands.TracksUnlockAll" Executed="CommandBinding_TracksUnlockAll"/>
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -92,6 +93,7 @@
             </MenuItem>
             <MenuItem Header="Tracks">
                 <MenuItem Command="local:Commands.TracksUnmuteAll"/>
+                <MenuItem Command="local:Commands.TracksUnsoloAll"/>
                 <MenuItem Command="local:Commands.TracksUnlockAll"/>
             </MenuItem>
             <MenuItem Header="Monitor">

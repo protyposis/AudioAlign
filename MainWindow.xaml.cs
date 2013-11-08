@@ -524,6 +524,12 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_TracksUnsoloAll(object sender, ExecutedRoutedEventArgs e) {
+            foreach (AudioTrack track in trackList) {
+                track.Solo = false;
+            }
+        }
+
         private void CommandBinding_TracksUnlockAll(object sender, ExecutedRoutedEventArgs e) {
             foreach (AudioTrack track in trackList) {
                 track.Locked = false;
