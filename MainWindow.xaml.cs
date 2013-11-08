@@ -23,6 +23,7 @@ using AudioAlign.Audio.Matching.HaitsmaKalker2002;
 using AudioAlign.Audio.Streams;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace AudioAlign {
     /// <summary>
@@ -83,6 +84,14 @@ namespace AudioAlign {
             CommandBinding playToggleBinding = new CommandBinding(Commands.PlayToggle);
             CommandBindings.Add(playToggleBinding);
             playToggleBinding.Executed += new ExecutedRoutedEventHandler(playToggleBinding_Executed);
+
+
+            //// INIT TRACKLIST STUFF
+            //trackList.PropertyChanged += delegate(object sender2, PropertyChangedEventArgs e2) {
+            //    if (e2.PropertyName == "TotalLength") {
+            //        multiTrackViewer1.VirtualViewportMaxWidth = trackList.TotalLength.Ticks;
+            //    }
+            //};
 
 
             // INIT PLAYER
