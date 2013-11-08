@@ -187,7 +187,7 @@
                 <Label Content="{Binding ElementName=multiTrackViewer1, Path=VirtualViewportOffset}" ContentStringFormat="VVO: {0}" Width="130" />
             </StatusBarItem>
             <StatusBarItem>
-                <Label Name="statusLabel" Content="Status" Visibility="Collapsed" Width="Auto" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" Padding="0" />
+                <Label Name="statusLabel" Content="Status" FontWeight="Bold" Visibility="Collapsed" Width="Auto" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" Padding="0" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}}" Width="127" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" Padding="0" />
