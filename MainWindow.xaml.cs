@@ -401,7 +401,24 @@ namespace AudioAlign {
 
             if (dlg.ShowDialog() == true) {
                 Project.ExportEDL(trackList, new FileInfo(dlg.FileName));
-                ShowStatus("Exported", true);
+                ShowStatus("Vegas EDL Exported", true);
+            }
+        }
+
+        private void CommandBinding_FileExportSyncXML(object sender, ExecutedRoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".xml";
+            dlg.Filter = "Sync XML|*.xml";
+
+            if (dlg.ShowDialog() == true) {
+                Project p = new Project();
+                foreach (AudioTrack track in trackList) {
+                    p.AudioTracks.Add(track);
+                }
+                p.Matches.AddRange(multiTrackViewer1.Matches);
+                p.MasterVolume = (float)volumeSlider.Value;
+                Project.ExportSyncXML(p, new FileInfo(dlg.FileName));
+                ShowStatus("Sync XML Exported", true);
             }
         }
 
