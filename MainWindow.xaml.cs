@@ -573,6 +573,12 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_TracksResetColors(object sender, ExecutedRoutedEventArgs e) {
+            foreach (AudioTrack track in trackList) {
+                track.Color = Track.DEFAULT_COLOR;
+            }
+        }
+
         /// <summary>
         /// Displays a status message in the status bar to provide the user feedback for operations
         /// without visible results. The message disappears automatically after a few seconds.

@@ -42,6 +42,7 @@
         <CommandBinding Command="local:Commands.TracksUnsoloAll" Executed="CommandBinding_TracksUnsoloAll"/>
         <CommandBinding Command="local:Commands.TracksUnlockAll" Executed="CommandBinding_TracksUnlockAll"/>
         <CommandBinding Command="local:Commands.TracksResetVolume" Executed="CommandBinding_TracksResetVolume"/>
+        <CommandBinding Command="local:Commands.TracksResetColors" Executed="CommandBinding_TracksResetColors"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
@@ -100,6 +101,7 @@
                 <MenuItem Command="local:Commands.TracksUnsoloAll"/>
                 <MenuItem Command="local:Commands.TracksUnlockAll"/>
                 <MenuItem Command="local:Commands.TracksResetVolume"/>
+                <MenuItem Command="local:Commands.TracksResetColors"/>
             </MenuItem>
             <MenuItem Header="Monitor">
                 <MenuItem Command="local:Commands.MonitorMasterVolume" Name="menuItemMonitorMasterVolume" IsCheckable="True" IsChecked="True"/>
