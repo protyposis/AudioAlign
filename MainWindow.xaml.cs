@@ -420,6 +420,8 @@ namespace AudioAlign {
                 Project.ExportSyncXML(p, new FileInfo(dlg.FileName));
                 ShowStatus("Sync XML Exported", true);
             }
+
+            //JikuDatasetUtils.EvaluateOffsets(trackList);
         }
 
         private void CommandBinding_AddAudioFile(object sender, ExecutedRoutedEventArgs e) {

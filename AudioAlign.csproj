@@ -173,6 +173,7 @@
     <Compile Include="DtwPathViewer.xaml.cs">
       <DependentUpon>DtwPathViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JikuDatasetUtils.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

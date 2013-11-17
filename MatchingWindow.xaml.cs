@@ -737,36 +737,12 @@ namespace AudioAlign {
         }
 
         private void jikuButton_Click(object sender, RoutedEventArgs e) {
-            Dictionary<Track, long> offsets = new Dictionary<Track, long>(trackList.Count);
-            long minOffset = long.MaxValue;
-            string pattern = tracknameRegex.Text;
-            bool patternSelect = !(String.IsNullOrEmpty(pattern) || pattern.Trim().Equals("*"));
-
-            foreach(Track t in trackList) {
-                if(t.Locked || (patternSelect && !Regex.IsMatch(t.Name, pattern))) continue;
-                System.Text.RegularExpressions.Match m = Regex.Match(t.Name, "[0-9]{10,}");
-                if(m.Success) {
-                    long offset = long.Parse(m.Value);
-                    minOffset = Math.Min(minOffset, offset);
-                    offsets.Add(t, offset);
-                }
-            }
-
-            foreach(Track t in offsets.Keys) {
-                t.Offset = new TimeSpan((offsets[t] - minOffset)*TimeUtil.MILLISECS_TO_TICKS);
-            }
+            JikuDatasetUtils.TimestampAlign(trackList, tracknameRegex.Text);
         }
 
         private void moveButton_Click(object sender, RoutedEventArgs e) {
             try {
-                string pattern = tracknameRegex.Text;
-                TimeSpan offset = TimeSpan.Parse(trackMoveTime.Text);
-
-                foreach (AudioTrack t in trackList) {
-                    if (!t.Locked && Regex.IsMatch(t.Name, pattern)) {
-                        t.Offset += offset;
-                    }
-                }
+                JikuDatasetUtils.Move(trackList, tracknameRegex.Text, TimeSpan.Parse(trackMoveTime.Text));
             }
             catch(Exception ex) {
                 Console.WriteLine("moving failed:");
