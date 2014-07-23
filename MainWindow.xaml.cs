@@ -424,6 +424,17 @@ namespace AudioAlign {
             //JikuDatasetUtils.EvaluateOffsets(trackList);
         }
 
+        private void CommandBinding_FileExportMatchesCSV(object sender, ExecutedRoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".csv";
+            dlg.Filter = "Matches CSV|*.csv";
+
+            if (dlg.ShowDialog() == true) {
+                Project.ExportMatchesCSV(multiTrackViewer1.Matches, new FileInfo(dlg.FileName));
+                ShowStatus("Matches CSV Exported", true);
+            }
+        }
+
         private void CommandBinding_AddAudioFile(object sender, ExecutedRoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.DefaultExt = ".wav";

@@ -21,6 +21,7 @@
         <CommandBinding Command="SaveAs" Executed="CommandBinding_SaveAs"/>
         <CommandBinding Command="local:Commands.FileExportVegasEDL" Executed="CommandBinding_FileExportVegasEDL"/>
         <CommandBinding Command="local:Commands.FileExportSyncXML" Executed="CommandBinding_FileExportSyncXML"/>
+        <CommandBinding Command="local:Commands.FileExportMatchesCSV" Executed="CommandBinding_FileExportMatchesCSV"/>
         <CommandBinding Command="local:Commands.AddAudioFile" Executed="CommandBinding_AddAudioFile"/>
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
         <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
@@ -74,6 +75,7 @@
                 <Separator/>
                 <MenuItem Command="local:Commands.FileExportVegasEDL"/>
                 <MenuItem Command="local:Commands.FileExportSyncXML"/>
+                <MenuItem Command="local:Commands.FileExportMatchesCSV"/>
                 <Separator/>
                 <MenuItem Command="local:Commands.AddAudioFile"/>
                 <Separator/>
