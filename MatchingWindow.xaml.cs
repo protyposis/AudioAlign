@@ -24,6 +24,7 @@ using AudioAlign.Audio.Matching.Graph;
 using AudioAlign.Audio.Matching.Dixon2005;
 using AudioAlign.Audio.Streams;
 using Match = AudioAlign.Audio.Matching.Match;
+using System.IO;
 
 namespace AudioAlign {
     /// <summary>
@@ -748,6 +749,68 @@ namespace AudioAlign {
                 Console.WriteLine("moving failed:");
                 Console.WriteLine(ex);
             }
+        }
+
+        /// <summary>
+        /// Reads drift factors from a config file and applies them to all matches by scaling their 2 match positions by the drift factor.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void driftCorrectMatches_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.DefaultExt = ".txt";
+                dlg.Filter = "Drift Config|*.txt";
+                dlg.Multiselect = false;
+
+                if (dlg.ShowDialog() == true)
+                {
+                    // read drift config
+                    Dictionary<string, double> mapping = new Dictionary<string, double>();
+                    using (StreamReader reader = File.OpenText(dlg.FileName))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            string[] parts = line.Split(';');
+                            mapping.Add(parts[0], Double.Parse(parts[1]));
+                        }
+                    }
+
+                    // adjust matching points
+                    foreach (Match m in matchGrid.Items)
+                    {
+                        foreach (string filePattern in mapping.Keys)
+                        {
+                            double factor = mapping[filePattern];
+                            string regex = "^" + filePattern.Replace(".", "\\.").Replace("*", ".+") + "$";
+
+                            if (Regex.IsMatch(m.Track1.FileInfo.Name, regex))
+                            {
+                                m.Track1Time = new TimeSpan((long)(m.Track1Time.Ticks * factor));
+                                Debug.WriteLine("adjusted " + m.Track1.Name);
+                            }
+                            if (Regex.IsMatch(m.Track2.FileInfo.Name, regex))
+                            {
+                                m.Track2Time = new TimeSpan((long)(m.Track2Time.Ticks * factor));
+                                Debug.WriteLine("adjusted " + m.Track2.Name);
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
+
+        private void jikuEvaluateOffsets_Click(object sender, RoutedEventArgs e)
+        {
+            JikuDatasetUtils.EvaluateOffsets(trackList);
         }
     }
 }

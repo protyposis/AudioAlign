@@ -11,6 +11,11 @@ namespace AudioAlign
 {
     class JikuDatasetUtils
     {
+        /// <summary>
+        /// Reads timestamps from the Jiku file names and aligns the tracks according to these timestamps on the timeline.
+        /// </summary>
+        /// <param name="trackList"></param>
+        /// <param name="tracknameRegexFilterPattern">regex to restrict alignment to matching tracks</param>
         public static void TimestampAlign(TrackList<AudioTrack> trackList, string tracknameRegexFilterPattern)
         {
             Dictionary<Track, long> offsets = new Dictionary<Track, long>(trackList.Count);
@@ -36,6 +41,12 @@ namespace AudioAlign
             }
         }
 
+        /// <summary>
+        /// Moves all tracks whose names (usually these are the file names) match a regex pattern by the specified time in the timeline.
+        /// </summary>
+        /// <param name="trackList"></param>
+        /// <param name="tracknameRegexFilterPattern"></param>
+        /// <param name="moveTime"></param>
         public static void Move(TrackList<AudioTrack> trackList, string tracknameRegexFilterPattern, TimeSpan moveTime)
         {
             string pattern = tracknameRegexFilterPattern;
