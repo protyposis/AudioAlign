@@ -160,6 +160,19 @@ namespace AudioAlign {
                 if (e2.Key == Key.Delete) {
                     AudioTrack audioTrack = multiTrackViewer1.SelectedItem as AudioTrack;
                     if (audioTrack != null) {
+                        // 1. delete all related matches
+                        List<Match> deleteList = new List<Match>();
+                        // 1a find all related matches
+                        foreach (Match m in multiTrackViewer1.Matches) {
+                            if (m.Track1 == audioTrack || m.Track2 == audioTrack) {
+                                deleteList.Add(m);
+                            }
+                        }
+                        // 1b delete
+                        foreach (Match m in deleteList) {
+                            multiTrackViewer1.Matches.Remove(m);
+                        }
+                        // 2. delete track
                         trackList.Remove(audioTrack);
                     }
                     e2.Handled = true;
