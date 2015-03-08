@@ -158,7 +158,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <my:ExtendedSlider AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="3" Maximum="4" Name="volumeSlider" Orientation="Vertical" SmallChange="0.01" TickFrequency="0.1" TickPlacement="Both" Value="1" Width="30" LargeChange="0.1" DefaultValue="1" />
-                        <Label Grid.Row="1" Name="decibelLabel" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding ElementName=volumeSlider, Path=Value, FallbackValue=dB, Converter={StaticResource LinearDecibelConverter}}" ContentStringFormat="{}{0:0.0}" FontSize="9" Padding="0" HorizontalAlignment="Center"/>
+                        <Label Grid.Row="1" Name="decibelLabel" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding ElementName=volumeSlider, Path=Value, FallbackValue=dB, Converter={StaticResource LinearDecibelStringConverter}}" FontSize="9" Padding="0" HorizontalAlignment="Center"/>
                     </Grid>
                     <my:StereoVUMeter Margin="43,6,6,6" Name="stereoVUMeter1" />
                     <my:CorrelationMeter Grid.Row="1" Name="correlationMeter" Background="Black" Margin="-3,0,-3,-3" FontSize="9" />
