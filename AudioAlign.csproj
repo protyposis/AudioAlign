@@ -243,6 +243,10 @@
       <Project>{E868D91E-C5CF-46E4-BE2F-F95353ACB5E2}</Project>
       <Name>AudioAlign.Audio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AudioAlign.FFmpeg\AudioAlign.FFmpeg.csproj">
+      <Project>{8a1a603c-7005-4cc0-9ab7-e6fd3f58f621}</Project>
+      <Name>AudioAlign.FFmpeg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AudioAlign.FFTW\AudioAlign.FFTW.csproj">
       <Project>{880F644B-5370-47D6-A4B6-F98338073631}</Project>
       <Name>AudioAlign.FFTW</Name>
