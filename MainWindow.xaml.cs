@@ -68,6 +68,8 @@ namespace AudioAlign {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            Title = Title + (Environment.Is64BitProcess ? " (x64)" : " (x86)");
+
             multiTrackViewer1.ItemsSource = trackList;
 
             // INIT COMMAND BINDINGS
