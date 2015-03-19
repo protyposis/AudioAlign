@@ -4,6 +4,7 @@
         xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
         xmlns:local="clr-namespace:AudioAlign"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+        xmlns:oxy="http://oxyplot.org/wpf"
         FontSize="11" 
         Title="Cross Correlation Result" Height="300" Width="689"
         Background="{StaticResource NormalBorderBrush}" WindowStyle="ToolWindow">
@@ -12,21 +13,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <d3:ChartPlotter Grid.Column="0" Name="plotter1" Margin="3">
-            <d3:ChartPlotter.Style>
-                <Style>
-                    <Setter Property="Control.Background" Value="White"/>
-                    <Setter Property="Control.Foreground" Value="Black"/>
-                </Style>
-            </d3:ChartPlotter.Style>
-        </d3:ChartPlotter>
-        <d3:ChartPlotter Grid.Column="1" Name="plotter2" Margin="3">
-            <d3:ChartPlotter.Style>
-                <Style>
-                    <Setter Property="Control.Background" Value="White"/>
-                    <Setter Property="Control.Foreground" Value="Black"/>
-                </Style>
-            </d3:ChartPlotter.Style>
-        </d3:ChartPlotter>
+        <oxy:Plot Grid.Column="0" Name="plotter1" Margin="3"/>
+        <oxy:Plot Grid.Column="1" Name="plotter2" Margin="3"/>
     </Grid>
 </Window>
