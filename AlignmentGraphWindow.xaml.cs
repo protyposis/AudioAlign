@@ -53,8 +53,9 @@ namespace AudioAlign {
             timeSpanAxis1.Title = "Time";
             timeSpanAxis1.Position = AxisPosition.Bottom;
             plotModel.Axes.Add(timeSpanAxis1);
-            var timeSpanAxis2 = new TimeSpanAxis();
+            var timeSpanAxis2 = new MsecTimeSpanAxis();
             timeSpanAxis2.Title = "Offset";
+            timeSpanAxis2.StringFormat = "m:ss:msec";
             plotModel.Axes.Add(timeSpanAxis2);
             FillGraph(plotModel);
             plotModel.IsLegendVisible = false;
@@ -63,6 +64,35 @@ namespace AudioAlign {
 
         private void MenuItemCopyToClipboard_Click(object sender, RoutedEventArgs e) {
             Clipboard.SetImage(OxyPlot.Wpf.PngExporter.ExportToBitmap(plotter.Model, (int)plotter.ActualWidth, (int)plotter.ActualHeight, OxyColors.White));
+        }
+
+        /// <summary>
+        /// Modifies OxyPlot's TimeSpanAxis calculation to display labels for smaller intervals. This
+        /// is helpful on the Y-axis offset plotting to visualize offsets with higher precision. A min
+        /// interval of the default 1 second is to coarse to inspect offsets on the millisecond level.
+        /// https://github.com/oxyplot/oxyplot/blob/v2014.1.546/Source/OxyPlot/Axes/TimeSpanAxis.cs
+        /// </summary>
+        class MsecTimeSpanAxis : TimeSpanAxis {
+            protected override double CalculateActualInterval(double availableSize, double maxIntervalSize) {
+                double range = Math.Abs(this.ActualMinimum - this.ActualMaximum);
+                double interval = 0.001;
+                var goodIntervals = new[] { 0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0, 5, 10, 30, 60, 120, 300, 600, 900, 1200, 1800, 3600 };
+
+                int maxNumberOfIntervals = Math.Max((int)(availableSize / maxIntervalSize), 2);
+
+                while (true) {
+                    if (range / interval < maxNumberOfIntervals) {
+                        return interval;
+                    }
+
+                    double nextInterval = goodIntervals.FirstOrDefault(i => i > interval);
+                    if (Math.Abs(nextInterval) < double.Epsilon) {
+                        nextInterval = interval * 2;
+                    }
+
+                    interval = nextInterval;
+                }
+            }
         }
     }
 }
