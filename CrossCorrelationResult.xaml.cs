@@ -28,8 +28,34 @@ namespace AudioAlign {
             PlotResult(plotter1, ccr);
             PlotResult(plotter2, ccr.AbsoluteResult());
 
-            //plotter1.Viewport.SetBinding(Viewport2D.VisibleProperty,
-            //                             new Binding("Visible") {Source = plotter2.Viewport, Mode = BindingMode.TwoWay});
+            
+            // Sync horizontal axes
+
+            var p1a1 = plotter1.ActualModel.Axes[0];
+            var p2a1 = plotter2.ActualModel.Axes[0];
+
+            bool isInternalChange = false;
+            p1a1.AxisChanged += (s, e) => {
+                if (isInternalChange) {
+                    return;
+                }
+
+                isInternalChange = true;
+                p2a1.Zoom(p1a1.ActualMinimum, p1a1.ActualMaximum);
+                plotter2.ActualModel.InvalidatePlot(false);
+                isInternalChange = false;
+            };
+
+            p2a1.AxisChanged += (s, e) => {
+                if (isInternalChange) {
+                    return;
+                }
+
+                isInternalChange = true;
+                p1a1.Zoom(p2a1.ActualMinimum, p2a1.ActualMaximum);
+                plotter1.ActualModel.InvalidatePlot(false);
+                isInternalChange = false;
+            };
         }
 
         private void PlotResult(OxyPlot.Wpf.Plot plotter, CrossCorrelation.Result ccr) {
