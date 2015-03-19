@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
         xmlns:local="clr-namespace:AudioAlign"
-        xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:oxy="http://oxyplot.org/wpf"
         FontSize="11" 
         Title="Cross Correlation Result" Height="300" Width="689"

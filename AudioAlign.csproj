@@ -104,9 +104,6 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DynamicDataDisplay">
-      <HintPath>..\..\libs\DynamicDataDisplay.dll</HintPath>
-    </Reference>
     <Reference Include="OxyPlot">
       <HintPath>..\packages\OxyPlot.Core.2014.1.546\lib\portable-net4+sl4+wp71+win8\OxyPlot.dll</HintPath>
     </Reference>
@@ -173,7 +170,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Chart\TrianglePointMarker.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="CrossCorrelationResult.xaml.cs">
       <DependentUpon>CrossCorrelationResult.xaml</DependentUpon>
