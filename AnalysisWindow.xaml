@@ -4,6 +4,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:aaam="clr-namespace:AudioAlign.Audio.Matching;assembly=AudioAlign.Audio"
+        xmlns:oxy="http://oxyplot.org/wpf"
         Title="Alignment Analysis" Height="504" Width="816"
         FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" Loaded="Window_Loaded" Unloaded="Window_Unloaded"
@@ -81,14 +82,16 @@
                             <DataGridTextColumn Header="%" Binding="{Binding Score, StringFormat='{}{0:P3}'}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <d3:ChartPlotter Grid.Column="1" Name="resultPlotter" Margin="3,0,0,0">
-                        <d3:ChartPlotter.Style>
-                            <Style>
-                                <Setter Property="Control.Background" Value="White"/>
-                                <Setter Property="Control.Foreground" Value="Black"/>
-                            </Style>
-                        </d3:ChartPlotter.Style>
-                    </d3:ChartPlotter>
+                    <oxy:Plot Grid.Column="1" Name="resultPlotter" Margin="3,0,0,0">
+                        <!--<oxy:Plot.Series>
+                            <oxy:LineSeries ItemsSource="{Binding Points}"/>
+                        </oxy:Plot.Series>-->
+                        <oxy:Plot.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Copy to clipboard" Click="MenuItemCopyToClipboard_Click"/>
+                            </ContextMenu>
+                        </oxy:Plot.ContextMenu>
+                    </oxy:Plot>
                 </Grid>
             </GroupBox>
         </Grid>

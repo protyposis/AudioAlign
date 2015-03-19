@@ -16,10 +16,9 @@ using AudioAlign.Audio.Matching;
 using AudioAlign.Audio;
 using System.Collections.ObjectModel;
 using System.Data;
-using Microsoft.Research.DynamicDataDisplay.DataSources;
-using Microsoft.Research.DynamicDataDisplay.PointMarkers;
-using Microsoft.Research.DynamicDataDisplay;
-using Microsoft.Research.DynamicDataDisplay.Charts;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace AudioAlign {
     /// <summary>
@@ -62,38 +61,64 @@ namespace AudioAlign {
             dataTable.Columns.Add("|μ|", typeof(double));
             dataTable.Columns.Add("%", typeof(double));
 
-            var graphStyles = new Tuple<Pen, PointMarker>[] {
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.YellowGreen, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.YellowGreen, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.Magenta, 1d), new CirclePointMarker()),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.Cyan, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Up)),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.Cyan, 1d), new Chart.TrianglePointMarker(Chart.TrianglePointMarker.Direction.Down)),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.Cyan, 1d), new CirclePointMarker()),
-                new Tuple<Pen, PointMarker>(new Pen(Brushes.Red, 2d), new CirclePointMarker())
+            var graphStyles = new Tuple<OxyColor, MarkerType>[] {
+                new Tuple<OxyColor, MarkerType>(OxyColors.YellowGreen, MarkerType.Cross), // down
+                new Tuple<OxyColor, MarkerType>(OxyColors.YellowGreen, MarkerType.Plus), // up
+                new Tuple<OxyColor, MarkerType>(OxyColors.Magenta, MarkerType.Plus), // up
+                new Tuple<OxyColor, MarkerType>(OxyColors.Magenta, MarkerType.Cross), // down
+                new Tuple<OxyColor, MarkerType>(OxyColors.Magenta, MarkerType.Circle),
+                new Tuple<OxyColor, MarkerType>(OxyColors.Cyan, MarkerType.Plus), // up
+                new Tuple<OxyColor, MarkerType>(OxyColors.Cyan, MarkerType.Cross), // down
+                new Tuple<OxyColor, MarkerType>(OxyColors.Cyan, MarkerType.Circle),
+                new Tuple<OxyColor, MarkerType>(OxyColors.Red, MarkerType.Circle)
             };
 
-            // setup plotter axes
-            HorizontalTimeSpanAxis timeSpanAxis = new HorizontalTimeSpanAxis();
-            resultPlotter.HorizontalAxis = timeSpanAxis;
-            
-            // setup plotter viewport
-            resultPlotter.Viewport.Visible = new Rect(0, -0.1, timeSpanAxis.ConvertToDouble(trackList.End - trackList.Start), 1.2);
+            var plotModel = new PlotModel();
+
+            // setup plotter axes and viewport
+            plotModel.Axes.Add(new TimeSpanAxis() {
+                Position = AxisPosition.Bottom,
+                Minimum = 0,
+                Maximum = TimeSpanAxis.ToDouble(trackList.End - trackList.Start)
+            });
+            plotModel.Axes.Add(new LinearAxis() {
+                Minimum = -0.1,
+                Maximum = 1.2,
+                MajorGridlineStyle = LineStyle.Automatic,
+                MinorGridlineStyle = LineStyle.Automatic
+            });
 
             // setup plotter graph lines
             for (int i = 1; i < dataTable.Columns.Count; i++) {
                 DataColumn column = dataTable.Columns[i];
-                TableDataSource dataSource = new TableDataSource(dataTable);
-                dataSource.SetXMapping(row => timeSpanAxis.ConvertToDouble((TimeSpan)row[0]));
-                dataSource.SetYMapping(row => (double)row[column]);
-                resultPlotter.AddLineGraph(dataSource, 
-                    graphStyles[i - 1].Item1,
-                    graphStyles[i - 1].Item2,
-                    new PenDescription(column.ColumnName));
+                plotModel.Series.Add(new LineSeries {
+                    Color = graphStyles[i - 1].Item1,
+                    MarkerType = graphStyles[i - 1].Item2,
+                    MarkerFill = OxyColors.Red,
+                    MarkerStroke = OxyColors.Red,
+                    Title = column.ColumnName,
+                    TrackerFormatString = "{0}\nTime: {2}\nValue: {4}" // bugfix https://github.com/oxyplot/oxyplot/issues/265
+                });
             }
 
-            resultPlotter.LegendVisible = false;
+            plotModel.IsLegendVisible = false;
+            resultPlotter.Model = plotModel;
+
+            dataTable.RowChanged += delegate(object sender, DataRowChangeEventArgs e) {
+                if (e.Action == DataRowAction.Add) {
+                    TimeSpan time = (TimeSpan)e.Row.ItemArray[0];
+                    for (int x = 0; x < plotModel.Series.Count; x++) {
+                        ((LineSeries)plotModel.Series[x]).Points.Add(new DataPoint(TimeSpanAxis.ToDouble(time), (double)e.Row.ItemArray[x + 1]));
+                    }
+                }
+                plotModel.InvalidatePlot(false);
+            };
+            dataTable.TableCleared += delegate(object sender, DataTableClearEventArgs e) {
+                for (int x = 0; x < plotModel.Series.Count; x++) {
+                    ((LineSeries)plotModel.Series[x]).Points.Clear();
+                }
+                plotModel.InvalidatePlot(false);
+            };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
@@ -151,10 +176,6 @@ namespace AudioAlign {
 
             dataTable.Clear();
 
-            //analysis.Started += new EventHandler(delegate(object sender2, EventArgs e2) {
-            //    resultPlotter.Dispatcher.Invoke((Action)delegate {
-            //    });
-            //});
             analysis.WindowAnalysed += new EventHandler<AnalysisEventArgs>(delegate(object sender2, AnalysisEventArgs e2) {
                 analysisResultsGrid.Dispatcher.Invoke((Action)delegate {
                     windowResults.Add(e2);
@@ -169,11 +190,12 @@ namespace AudioAlign {
                 analysisResultsGrid.Dispatcher.Invoke((Action)delegate {
                     windowResults.Add(e2);
                 });
-                //resultPlotter.Dispatcher.Invoke((Action)delegate {
-                //    resultPlotter.Viewport.FitToView();
-                //});
             });
             analysis.ExecuteAsync();
+        }
+
+        private void MenuItemCopyToClipboard_Click(object sender, RoutedEventArgs e) {
+            Clipboard.SetImage(OxyPlot.Wpf.PngExporter.ExportToBitmap(resultPlotter.Model, (int)resultPlotter.ActualWidth, (int)resultPlotter.ActualHeight, OxyColors.White));
         }
     }
 }
