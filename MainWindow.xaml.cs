@@ -515,6 +515,23 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_FileExportAudioMix(object sender, ExecutedRoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".wav";
+            dlg.Filter = "Wave files|*.wav";
+
+            if (dlg.ShowDialog() == true) {
+                Task.Factory.StartNew(() => {
+                    IProgressReporter progressReporter = ProgressMonitor.GlobalInstance.BeginTask("Rendering output to file...", true);
+                    player.SaveToFile(new FileInfo(dlg.FileName), progressReporter);
+                    progressReporter.Finish();
+                    Dispatcher.BeginInvoke((Action)delegate {
+                        ShowStatus("Audio export finished", true);
+                    });
+                });
+            }
+        }
+
         private void CommandBinding_Close(object sender, ExecutedRoutedEventArgs e) {
             Close();
         }

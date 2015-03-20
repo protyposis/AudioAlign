@@ -23,6 +23,7 @@
         <CommandBinding Command="local:Commands.FileExportSyncXML" Executed="CommandBinding_FileExportSyncXML"/>
         <CommandBinding Command="local:Commands.FileExportMatchesCSV" Executed="CommandBinding_FileExportMatchesCSV"/>
         <CommandBinding Command="local:Commands.AddAudioFile" Executed="CommandBinding_AddAudioFile"/>
+        <CommandBinding Command="local:Commands.FileExportAudioMix" Executed="CommandBinding_FileExportAudioMix"/>
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
         <CommandBinding Command="local:Commands.FileOpenRecentProject" Executed="CommandBinding_FileOpenRecentProject"/>
         <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
@@ -84,6 +85,7 @@
                 <MenuItem Command="local:Commands.FileExportMatchesCSV"/>
                 <Separator/>
                 <MenuItem Command="local:Commands.AddAudioFile"/>
+                <MenuItem Command="local:Commands.FileExportAudioMix"/>
                 <Separator/>
                 <MenuItem Command="Close"/>
                 <Separator Name="RecentSeparator"/>
