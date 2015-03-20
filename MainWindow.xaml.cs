@@ -31,6 +31,7 @@ namespace AudioAlign {
     /// </summary>
     public partial class MainWindow : Window {
 
+        private RecentProjects recentProjects;
         private Project project;
         private TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
@@ -42,14 +43,59 @@ namespace AudioAlign {
         private int correlationConsumer;
 
         public MainWindow() {
+            recentProjects = new RecentProjects();
+
+            /*
+             * The menu items of the recently opened project are handled here in code behind 
+             * because in XAML (ItemsSource/CompositeCollection/CollectionViewSource/CollectionContainer) 
+             * there's a few problems I spent too much time with and could not solve. This
+             * programmatic solution works perfectly.
+             * 
+             * - When overriding the ItemContainerStyle, which is necessary to automatically
+             *   set the Header and Command, the style breaks... this is probably because of
+             *   the weird style combination I'm using in this app and wouldn't happen with
+             *   the default style (setting ItemContainerStyle replaces the style in the locally
+             *   included style file and falls back to proerties of the default style for the app).
+             * - When setting the header text through the style, the header text of all statically 
+             *   defined MenuItems gets overwritten because they don't have the header directly
+             *   set but get the header text from the associated command. So the header text
+             *   overrules the command text.
+             */
+            recentProjects.MenuEntries.CollectionChanged += delegate(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+                // Always rebuilt the whole menu... happens very seldomly and shouldn't be a noticable performance impact
+                int separatorIndex = FileMenu.Items.IndexOf(RecentSeparator);
+
+                // Clear old entries
+                if (FileMenu.Items.Count > (separatorIndex + 1)) {
+                    for (int x = FileMenu.Items.Count - 1; x > separatorIndex; x--) {
+                        FileMenu.Items.RemoveAt(x);
+                    }
+                }
+
+                Debug.Assert(FileMenu.Items.Count == separatorIndex + 1, "wrong menu delete count");
+
+                // Add new entries
+                int count = 0;
+                foreach (RecentProjects.RecentEntry entry in recentProjects.MenuEntries) {
+                    // Determine if this item represents a real project to be numbered
+                    bool projectEntry = entry.Parameter != null && entry.Parameter != RecentProjects.ClearCommand;
+
+                    FileMenu.Items.Add(new MenuItem {
+                        Header = (projectEntry ? (++count) + " " : "") + entry.Title,
+                        IsEnabled = entry.Enabled,
+                        Command = Commands.FileOpenRecentProject,
+                        CommandParameter = entry.Parameter
+                    });
+                }
+
+                Debug.Assert(FileMenu.Items.Count == separatorIndex + 1 + recentProjects.MenuEntries.Count, "wrong menu item count");
+            };
+
             project = new Project();
             trackList = new TrackList<AudioTrack>();
 
             InitializeComponent();
-        }
-
-        public TrackList<AudioTrack> TrackList {
-            get { return trackList; }
+            recentProjects.Load();
         }
 
         private void multiTrackViewer1_Drop(object sender, DragEventArgs e) {
@@ -309,6 +355,9 @@ namespace AudioAlign {
             p.MasterVolume = (float)volumeSlider.Value;
             Project.Save(p, targetFile);
             this.project = p;
+
+            recentProjects.Add(targetFile.FullName);
+            recentProjects.Save();
         }
 
         private void OpenProject(Project project, bool clear) {
@@ -332,6 +381,9 @@ namespace AudioAlign {
             // update gui
             ResetAudioMonitors();
             multiTrackViewer1.RefreshAdornerLayer(); // TODO find out why this doesn't work
+
+            recentProjects.Add(project.File.FullName);
+            recentProjects.Save();
         }
 
         private void ResetAudioMonitors() {
@@ -465,6 +517,15 @@ namespace AudioAlign {
 
         private void CommandBinding_Close(object sender, ExecutedRoutedEventArgs e) {
             Close();
+        }
+
+        private void CommandBinding_FileOpenRecentProject(object sender, ExecutedRoutedEventArgs e) {
+            if ((string)e.Parameter == RecentProjects.ClearCommand) {
+                recentProjects.Clear();
+            }
+            else {
+                OpenProject(Project.Load(new FileInfo((string)e.Parameter)), true);
+            }
         }
 
         private void CommandBinding_DebugRefreshMultiTrackViewer(object sender, ExecutedRoutedEventArgs e) {

@@ -24,6 +24,7 @@
         <CommandBinding Command="local:Commands.FileExportMatchesCSV" Executed="CommandBinding_FileExportMatchesCSV"/>
         <CommandBinding Command="local:Commands.AddAudioFile" Executed="CommandBinding_AddAudioFile"/>
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
+        <CommandBinding Command="local:Commands.FileOpenRecentProject" Executed="CommandBinding_FileOpenRecentProject"/>
         <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
         <CommandBinding Command="local:Commands.ViewZoomToFit" Executed="CommandBinding_ViewZoomToFit"/>
         <CommandBinding Command="local:Commands.ViewFitTracksVertically" Executed="CommandBinding_ViewFitTracksVertically"/>
@@ -64,9 +65,14 @@
         </Grid.ColumnDefinitions>
         <Menu Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <Menu.Resources>
-                <ResourceDictionary Source="/presentationframework.aero;component/themes/aero.normalcolor.xaml"/>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="/presentationframework.aero;component/themes/aero.normalcolor.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                    <CollectionViewSource x:Key="RecentProjectsMenuEntries" Source="{Binding RecentProjects.MenuEntries}"/>
+                </ResourceDictionary>
             </Menu.Resources>
-            <MenuItem Header="File">
+            <MenuItem Header="File" Name="FileMenu">
                 <MenuItem Command="New"/>
                 <MenuItem Command="Open"/>
                 <MenuItem Command="local:Commands.FileProjectAdd"/>
@@ -80,6 +86,7 @@
                 <MenuItem Command="local:Commands.AddAudioFile"/>
                 <Separator/>
                 <MenuItem Command="Close"/>
+                <Separator Name="RecentSeparator"/>
             </MenuItem>
             <MenuItem Header="View">
                 <MenuItem Command="local:Commands.ViewZoomToFit"/>
