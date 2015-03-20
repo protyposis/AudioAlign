@@ -81,16 +81,7 @@
                             <DataGridTextColumn Header="%" Binding="{Binding Score, StringFormat='{}{0:P3}'}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <oxy:Plot Grid.Column="1" Name="resultPlotter" Margin="3,0,0,0">
-                        <!--<oxy:Plot.Series>
-                            <oxy:LineSeries ItemsSource="{Binding Points}"/>
-                        </oxy:Plot.Series>-->
-                        <oxy:Plot.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Copy to clipboard" Click="MenuItemCopyToClipboard_Click"/>
-                            </ContextMenu>
-                        </oxy:Plot.ContextMenu>
-                    </oxy:Plot>
+                    <oxy:Plot Grid.Column="1" Name="resultPlotter" Margin="3,0,0,0"/>
                 </Grid>
             </GroupBox>
         </Grid>

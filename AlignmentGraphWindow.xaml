@@ -6,15 +6,6 @@
         FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" Loaded="Window_Loaded">
     <Grid>
-        <oxy:Plot Name="plotter">
-            <!--<oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Points}"/>
-            </oxy:Plot.Series>-->
-            <oxy:Plot.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Copy to clipboard" Click="MenuItemCopyToClipboard_Click"/>
-                </ContextMenu>
-            </oxy:Plot.ContextMenu>
-        </oxy:Plot>
+        <oxy:Plot Name="plotter"/>
     </Grid>
 </Window>

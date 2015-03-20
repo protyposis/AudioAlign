@@ -193,9 +193,5 @@ namespace AudioAlign {
             });
             analysis.ExecuteAsync();
         }
-
-        private void MenuItemCopyToClipboard_Click(object sender, RoutedEventArgs e) {
-            Clipboard.SetImage(OxyPlot.Wpf.PngExporter.ExportToBitmap(resultPlotter.Model, (int)resultPlotter.ActualWidth, (int)resultPlotter.ActualHeight, OxyColors.White));
-        }
     }
 }

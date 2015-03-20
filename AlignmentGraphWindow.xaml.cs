@@ -64,10 +64,6 @@ namespace AudioAlign {
             plotter.Model = plotModel;
         }
 
-        private void MenuItemCopyToClipboard_Click(object sender, RoutedEventArgs e) {
-            Clipboard.SetImage(OxyPlot.Wpf.PngExporter.ExportToBitmap(plotter.Model, (int)plotter.ActualWidth, (int)plotter.ActualHeight, OxyColors.White));
-        }
-
         /// <summary>
         /// Modifies OxyPlot's TimeSpanAxis calculation to display labels for smaller intervals. This
         /// is helpful on the Y-axis offset plotting to visualize offsets with higher precision. A min
