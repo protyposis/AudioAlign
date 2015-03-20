@@ -521,11 +521,24 @@ namespace AudioAlign {
             dlg.Filter = "Wave files|*.wav";
 
             if (dlg.ShowDialog() == true) {
+                // create a separate monitor just for the file export to isolate this progress for the 
+                // modal window (else other running tasks could be shown in the modal dialog too)
+                var progressMonitor = new ProgressMonitor();
+
+                ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
+                var modalProgress = new ModalProgressWindow(progressMonitor);
+                var progressReporter = progressMonitor.BeginTask("Rendering output to file...", true);
+
+                modalProgress.Owner = this;
+                modalProgress.Show();
+
                 Task.Factory.StartNew(() => {
-                    IProgressReporter progressReporter = ProgressMonitor.GlobalInstance.BeginTask("Rendering output to file...", true);
                     player.SaveToFile(new FileInfo(dlg.FileName), progressReporter);
-                    progressReporter.Finish();
+
                     Dispatcher.BeginInvoke((Action)delegate {
+                        progressReporter.Finish();
+                        modalProgress.Close();
+                        ProgressMonitor.GlobalInstance.RemoveChild(progressMonitor);
                         ShowStatus("Audio export finished", true);
                     });
                 });
