@@ -66,12 +66,7 @@
         </Grid.ColumnDefinitions>
         <Menu Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <Menu.Resources>
-                <ResourceDictionary>
-                    <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="/presentationframework.aero;component/themes/aero.normalcolor.xaml"/>
-                    </ResourceDictionary.MergedDictionaries>
-                    <CollectionViewSource x:Key="RecentProjectsMenuEntries" Source="{Binding RecentProjects.MenuEntries}"/>
-                </ResourceDictionary>
+                <ResourceDictionary Source="/presentationframework.aero;component/themes/aero.normalcolor.xaml"/>
             </Menu.Resources>
             <MenuItem Header="File" Name="FileMenu">
                 <MenuItem Command="New"/>
