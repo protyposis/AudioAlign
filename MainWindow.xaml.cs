@@ -386,8 +386,10 @@ namespace AudioAlign {
             ResetAudioMonitors();
             multiTrackViewer1.RefreshAdornerLayer(); // TODO find out why this doesn't work
 
-            recentProjects.Add(project.File.FullName);
-            recentProjects.Save();
+            if (project.File != null) {
+                recentProjects.Add(project.File.FullName);
+                recentProjects.Save();
+            }
         }
 
         private void ResetAudioMonitors() {
