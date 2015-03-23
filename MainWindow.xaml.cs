@@ -98,6 +98,10 @@ namespace AudioAlign {
             recentProjects.Load();
         }
 
+        public TrackList<AudioTrack> TrackList {
+            get { return trackList; } // required for binding to the GUI
+        }
+
         private void multiTrackViewer1_Drop(object sender, DragEventArgs e) {
             // source: http://stackoverflow.com/questions/332859/detect-dragndrop-file-in-wpf
             if (e.Data is DataObject && ((DataObject)e.Data).ContainsFileDropList()) {
