@@ -171,7 +171,7 @@
             <Trigger Property="IsEnabled" Value="true" />
             <Trigger Property="IsEnabled" Value="false">
                 <Setter Property="Background" Value="{DynamicResource DisabledBackgroundBrush}" TargetName="Background" />
-                <Setter Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" TargetName="ShineBorder" />
+                <!--<Setter Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" TargetName="ShineBorder" />-->
                 <Setter Property="Opacity" TargetName="Grid" Value="0.5" />
             </Trigger>
         </ControlTemplate.Triggers>
