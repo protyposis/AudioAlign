@@ -535,10 +535,11 @@ namespace AudioAlign {
 
                 ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
                 var modalProgress = new ModalProgressWindow(progressMonitor);
-                var progressReporter = progressMonitor.BeginTask("Rendering output to file...", true);
-
                 modalProgress.Owner = this;
                 modalProgress.Show();
+
+                // progress window needs to be open before beginning a task (else progress bar init does not get called)
+                var progressReporter = progressMonitor.BeginTask("Rendering output to file...", true);
 
                 Task.Factory.StartNew(() => {
                     player.SaveToFile(new FileInfo(dlg.FileName), progressReporter);

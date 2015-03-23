@@ -60,8 +60,6 @@ namespace AudioAlign {
             // http://stackoverflow.com/a/22964229
             ownerWindowHandle = (new WindowInteropHelper(Owner)).Handle;
             EnableWindow(ownerWindowHandle, false);
-
-            blockClosing = true;
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e) {
@@ -77,6 +75,7 @@ namespace AudioAlign {
                 progressBar.IsEnabled = true;
                 progressBarLabel.Text = progressMonitor.StatusMessage;
             });
+            blockClosing = true;
         }
 
         private void Instance_ProcessingProgressChanged(object sender, ValueEventArgs<float> e) {
