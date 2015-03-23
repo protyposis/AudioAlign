@@ -390,6 +390,8 @@ namespace AudioAlign {
                 recentProjects.Add(project.File.FullName);
                 recentProjects.Save();
             }
+
+            CommandBinding_ViewZoomToFit(this, null);
         }
 
         private void ResetAudioMonitors() {
@@ -574,7 +576,12 @@ namespace AudioAlign {
                 multiTrackViewer1.VirtualViewportWidth = trackList.End.Ticks + TimeUtil.SECS_TO_TICKS * 10;
             }
             else {
-                MessageBox.Show(this, "Timeline is empty!", ((RoutedUICommand)e.Command).Text, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                multiTrackViewer1.VirtualViewportOffset = 0;
+                multiTrackViewer1.VirtualViewportWidth = TimeUtil.SECS_TO_TICKS * 60 * 10;
+
+                if (e != null) {
+                    MessageBox.Show(this, "Timeline is empty!", ((RoutedUICommand)e.Command).Text, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
         }
 
