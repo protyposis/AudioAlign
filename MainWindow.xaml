@@ -66,20 +66,20 @@
         </Grid.ColumnDefinitions>
         <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="File" Name="FileMenu">
-                <MenuItem Command="New"/>
-                <MenuItem Command="Open"/>
-                <MenuItem Command="local:Commands.FileProjectAdd"/>
-                <MenuItem Command="Save"/>
-                <MenuItem Command="SaveAs"/>
+                <MenuItem Command="New" Header="New"/>
+                <MenuItem Command="Open" Header="Open..."/>
+                <MenuItem Command="local:Commands.FileProjectAdd" Header="Add..."/>
+                <MenuItem Command="Save" Header="Save"/>
+                <MenuItem Command="SaveAs" Header="Save as..."/>
                 <Separator/>
-                <MenuItem Command="local:Commands.FileExportVegasEDL"/>
-                <MenuItem Command="local:Commands.FileExportSyncXML"/>
-                <MenuItem Command="local:Commands.FileExportMatchesCSV"/>
+                <MenuItem Command="local:Commands.FileExportVegasEDL" Header="Export to Vegas EDL..."/>
+                <MenuItem Command="local:Commands.FileExportSyncXML" Header="Export sync XML..."/>
+                <MenuItem Command="local:Commands.FileExportMatchesCSV" Header="Export matches to CSV..."/>
                 <Separator/>
-                <MenuItem Command="local:Commands.AddAudioFile"/>
-                <MenuItem Command="local:Commands.FileExportAudioMix"/>
+                <MenuItem Command="local:Commands.AddAudioFile" Header="Add audio file..."/>
+                <MenuItem Command="local:Commands.FileExportAudioMix" Header="Export audio mix..."/>
                 <Separator/>
-                <MenuItem Command="Close"/>
+                <MenuItem Command="Close" Header="Exit"/>
                 <Separator Name="RecentSeparator"/>
             </MenuItem>
             <MenuItem Header="View">
