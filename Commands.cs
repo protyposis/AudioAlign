@@ -15,8 +15,8 @@ namespace AudioAlign {
         public static readonly RoutedUICommand FileExportAudioMix = new RoutedUICommand("Export audio mix", "FileExportAudioMix", typeof(MainWindow));
         public static readonly RoutedUICommand FileOpenRecentProject = new RoutedUICommand("Open Recent Project", "FileOpenRecentProject", typeof(MainWindow));
         public static readonly RoutedUICommand DebugRefreshMultiTrackViewer = new RoutedUICommand("Refresh MultiTrackViewer", "DebugRefreshMultiTrackViewer", typeof(MainWindow));
-        public static readonly RoutedUICommand ViewZoomToFit = new RoutedUICommand("Zoom to Fit", "ViewZoomToFit", typeof(MainWindow));
-        public static readonly RoutedUICommand ViewFitTracksVertically = new RoutedUICommand("Resize Track Heights", "ViewFitTracksVertically", typeof(MainWindow));
+        public static readonly RoutedUICommand ViewZoomToFit = new RoutedUICommand("Zoom to Fit", "ViewZoomToFit", typeof(MainWindow), new InputGestureCollection(new[] { new KeyGesture(Key.F, ModifierKeys.Control) }));
+        public static readonly RoutedUICommand ViewFitTracksVertically = new RoutedUICommand("Resize Track Heights", "ViewFitTracksVertically", typeof(MainWindow), new InputGestureCollection(new[] { new KeyGesture(Key.H, ModifierKeys.Control) }));
         public static readonly RoutedUICommand ViewGroupMatchingTracks = new RoutedUICommand("Group Matching Tracks", "ViewGroupMatchingTracks", typeof(MainWindow));
         public static readonly RoutedUICommand ViewOrderTracksByOffset = new RoutedUICommand("Offset", "ViewOrderTracksByOffset", typeof(MainWindow));
         public static readonly RoutedUICommand ViewOrderTracksByLength = new RoutedUICommand("Length", "ViewOrderTracksByLength", typeof(MainWindow));
