@@ -64,10 +64,7 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="120" MinWidth="120"/>
         </Grid.ColumnDefinitions>
-        <Menu Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.ColumnSpan="2">
-            <Menu.Resources>
-                <ResourceDictionary Source="/presentationframework.aero;component/themes/aero.normalcolor.xaml"/>
-            </Menu.Resources>
+        <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="File" Name="FileMenu">
                 <MenuItem Command="New"/>
                 <MenuItem Command="Open"/>
@@ -121,8 +118,7 @@
                 <MenuItem Command="local:Commands.DebugRefreshMultiTrackViewer"/>
             </MenuItem>
         </Menu>
-        <Border Grid.Row="1" Grid.ColumnSpan="2">
-        </Border>
+        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,0,0,1"/>
         <Grid Grid.Row="2">
             <Grid Margin="6,6,3,6">
                 <Grid.RowDefinitions>
