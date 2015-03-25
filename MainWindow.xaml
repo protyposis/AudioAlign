@@ -26,7 +26,6 @@
         <CommandBinding Command="local:Commands.FileExportAudioMix" Executed="CommandBinding_FileExportAudioMix"/>
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
         <CommandBinding Command="local:Commands.FileOpenRecentProject" Executed="CommandBinding_FileOpenRecentProject"/>
-        <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
         <CommandBinding Command="local:Commands.ViewZoomToFit" Executed="CommandBinding_ViewZoomToFit"/>
         <CommandBinding Command="local:Commands.ViewFitTracksVertically" Executed="CommandBinding_ViewFitTracksVertically"/>
         <CommandBinding Command="local:Commands.ViewGroupMatchingTracks" Executed="CommandBinding_ViewGroupMatchingTracks"/>
@@ -46,6 +45,8 @@
         <CommandBinding Command="local:Commands.TracksUnlockAll" Executed="CommandBinding_TracksUnlockAll"/>
         <CommandBinding Command="local:Commands.TracksResetVolume" Executed="CommandBinding_TracksResetVolume"/>
         <CommandBinding Command="local:Commands.TracksResetColors" Executed="CommandBinding_TracksResetColors"/>
+        <CommandBinding Command="local:Commands.DebugRefreshMultiTrackViewer" Executed="CommandBinding_DebugRefreshMultiTrackViewer"/>
+        <CommandBinding Command="local:Commands.DebugRefreshPeakStores" Executed="CommandBinding_DebugRefreshPeakStores"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
@@ -116,6 +117,7 @@
                 <MenuItem Header="WaveView Debug" IsCheckable="True" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}"/>
                 <MenuItem Header="MultiTrackViewer Debug" IsCheckable="True" Name="MultiTrackViewerDebugCheckbox"/>
                 <MenuItem Command="local:Commands.DebugRefreshMultiTrackViewer"/>
+                <MenuItem Command="local:Commands.DebugRefreshPeakStores"/>
             </MenuItem>
         </Menu>
         <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="{StaticResource ShadeBrush}" BorderThickness="0,0,0,1"/>

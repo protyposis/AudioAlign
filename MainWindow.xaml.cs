@@ -571,6 +571,13 @@ namespace AudioAlign {
             multiTrackViewer1.RefreshAdornerLayer();
         }
 
+        private void CommandBinding_DebugRefreshPeakStores(object sender, ExecutedRoutedEventArgs e) {
+            // The peaks get recalculated when the length of a track changes, which currently
+            // only happens when it gets warped. By setting the length to its own value, we
+            // do not change the track but trigger the event that leads to a peak refresh.
+            trackList.ToList().ForEach(track => track.Length = track.Length);
+        }
+
         private void CommandBinding_ViewZoomToFit(object sender, ExecutedRoutedEventArgs e) {
             if (trackList.Count > 0) {
                 multiTrackViewer1.VirtualViewportOffset = 0;
