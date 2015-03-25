@@ -570,7 +570,7 @@ namespace AudioAlign {
             }
 
             // add last match if it hasn't been added
-            if (path.Count % filterSize != 1) {
+            if (path.Count > 0 && path.Count % filterSize != 1) {
                 Tuple<TimeSpan, TimeSpan> lastMatch = path[path.Count - 1];
                 matches.Add(new Match() {
                     Track1 = t1,
