@@ -70,14 +70,14 @@
                 <MenuItem Command="Open" Header="Open..."/>
                 <MenuItem Command="local:Commands.FileProjectAdd" Header="Add..."/>
                 <MenuItem Command="Save" Header="Save"/>
-                <MenuItem Command="SaveAs" Header="Save as..."/>
+                <MenuItem Command="SaveAs" Header="Save As..."/>
                 <Separator/>
                 <MenuItem Command="local:Commands.FileExportVegasEDL" Header="Export to Vegas EDL..."/>
-                <MenuItem Command="local:Commands.FileExportSyncXML" Header="Export sync XML..."/>
-                <MenuItem Command="local:Commands.FileExportMatchesCSV" Header="Export matches to CSV..."/>
+                <MenuItem Command="local:Commands.FileExportSyncXML" Header="Export Sync XML..."/>
+                <MenuItem Command="local:Commands.FileExportMatchesCSV" Header="Export Matches to CSV..."/>
                 <Separator/>
-                <MenuItem Command="local:Commands.AddAudioFile" Header="Add audio file..."/>
-                <MenuItem Command="local:Commands.FileExportAudioMix" Header="Export audio mix..."/>
+                <MenuItem Command="local:Commands.AddAudioFile" Header="Add Audio File..."/>
+                <MenuItem Command="local:Commands.FileExportAudioMix" Header="Export Audio Mix..."/>
                 <Separator/>
                 <MenuItem Command="Close" Header="Exit"/>
                 <Separator Name="RecentSeparator"/>
@@ -87,7 +87,7 @@
                 <MenuItem Command="local:Commands.ViewFitTracksVertically"/>
                 <Separator/>
                 <MenuItem Command="local:Commands.ViewGroupMatchingTracks"/>
-                <MenuItem Header="Order tracks">
+                <MenuItem Header="Order Tracks">
                     <MenuItem Command="local:Commands.ViewOrderTracksByOffset"/>
                     <MenuItem Command="local:Commands.ViewOrderTracksByLength"/>
                     <MenuItem Command="local:Commands.ViewOrderTracksByName"/>
@@ -113,8 +113,8 @@
                 <MenuItem Command="local:Commands.MonitorSpectrogram" Name="menuItemMonitorSpectrogram" IsCheckable="True" IsChecked="True"/>
             </MenuItem>
             <MenuItem Header="Debug">
-                <MenuItem Header="WaveView debug" IsCheckable="True" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}"/>
-                <MenuItem Header="MultiTrackViewer debug" IsCheckable="True" Name="MultiTrackViewerDebugCheckbox"/>
+                <MenuItem Header="WaveView Debug" IsCheckable="True" IsChecked="{Binding ElementName=multiTrackViewer1, Path=DebugOutput}"/>
+                <MenuItem Header="MultiTrackViewer Debug" IsCheckable="True" Name="MultiTrackViewerDebugCheckbox"/>
                 <MenuItem Command="local:Commands.DebugRefreshMultiTrackViewer"/>
             </MenuItem>
         </Menu>
