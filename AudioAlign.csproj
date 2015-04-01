@@ -266,9 +266,9 @@
       <Project>{880F644B-5370-47D6-A4B6-F98338073631}</Project>
       <Name>AudioAlign.FFTW</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.LibSampleRate\AudioAlign.LibSampleRate.csproj">
-      <Project>{CC813B15-06BB-4334-96C6-DD252BE37D1B}</Project>
-      <Name>AudioAlign.LibSampleRate</Name>
+    <ProjectReference Include="..\AudioAlign.Soxr\AudioAlign.Soxr.csproj">
+      <Project>{24228071-5e72-4ba8-90e3-89de331a718c}</Project>
+      <Name>AudioAlign.Soxr</Name>
     </ProjectReference>
     <ProjectReference Include="..\AudioAlign.WaveControls\AudioAlign.WaveControls.csproj">
       <Project>{FD0C6CC5-B509-4441-9AA2-E8B34BAD9F95}</Project>
