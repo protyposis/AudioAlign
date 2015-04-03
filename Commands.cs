@@ -13,6 +13,7 @@ namespace AudioAlign {
         public static readonly RoutedUICommand FileProjectAdd = new RoutedUICommand("Add", "FileProjectAdd", typeof(MainWindow));
         public static readonly RoutedUICommand AddAudioFile = new RoutedUICommand("Add Audio File", "AddAudioFile", typeof(MainWindow));
         public static readonly RoutedUICommand FileExportAudioMix = new RoutedUICommand("Export audio mix", "FileExportAudioMix", typeof(MainWindow));
+        public static readonly RoutedUICommand FileExportSelectedTracks = new RoutedUICommand("Export selected tracks", "FileExportSelectedTracks", typeof(MainWindow));
         public static readonly RoutedUICommand FileOpenRecentProject = new RoutedUICommand("Open Recent Project", "FileOpenRecentProject", typeof(MainWindow));
         public static readonly RoutedUICommand DebugRefreshMultiTrackViewer = new RoutedUICommand("Refresh MultiTrackViewer", "DebugRefreshMultiTrackViewer", typeof(MainWindow));
         public static readonly RoutedUICommand DebugRefreshPeakStores = new RoutedUICommand("Refresh PeakStores", "DebugRefreshPeakStores", typeof(MainWindow));

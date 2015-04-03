@@ -537,20 +537,61 @@ namespace AudioAlign {
                 // create a separate monitor just for the file export to isolate this progress for the 
                 // modal window (else other running tasks could be shown in the modal dialog too)
                 var progressMonitor = new ProgressMonitor();
-
                 ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
+
+                // progress window needs to be open before beginning a task (else progress bar init does not get called)
                 var modalProgress = new ModalProgressWindow(progressMonitor);
                 modalProgress.Owner = this;
                 modalProgress.Show();
 
-                // progress window needs to be open before beginning a task (else progress bar init does not get called)
-                var progressReporter = progressMonitor.BeginTask("Rendering output to file...", true);
+                var progressReporter = progressMonitor.BeginTask("Rendering mix to file...", true);
 
                 Task.Factory.StartNew(() => {
                     player.SaveToFile(new FileInfo(dlg.FileName), progressReporter);
 
                     Dispatcher.BeginInvoke((Action)delegate {
                         progressReporter.Finish();
+                        modalProgress.Close();
+                        ProgressMonitor.GlobalInstance.RemoveChild(progressMonitor);
+                        ShowStatus("Audio export finished", true);
+                    });
+                });
+            }
+        }
+
+        private void CommandBinding_FileExportSelectedTracks(object sender, ExecutedRoutedEventArgs e) {
+            // Get the list of selected tracks
+            var selectedTracks = multiTrackViewer1.SelectedItems.Cast<AudioTrack>().ToList();
+
+            if (selectedTracks.Count == 0) {
+                ShowStatus("No tracks selected!", false);
+                return;
+            }
+
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".wav";
+            dlg.Filter = "Wave files|*.wav";
+            dlg.FileName = "AAexport {name}";
+
+            if (dlg.ShowDialog() == true) {
+                // create a separate monitor just for the file export to isolate this progress for the 
+                // modal window (else other running tasks could be shown in the modal dialog too)
+                var progressMonitor = new ProgressMonitor();
+                ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
+
+                // progress window needs to be open before beginning a task (else progress bar init does not get called)
+                var modalProgress = new ModalProgressWindow(progressMonitor);
+                modalProgress.Owner = this;
+                modalProgress.Show();
+
+                Task.Factory.StartNew(() => {
+                    foreach (AudioTrack track in selectedTracks) {
+                        var progressReporter = progressMonitor.BeginTask("Rendering " + track.Name + " to file...", true);
+                        player.SaveToFile(track, new FileInfo(dlg.FileName.Replace("{name}", track.Name)), progressReporter);
+                        progressReporter.Finish();
+                    }
+
+                    Dispatcher.BeginInvoke((Action)delegate {
                         modalProgress.Close();
                         ProgressMonitor.GlobalInstance.RemoveChild(progressMonitor);
                         ShowStatus("Audio export finished", true);

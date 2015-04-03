@@ -24,6 +24,7 @@
         <CommandBinding Command="local:Commands.FileExportMatchesCSV" Executed="CommandBinding_FileExportMatchesCSV"/>
         <CommandBinding Command="local:Commands.AddAudioFile" Executed="CommandBinding_AddAudioFile"/>
         <CommandBinding Command="local:Commands.FileExportAudioMix" Executed="CommandBinding_FileExportAudioMix"/>
+        <CommandBinding Command="local:Commands.FileExportSelectedTracks" Executed="CommandBinding_FileExportSelectedTracks"/>
         <CommandBinding Command="Close" Executed="CommandBinding_Close"/>
         <CommandBinding Command="local:Commands.FileOpenRecentProject" Executed="CommandBinding_FileOpenRecentProject"/>
         <CommandBinding Command="local:Commands.ViewZoomToFit" Executed="CommandBinding_ViewZoomToFit"/>
@@ -79,6 +80,7 @@
                 <Separator/>
                 <MenuItem Command="local:Commands.AddAudioFile" Header="Add Audio File..."/>
                 <MenuItem Command="local:Commands.FileExportAudioMix" Header="Export Audio Mix..."/>
+                <MenuItem Command="local:Commands.FileExportSelectedTracks" Header="Export Selected Tracks..."/>
                 <Separator/>
                 <MenuItem Command="Close" Header="Exit"/>
                 <Separator Name="RecentSeparator"/>
