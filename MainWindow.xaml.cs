@@ -210,22 +210,27 @@ namespace AudioAlign {
             // INIT RANDOM STUFF
             multiTrackViewer1.KeyUp += new KeyEventHandler(delegate(object sender2, KeyEventArgs e2) {
                 if (e2.Key == Key.Delete) {
-                    AudioTrack audioTrack = multiTrackViewer1.SelectedItem as AudioTrack;
-                    if (audioTrack != null) {
-                        // 1. delete all related matches
-                        List<Match> deleteList = new List<Match>();
-                        // 1a find all related matches
-                        foreach (Match m in multiTrackViewer1.Matches) {
-                            if (m.Track1 == audioTrack || m.Track2 == audioTrack) {
-                                deleteList.Add(m);
+                    // create temporary list to avoid concurrent modification exception
+                    var selectedAudioTracks = new List<AudioTrack>(multiTrackViewer1.SelectedItems.Cast<AudioTrack>());
+
+                    // delete tracks
+                    foreach (AudioTrack audioTrack in selectedAudioTracks) {
+                        if (audioTrack != null) {
+                            // 1. delete all related matches
+                            List<Match> deleteList = new List<Match>();
+                            // 1a find all related matches
+                            foreach (Match m in multiTrackViewer1.Matches) {
+                                if (m.Track1 == audioTrack || m.Track2 == audioTrack) {
+                                    deleteList.Add(m);
+                                }
                             }
+                            // 1b delete
+                            foreach (Match m in deleteList) {
+                                multiTrackViewer1.Matches.Remove(m);
+                            }
+                            // 2. delete track
+                            trackList.Remove(audioTrack);
                         }
-                        // 1b delete
-                        foreach (Match m in deleteList) {
-                            multiTrackViewer1.Matches.Remove(m);
-                        }
-                        // 2. delete track
-                        trackList.Remove(audioTrack);
                     }
                     e2.Handled = true;
                 }
