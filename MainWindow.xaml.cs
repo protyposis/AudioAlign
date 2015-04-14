@@ -81,7 +81,7 @@ namespace AudioAlign {
                     bool projectEntry = entry.Parameter != null && entry.Parameter != RecentProjects.ClearCommand;
 
                     FileMenu.Items.Add(new MenuItem {
-                        Header = (projectEntry ? (++count) + " " : "") + entry.Title,
+                        Header = (projectEntry ? (++count) + " " : "") + entry.Title.Replace("_", "__"),
                         IsEnabled = entry.Enabled,
                         Command = Commands.FileOpenRecentProject,
                         CommandParameter = entry.Parameter
