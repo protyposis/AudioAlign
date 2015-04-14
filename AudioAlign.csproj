@@ -266,6 +266,10 @@
       <Project>{880F644B-5370-47D6-A4B6-F98338073631}</Project>
       <Name>AudioAlign.FFTW</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AudioAlign.PFFFT\AudioAlign.PFFFT.csproj">
+      <Project>{3960f81d-5aea-4f36-a26c-f295dff3fcb6}</Project>
+      <Name>AudioAlign.PFFFT</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AudioAlign.Soxr\AudioAlign.Soxr.csproj">
       <Project>{24228071-5e72-4ba8-90e3-89de331a718c}</Project>
       <Name>AudioAlign.Soxr</Name>
