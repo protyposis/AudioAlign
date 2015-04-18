@@ -25,6 +25,7 @@ using AudioAlign.Audio.Matching.Dixon2005;
 using AudioAlign.Audio.Streams;
 using Match = AudioAlign.Audio.Matching.Match;
 using System.IO;
+using AudioAlign.Audio.DataStructures;
 
 namespace AudioAlign {
     /// <summary>
@@ -465,7 +466,7 @@ namespace AudioAlign {
                     dtwPathViewer.Show();
                 });
 
-                dtw.OltwInit += new DTW.OltwInitDelegate(delegate(int windowSize, IMatrix cellCostMatrix, IMatrix totalCostMatrix) {
+                dtw.OltwInit += new DTW.OltwInitDelegate(delegate(int windowSize, IMatrix<double> cellCostMatrix, IMatrix<double> totalCostMatrix) {
                     dtwPathViewer.Dispatcher.BeginInvoke((Action)delegate {
                         dtwPathViewer.DtwPath.Init(windowSize, cellCostMatrix, totalCostMatrix);
                     });

@@ -8,13 +8,14 @@ using System.Windows;
 using AudioAlign.WaveControls;
 using System.Windows.Media;
 using AudioAlign.Audio.Matching.Dixon2005;
+using AudioAlign.Audio.DataStructures;
 
 namespace AudioAlign {
     public class DtwPath : Control {
 
         private WriteableBitmap writeableBitmap;
-        private IMatrix cellCostMatrix;
-        private IMatrix totalCostMatrix;
+        private IMatrix<double> cellCostMatrix;
+        private IMatrix<double> totalCostMatrix;
         private int size;
         private int[] pixels;
         private int pathColor, minColor, maxColor, undefColor;
@@ -34,7 +35,7 @@ namespace AudioAlign {
             ClipToBounds = true;
         }
 
-        public void Init(int size, IMatrix cellCostMatrix, IMatrix totalCostMatrix) {
+        public void Init(int size, IMatrix<double> cellCostMatrix, IMatrix<double> totalCostMatrix) {
             this.cellCostMatrix = cellCostMatrix;
             this.totalCostMatrix = totalCostMatrix;
             this.size = (int)this.Width;
