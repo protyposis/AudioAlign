@@ -20,7 +20,7 @@ using AudioAlign.Audio.Matching;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Interop;
-using AudioAlign.Audio.Matching.Graph;
+using AudioAlign.Audio.DataStructures.Graph;
 using AudioAlign.Audio.Matching.Dixon2005;
 using AudioAlign.Audio.Streams;
 using Match = AudioAlign.Audio.Matching.Match;
