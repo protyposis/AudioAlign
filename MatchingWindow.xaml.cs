@@ -25,7 +25,7 @@ using AudioAlign.Audio.Matching.Dixon2005;
 using AudioAlign.Audio.Streams;
 using Match = AudioAlign.Audio.Matching.Match;
 using System.IO;
-using AudioAlign.Audio.DataStructures;
+using AudioAlign.Audio.DataStructures.Matrix;
 
 namespace AudioAlign {
     /// <summary>

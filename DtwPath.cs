@@ -8,7 +8,7 @@ using System.Windows;
 using AudioAlign.WaveControls;
 using System.Windows.Media;
 using AudioAlign.Audio.Matching.Dixon2005;
-using AudioAlign.Audio.DataStructures;
+using AudioAlign.Audio.DataStructures.Matrix;
 
 namespace AudioAlign {
     public class DtwPath : Control {
