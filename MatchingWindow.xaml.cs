@@ -326,7 +326,7 @@ namespace AudioAlign {
             List<Match> matches = fingerprintStore.FindAllMatches();
             sw.Stop();
             Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
-            matches = FingerprintStore.FilterDuplicateMatches(matches);
+            matches = MatchProcessor.FilterDuplicateMatches(matches);
             Debug.WriteLine(matches.Count + " matches found (filtered)");
             foreach (Match match in matches) {
                 multiTrackViewer.Matches.Add(match);
@@ -863,8 +863,8 @@ namespace AudioAlign {
             List<Match> matches = store.FindAllMatches();
             sw.Stop();
             Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
-            //matches = FingerprintStore.FilterDuplicateMatches(matches);
-            //Debug.WriteLine(matches.Count + " matches found (filtered)");
+            matches = MatchProcessor.FilterDuplicateMatches(matches);
+            Debug.WriteLine(matches.Count + " matches found (filtered)");
             foreach (Match match in matches) {
                 multiTrackViewer.Matches.Add(match);
             }
