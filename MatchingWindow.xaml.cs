@@ -813,5 +813,61 @@ namespace AudioAlign {
         {
             JikuDatasetUtils.EvaluateOffsets(trackList);
         }
+
+        private void scanTracksButtonWang_Click(object sender, RoutedEventArgs e) {
+            // calculate subfingerprints
+            numTasksRunning = trackList.Count;
+            var fingerprintStore = new AudioAlign.Audio.Matching.Wang2003.FingerprintStore();
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            long startMemory = GC.GetTotalMemory(false);
+
+            Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList,
+                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
+                audioTrack => {
+                    DateTime startTime = DateTime.Now;
+                    IProgressReporter progressReporter = progressMonitor.BeginTask("Generating fingerprint hashes for " + audioTrack.FileInfo.Name, true);
+
+                    var fpg = new AudioAlign.Audio.Matching.Wang2003.FingerprintGenerator();
+                    int hashesCalculated = 0;
+                    fpg.FingerprintHashesGenerated += delegate(object s2, AudioAlign.Audio.Matching.Wang2003.FingerprintHashEventArgs e2) {
+                        hashesCalculated += e2.Hashes.Count;
+                        progressReporter.ReportProgress((double)e2.Index / e2.Indices * 100);
+                        fingerprintStore.Add(e2);
+                    };
+
+                    fpg.Generate(audioTrack);
+
+                    progressReporter.Finish();
+                    Debug.WriteLine("fingerprint hash generation finished (" + hashesCalculated + " hashes) - " + (DateTime.Now - startTime));
+
+                    if (--numTasksRunning == 0) {
+                        // all running generator tasks have finished
+                        multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
+                            // calculate fingerprints / matches after processing of all tracks has finished
+                            //ClearAllMatches();
+                            stopwatch.Stop();
+                            long memory = GC.GetTotalMemory(false) - startMemory;
+                            Debug.WriteLine("fingerprint hash generation finished in " + stopwatch.Elapsed + " (mem: " + (memory / 1024 / 1024) + " MB)");
+                            FindAllDirectMatchesWang(fingerprintStore);
+                        });
+                    }
+                }));
+        }
+
+        private void FindAllDirectMatchesWang(AudioAlign.Audio.Matching.Wang2003.FingerprintStore store) {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            List<Match> matches = store.FindAllMatches();
+            sw.Stop();
+            Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
+            //matches = FingerprintStore.FilterDuplicateMatches(matches);
+            //Debug.WriteLine(matches.Count + " matches found (filtered)");
+            foreach (Match match in matches) {
+                multiTrackViewer.Matches.Add(match);
+            }
+        }
     }
 }
