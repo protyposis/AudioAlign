@@ -815,9 +815,11 @@ namespace AudioAlign {
         }
 
         private void scanTracksButtonWang_Click(object sender, RoutedEventArgs e) {
+            var profile = new AudioAlign.Audio.Matching.Wang2003.Profile();
+
             // calculate subfingerprints
             numTasksRunning = trackList.Count;
-            var fingerprintStore = new AudioAlign.Audio.Matching.Wang2003.FingerprintStore();
+            var fingerprintStore = new AudioAlign.Audio.Matching.Wang2003.FingerprintStore(profile);
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -830,7 +832,7 @@ namespace AudioAlign {
                     DateTime startTime = DateTime.Now;
                     IProgressReporter progressReporter = progressMonitor.BeginTask("Generating fingerprint hashes for " + audioTrack.FileInfo.Name, true);
 
-                    var fpg = new AudioAlign.Audio.Matching.Wang2003.FingerprintGenerator();
+                    var fpg = new AudioAlign.Audio.Matching.Wang2003.FingerprintGenerator(profile);
                     int hashesCalculated = 0;
                     fpg.FingerprintHashesGenerated += delegate(object s2, AudioAlign.Audio.Matching.Wang2003.FingerprintHashEventArgs e2) {
                         hashesCalculated += e2.Hashes.Count;
