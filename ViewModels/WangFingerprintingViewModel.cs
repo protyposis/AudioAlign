@@ -45,7 +45,6 @@ namespace AudioAlign.ViewModels {
         }
 
         private void FindAndAddMatches() {
-            Console.WriteLine(Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
             model.FindAllMatches(progressMonitor, matches => {
                 foreach (Match match in matches) {
                     matchCollection.Add(match);
