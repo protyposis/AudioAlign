@@ -26,6 +26,7 @@ using AudioAlign.Audio.Streams;
 using Match = AudioAlign.Audio.Matching.Match;
 using System.IO;
 using AudioAlign.Audio.DataStructures.Matrix;
+using AudioAlign.ViewModels;
 
 namespace AudioAlign {
     /// <summary>
@@ -53,6 +54,8 @@ namespace AudioAlign {
         public TimeSpan CorrelationWindowSize { get; set; }
         public TimeSpan CorrelationIntervalSize { get; set; }
 
+        public WangFingerprintingViewModel WangFingerprinting { get; set; }
+
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
             FingerprintSize = FingerprintStore.DEFAULT_FINGERPRINT_SIZE;
@@ -66,11 +69,13 @@ namespace AudioAlign {
             CorrelationWindowSize = new TimeSpan(0, 0, 5);
             CorrelationIntervalSize = new TimeSpan(0, 5, 0);
 
-            InitializeComponent();
-
             progressMonitor = new ProgressMonitor();
             this.trackList = trackList;
             this.multiTrackViewer = multiTrackViewer;
+
+            WangFingerprinting = new WangFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
+
+            InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
@@ -812,64 +817,6 @@ namespace AudioAlign {
         private void jikuEvaluateOffsets_Click(object sender, RoutedEventArgs e)
         {
             JikuDatasetUtils.EvaluateOffsets(trackList);
-        }
-
-        private void scanTracksButtonWang_Click(object sender, RoutedEventArgs e) {
-            var profile = new AudioAlign.Audio.Matching.Wang2003.Profile();
-
-            // calculate subfingerprints
-            numTasksRunning = trackList.Count;
-            var fingerprintStore = new AudioAlign.Audio.Matching.Wang2003.FingerprintStore(profile);
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            long startMemory = GC.GetTotalMemory(false);
-
-            Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList,
-                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
-                audioTrack => {
-                    DateTime startTime = DateTime.Now;
-                    IProgressReporter progressReporter = progressMonitor.BeginTask("Generating fingerprint hashes for " + audioTrack.FileInfo.Name, true);
-
-                    var fpg = new AudioAlign.Audio.Matching.Wang2003.FingerprintGenerator(profile);
-                    int hashesCalculated = 0;
-                    fpg.FingerprintHashesGenerated += delegate(object s2, AudioAlign.Audio.Matching.Wang2003.FingerprintHashEventArgs e2) {
-                        hashesCalculated += e2.Hashes.Count;
-                        progressReporter.ReportProgress((double)e2.Index / e2.Indices * 100);
-                        fingerprintStore.Add(e2);
-                    };
-
-                    fpg.Generate(audioTrack);
-
-                    progressReporter.Finish();
-                    Debug.WriteLine("fingerprint hash generation finished (" + hashesCalculated + " hashes) - " + (DateTime.Now - startTime));
-
-                    if (--numTasksRunning == 0) {
-                        // all running generator tasks have finished
-                        multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
-                            // calculate fingerprints / matches after processing of all tracks has finished
-                            //ClearAllMatches();
-                            stopwatch.Stop();
-                            long memory = GC.GetTotalMemory(false) - startMemory;
-                            Debug.WriteLine("fingerprint hash generation finished in " + stopwatch.Elapsed + " (mem: " + (memory / 1024 / 1024) + " MB)");
-                            FindAllDirectMatchesWang(fingerprintStore);
-                        });
-                    }
-                }));
-        }
-
-        private void FindAllDirectMatchesWang(AudioAlign.Audio.Matching.Wang2003.FingerprintStore store) {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            List<Match> matches = store.FindAllMatches();
-            sw.Stop();
-            Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
-            matches = MatchProcessor.FilterDuplicateMatches(matches);
-            Debug.WriteLine(matches.Count + " matches found (filtered)");
-            foreach (Match match in matches) {
-                multiTrackViewer.Matches.Add(match);
-            }
         }
     }
 }

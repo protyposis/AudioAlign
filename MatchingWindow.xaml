@@ -28,7 +28,9 @@
                 </TabItem>
                 <TabItem Header="Fingerprint (W03)">
                     <Grid>
-                        <Button Name="scanTracksButtonWang" Content="Start" Height="23" Width="75" Click="scanTracksButtonWang_Click" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                        <Button Content="Find Matches" Height="23" Width="75" Command="{Binding WangFingerprinting.FindMatchesCommand}" Margin="0,0,740,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                        <Button Content="Clear" Height="23" Width="75" Command="{Binding WangFingerprinting.ClearCommand}" Margin="0,0,660,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                        <Button Content="Start" Height="23" Width="75" Command="{Binding WangFingerprinting.FingerprintCommand}" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Dynamic Time Warping">
