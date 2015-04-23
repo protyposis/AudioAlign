@@ -1,4 +1,5 @@
-﻿using AudioAlign.Audio.Matching;
+﻿using AudioAlign.Audio;
+using AudioAlign.Audio.Matching;
 using AudioAlign.Audio.Matching.Wang2003;
 using AudioAlign.Audio.Project;
 using AudioAlign.Audio.TaskMonitor;
@@ -6,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AudioAlign.Models {
@@ -67,7 +70,8 @@ namespace AudioAlign.Models {
                     progressReporter.Finish();
                     Debug.WriteLine("Fingerprint hash generation finished with " + hashesCalculated + " hashes in " + (DateTime.Now - startTime));
 
-                })).ContinueWith(task => {
+                }))
+                .ContinueWith(task => {
                     // all running generator tasks have finished
                     stopwatch.Stop();
                     long memory = GC.GetTotalMemory(false) - startMemory;
@@ -79,14 +83,38 @@ namespace AudioAlign.Models {
                 }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        public List<Match> FindAllMatches() {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            List<Match> matches = store.FindAllMatches();
-            sw.Stop();
-            Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
-            matches = MatchProcessor.FilterDuplicateMatches(matches);
-            Debug.WriteLine(matches.Count + " matches found (filtered)");
+        public List<Match> FindAllMatches(ProgressMonitor progressMonitor, Action<List<Match>> callback) {
+            List<Match> matches = null;
+
+            // NOTE The following task is passed the "default" task scheduler, because otherwise
+            //      it uses the "current" scheduler, which can be the UI scheduler when called
+            //      from a task run by the TaskScheduler.FromCurrentSynchronizationContext(), leading
+            //      to a blocked UI.
+
+            Task.Factory.StartNew(() => {
+                var progressReporter = progressMonitor.BeginTask("Matching hashes...", true);
+
+                EventHandler<ValueEventArgs<double>> progressHandler = delegate(object sender, ValueEventArgs<double> e) {
+                    progressReporter.ReportProgress(e.Value);
+                };
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                store.MatchingProgress += progressHandler;
+                matches = store.FindAllMatches();
+                store.MatchingProgress -= progressHandler;
+                sw.Stop();
+                Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
+
+                matches = MatchProcessor.FilterDuplicateMatches(matches);
+                Debug.WriteLine(matches.Count + " matches found (filtered)");
+
+                progressReporter.Finish();
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default) // Use default scheduler, see NOTE above
+            .ContinueWith(task => {
+                callback.Invoke(matches);
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+            
             return matches;
         }
     }

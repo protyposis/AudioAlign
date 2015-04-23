@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 
 namespace AudioAlign.ViewModels {
@@ -30,6 +31,7 @@ namespace AudioAlign.ViewModels {
             model.FingerprintingFinished += FingerprintingFinished;
 
             fingerprintCommand = new DelegateCommand(o => {
+                model.Reset();
                 model.Fingerprint(new List<AudioTrack>(trackList), progressMonitor);
             });
 
@@ -43,10 +45,12 @@ namespace AudioAlign.ViewModels {
         }
 
         private void FindAndAddMatches() {
-            List<Match> matches = model.FindAllMatches();
-            foreach (Match match in matches) {
-                matchCollection.Add(match);
-            }
+            Console.WriteLine(Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
+            model.FindAllMatches(progressMonitor, matches => {
+                foreach (Match match in matches) {
+                    matchCollection.Add(match);
+                }
+            });
         }
 
         private void FingerprintingFinished(object sender, EventArgs e) {
