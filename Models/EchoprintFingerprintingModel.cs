@@ -56,7 +56,7 @@ namespace AudioAlign.Models {
                 track => {
                     var startTime = DateTime.Now;
                     var progressReporter = progressMonitor.BeginTask("Generating fingerprint hashes for " + track.FileInfo.Name, true);
-                    var generator = new FingerprintGenerator();
+                    var generator = new FingerprintGenerator(profile);
                     int hashesCalculated = 0;
 
                     generator.FingerprintHashesGenerated += delegate(object s, FingerprintCodeEventArgs e) {
