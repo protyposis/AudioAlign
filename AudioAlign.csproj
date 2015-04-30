@@ -136,9 +136,11 @@
     <Compile Include="ModalProgressWindow.xaml.cs">
       <DependentUpon>ModalProgressWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\EchoprintFingerprintingModel.cs" />
     <Compile Include="Models\WangFingerprintingModel.cs" />
     <Compile Include="RecentProjects.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
+    <Compile Include="ViewModels\EchoprintFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\WangFingerprintingViewModel.cs" />
     <Page Include="AlignmentGraphWindow.xaml">
       <SubType>Designer</SubType>

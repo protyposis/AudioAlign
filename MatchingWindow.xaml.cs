@@ -55,6 +55,7 @@ namespace AudioAlign {
         public TimeSpan CorrelationIntervalSize { get; set; }
 
         public WangFingerprintingViewModel WangFingerprinting { get; set; }
+        public EchoprintFingerprintingViewModel EchoprintFingerprinting { get; set; }
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
@@ -74,6 +75,7 @@ namespace AudioAlign {
             this.multiTrackViewer = multiTrackViewer;
 
             WangFingerprinting = new WangFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
+            EchoprintFingerprinting = new EchoprintFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
 
             InitializeComponent();
         }

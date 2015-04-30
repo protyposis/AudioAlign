@@ -33,6 +33,13 @@
                         <Button Content="Start" Height="23" Width="75" Command="{Binding WangFingerprinting.FingerprintCommand}" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                     </Grid>
                 </TabItem>
+                <TabItem Header="Fingerprint (EP)">
+                    <Grid>
+                        <Button Content="Find Matches" Height="23" Width="75" Command="{Binding EchoprintFingerprinting.FindMatchesCommand}" Margin="0,0,740,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                        <Button Content="Clear" Height="23" Width="75" Command="{Binding EchoprintFingerprinting.ClearCommand}" Margin="0,0,660,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                        <Button Content="Start" Height="23" Width="75" Command="{Binding EchoprintFingerprinting.FingerprintCommand}" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                    </Grid>
+                </TabItem>
                 <TabItem Header="Dynamic Time Warping">
                     <Grid>
                         <Button Content="Start" Height="23" Name="dtwButton" Width="75" Click="dtwButton_Click" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
