@@ -136,11 +136,13 @@
     <Compile Include="ModalProgressWindow.xaml.cs">
       <DependentUpon>ModalProgressWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChromaprintFingerprintingModel.cs" />
     <Compile Include="Models\HaitsmaKalkerFingerprintingModel.cs" />
     <Compile Include="Models\EchoprintFingerprintingModel.cs" />
     <Compile Include="Models\WangFingerprintingModel.cs" />
     <Compile Include="RecentProjects.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
+    <Compile Include="ViewModels\ChromaprintFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\HaitsmaKalkerFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\EchoprintFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\WangFingerprintingViewModel.cs" />

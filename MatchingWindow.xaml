@@ -41,6 +41,17 @@
                         <Button Content="Start" Height="23" Width="75" Command="{Binding EchoprintFingerprinting.FingerprintCommand}" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                     </Grid>
                 </TabItem>
+                <TabItem Header="Fingerprint (CP)">
+                    <Grid>
+                        <Label Content="Error Threshold" Height="17" HorizontalAlignment="Left" Margin="10,13,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="60" Text="{Binding Path=ChromaprintFingerprinting.FingerprintBerThreshold, Mode=TwoWay}" />
+                        <Label Content="Fingerprint Size" Height="17" HorizontalAlignment="Left" Margin="170,13,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="250,10,0,0" Text="{Binding Path=ChromaprintFingerprinting.FingerprintSize, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
+                        <Button Content="Find Matches" Command="{Binding ChromaprintFingerprinting.FindMatchesCommand}" Height="23" Margin="10,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" />
+                        <Button Content="Clear" Command="{Binding ChromaprintFingerprinting.ClearCommand}" Height="23" Margin="90,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" />
+                        <Button Content="Start" Command="{Binding ChromaprintFingerprinting.FingerprintCommand}" Height="23" Width="75" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                    </Grid>
+                </TabItem>
                 <TabItem Header="Dynamic Time Warping">
                     <Grid>
                         <Button Content="Start" Height="23" Name="dtwButton" Width="75" Click="dtwButton_Click" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" />

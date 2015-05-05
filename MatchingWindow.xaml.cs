@@ -55,6 +55,7 @@ namespace AudioAlign {
         public HaitsmaKalkerFingerprintingViewModel HaitsmaKalkerFingerprinting { get; set; }
         public WangFingerprintingViewModel WangFingerprinting { get; set; }
         public EchoprintFingerprintingViewModel EchoprintFingerprinting { get; set; }
+        public ChromaprintFingerprintingViewModel ChromaprintFingerprinting { get; set; }
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
@@ -74,6 +75,7 @@ namespace AudioAlign {
             HaitsmaKalkerFingerprinting = new HaitsmaKalkerFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
             WangFingerprinting = new WangFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
             EchoprintFingerprinting = new EchoprintFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
+            ChromaprintFingerprinting = new ChromaprintFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
 
             InitializeComponent();
         }
