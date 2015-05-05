@@ -16,14 +16,15 @@
             <TabControl Height="100">
                 <TabItem Header="Fingerprint (HK02)">
                     <Grid>
-                        <Label Content="Profile" Height="17" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" />
-                        <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" Margin="46,6,0,0" Name="profileComboBox" VerticalAlignment="Top" Width="120" />
-                        <Button Name="scanTracksButton" Content="Start" Height="23" Width="75" Click="scanTracksButton_Click" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
-                        <Button Name="findMatchingMatchesButton" Content="Find Matches" Height="23" Margin="6,0,0,7" Click="findMatchingMatchesButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="154" />
+                        <ComboBox ItemsSource="{Binding HaitsmaKalkerFingerprinting.Profiles}" SelectedItem="{Binding Path=HaitsmaKalkerFingerprinting.SelectedProfile, Mode=TwoWay}" DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" Margin="46,6,0,0" VerticalAlignment="Top" Width="120" />
                         <Label Content="Error Threshold" Height="17" HorizontalAlignment="Left" Margin="188,10,0,0" VerticalAlignment="Top" />
-                        <TextBox Height="23" HorizontalAlignment="Left" Margin="269,7,0,0" VerticalAlignment="Top" Width="60" Text="{Binding Path=FingerprintBerThreshold, Mode=TwoWay}" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="269,7,0,0" VerticalAlignment="Top" Width="60" Text="{Binding Path=HaitsmaKalkerFingerprinting.FingerprintBerThreshold, Mode=TwoWay}" />
                         <Label Content="Fingerprint Size" Height="17" HorizontalAlignment="Left" Margin="349,10,0,0" VerticalAlignment="Top" />
-                        <TextBox Height="23" HorizontalAlignment="Left" Margin="430,7,0,0" Text="{Binding Path=FingerprintSize, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="430,7,0,0" Text="{Binding Path=HaitsmaKalkerFingerprinting.FingerprintSize, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
+                        <Label Content="Profile" Height="17" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" />
+                        <Button Content="Find Matches" Command="{Binding HaitsmaKalkerFingerprinting.FindMatchesCommand}" Height="23" Margin="10,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" />
+                        <Button Content="Clear" Command="{Binding HaitsmaKalkerFingerprinting.ClearCommand}" Height="23" Margin="90,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" />
+                        <Button Content="Start" Command="{Binding HaitsmaKalkerFingerprinting.FingerprintCommand}" Height="23" Width="75" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Fingerprint (W03)">

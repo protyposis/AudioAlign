@@ -43,8 +43,6 @@ namespace AudioAlign {
 
         private DtwPathViewer dtwPathViewer;
 
-        public int FingerprintSize { get; set; }
-        public float FingerprintBerThreshold { get; set; }
         public TimeSpan MatchFilterWindowSize { get; set; }
         public int TimeWarpFilterSize { get; set; }
         public bool TimeWarpSmoothing { get; set; }
@@ -54,13 +52,12 @@ namespace AudioAlign {
         public TimeSpan CorrelationWindowSize { get; set; }
         public TimeSpan CorrelationIntervalSize { get; set; }
 
+        public HaitsmaKalkerFingerprintingViewModel HaitsmaKalkerFingerprinting { get; set; }
         public WangFingerprintingViewModel WangFingerprinting { get; set; }
         public EchoprintFingerprintingViewModel EchoprintFingerprinting { get; set; }
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
-            FingerprintSize = FingerprintStore.DEFAULT_FINGERPRINT_SIZE;
-            FingerprintBerThreshold = 0.45f;
             MatchFilterWindowSize = new TimeSpan(0, 0, 30);
             TimeWarpFilterSize = 100;
             TimeWarpSmoothing = true;
@@ -74,6 +71,7 @@ namespace AudioAlign {
             this.trackList = trackList;
             this.multiTrackViewer = multiTrackViewer;
 
+            HaitsmaKalkerFingerprinting = new HaitsmaKalkerFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
             WangFingerprinting = new WangFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
             EchoprintFingerprinting = new EchoprintFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
 
@@ -95,8 +93,6 @@ namespace AudioAlign {
             timeWarpModeBorderSectionsRadioButton.IsChecked = true;
 
             matchGrid.ItemsSource = multiTrackViewer.Matches;
-            profileComboBox.ItemsSource = FingerprintGenerator.GetProfiles();
-            profileComboBox.SelectedIndex = 0;
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e) {
@@ -131,50 +127,6 @@ namespace AudioAlign {
                 progressBar.IsEnabled = false;
                 progressBarLabel.Text = "";
             });
-        }
-
-        private void scanTracksButton_Click(object sender, RoutedEventArgs e) {
-            // calculate subfingerprints
-            numTasksRunning = trackList.Count;
-            IProfile profile = (IProfile)profileComboBox.SelectedItem;
-            fingerprintStore = new FingerprintStore(profile);
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            long startMemory = GC.GetTotalMemory(false);
-
-            Task.Factory.StartNew(() => Parallel.ForEach<AudioTrack>(trackList, 
-                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, 
-                audioTrack => {
-                DateTime startTime = DateTime.Now;
-                IProgressReporter progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + audioTrack.FileInfo.Name, true);
-
-                FingerprintGenerator fpg = new FingerprintGenerator(profile, audioTrack, 3);
-                int subFingerprintsCalculated = 0;
-                fpg.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
-                    subFingerprintsCalculated++;
-                    progressReporter.ReportProgress((double)e2.Index / e2.Indices * 100);
-                    fingerprintStore.Add(e2.AudioTrack, e2.SubFingerprint, e2.Index, e2.IsVariation);
-                });
-                fpg.Completed += delegate {
-                    if (--numTasksRunning == 0) {
-                        // all running generator tasks have finished
-                        multiTrackViewer.Dispatcher.BeginInvoke((Action)delegate {
-                            // calculate fingerprints / matches after processing of all tracks has finished
-                            //ClearAllMatches();
-                            stopwatch.Stop();
-                            long memory = GC.GetTotalMemory(false) - startMemory;
-                            Debug.WriteLine("fingerprint generation finished in " + stopwatch.Elapsed + " (mem: " + (memory/1024/1024) + " MB)");
-                            FindAllDirectMatches();
-                        });
-                    }
-                };
-                fpg.Generate();
-
-                progressReporter.Finish();
-                Debug.WriteLine("subfingerprint generation finished - " + (DateTime.Now - startTime));
-            }));
         }
 
         private void filterMatchesButton_Click(object sender, RoutedEventArgs e) {
@@ -314,30 +266,7 @@ namespace AudioAlign {
         }
 
         private void clearMatchesButton_Click(object sender, RoutedEventArgs e) {
-            ClearAllMatches();
-        }
-
-        private void findMatchingMatchesButton_Click(object sender, RoutedEventArgs e) {
-            FindAllDirectMatches();
-        }
-
-        private void ClearAllMatches() {
             multiTrackViewer.Matches.Clear();
-        }
-
-        private void FindAllDirectMatches() {
-            fingerprintStore.Threshold = FingerprintBerThreshold;
-            fingerprintStore.FingerprintSize = FingerprintSize;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            List<Match> matches = fingerprintStore.FindAllMatches();
-            sw.Stop();
-            Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
-            matches = MatchProcessor.FilterDuplicateMatches(matches);
-            Debug.WriteLine(matches.Count + " matches found (filtered)");
-            foreach (Match match in matches) {
-                multiTrackViewer.Matches.Add(match);
-            }
         }
 
         private void matchGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
