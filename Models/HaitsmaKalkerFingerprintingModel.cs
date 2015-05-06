@@ -74,11 +74,9 @@ namespace AudioAlign.Models {
                     int subFingerprintsCalculated = 0;
 
                     generator.SubFingerprintsGenerated += new EventHandler<SubFingerprintsGeneratedEventArgs>(delegate(object s2, SubFingerprintsGeneratedEventArgs e2) {
-                        subFingerprintsCalculated++;
+                        subFingerprintsCalculated += e2.SubFingerprints.Count;
                         progressReporter.ReportProgress((double)e2.Index / e2.Indices * 100);
-                        foreach (var subFingerprint in e2.SubFingerprints) {
-                            store.Add(e2.AudioTrack, subFingerprint.SubFingerprint, subFingerprint.Index, subFingerprint.IsVariation);
-                        }
+                        store.Add(e2);
                     });
 
                     generator.Generate();
