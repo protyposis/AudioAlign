@@ -59,7 +59,7 @@ namespace AudioAlign.Models {
                     var generator = new FingerprintGenerator(profile);
                     int hashesCalculated = 0;
 
-                    generator.FingerprintHashesGenerated += delegate(object s, SubFingerprintEventArgs e) {
+                    generator.SubFingerprintsGenerated += delegate(object s, SubFingerprintsGeneratedEventArgs e) {
                         hashesCalculated += e.SubFingerprints.Count;
                         progressReporter.ReportProgress((double)e.Index / e.Indices * 100);
                         store.Add(e);
