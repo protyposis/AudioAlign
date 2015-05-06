@@ -70,7 +70,7 @@ namespace AudioAlign.Models {
                 track => {
                     var startTime = DateTime.Now;
                     var progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + track.FileInfo.Name, true);
-                    var generator = new FingerprintGenerator(SelectedProfile, track);
+                    var generator = new FingerprintGenerator(SelectedProfile, track, 3);
                     int subFingerprintsCalculated = 0;
 
                     generator.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
