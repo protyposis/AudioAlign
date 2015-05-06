@@ -45,6 +45,15 @@ namespace AudioAlign.ViewModels {
             });
         }
 
+        public Profile[] Profiles {
+            get { return model.Profiles; }
+        }
+
+        public Profile SelectedProfile {
+            get { return model.SelectedProfile; }
+            set { model.SelectedProfile = value; }
+        }
+
         public float FingerprintBerThreshold {
             get { return model.FingerprintBerThreshold; }
             set { model.FingerprintBerThreshold = value; }

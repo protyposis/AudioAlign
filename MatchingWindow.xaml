@@ -43,13 +43,15 @@
                 </TabItem>
                 <TabItem Header="Fingerprint (CP)">
                     <Grid>
-                        <Label Content="Error Threshold" Height="17" HorizontalAlignment="Left" Margin="10,13,0,0" VerticalAlignment="Top" />
-                        <TextBox Height="23" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="60" Text="{Binding Path=ChromaprintFingerprinting.FingerprintBerThreshold, Mode=TwoWay}" />
-                        <Label Content="Fingerprint Size" Height="17" HorizontalAlignment="Left" Margin="170,13,0,0" VerticalAlignment="Top" />
-                        <TextBox Height="23" HorizontalAlignment="Left" Margin="250,10,0,0" Text="{Binding Path=ChromaprintFingerprinting.FingerprintSize, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
+                        <Label Content="Error Threshold" Height="17" HorizontalAlignment="Left" Margin="188,10,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="269,7,0,0" VerticalAlignment="Top" Width="60" Text="{Binding Path=ChromaprintFingerprinting.FingerprintBerThreshold, Mode=TwoWay}" />
+                        <Label Content="Fingerprint Size" Height="17" HorizontalAlignment="Left" Margin="349,10,0,0" VerticalAlignment="Top" />
+                        <TextBox Height="23" HorizontalAlignment="Left" Margin="430,7,0,0" Text="{Binding Path=ChromaprintFingerprinting.FingerprintSize, Mode=TwoWay}" VerticalAlignment="Top" Width="60" />
                         <Button Content="Find Matches" Command="{Binding ChromaprintFingerprinting.FindMatchesCommand}" Height="23" Margin="10,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" />
                         <Button Content="Clear" Command="{Binding ChromaprintFingerprinting.ClearCommand}" Height="23" Margin="90,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" />
                         <Button Content="Start" Command="{Binding ChromaprintFingerprinting.FingerprintCommand}" Height="23" Width="75" Margin="0,0,6,6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                        <ComboBox ItemsSource="{Binding ChromaprintFingerprinting.Profiles}" SelectedItem="{Binding ChromaprintFingerprinting.SelectedProfile, Mode=TwoWay}" DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" Margin="46,6,0,0" VerticalAlignment="Top" Width="120" />
+                        <Label Content="Profile" Height="17" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Dynamic Time Warping">

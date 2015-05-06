@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace AudioAlign.Models {
     public class ChromaprintFingerprintingModel {
 
-        private Profile profile;
+        private Profile[] profiles;
         private FingerprintStore store;
 
         public event EventHandler FingerprintingFinished;
@@ -23,8 +23,15 @@ namespace AudioAlign.Models {
         public ChromaprintFingerprintingModel() {
             FingerprintBerThreshold = 0.45f;
             FingerprintSize = FingerprintStore.DEFAULT_FINGERPRINT_SIZE;
-            Reset(new Profile());
+            profiles = FingerprintGenerator.GetProfiles();
+            Reset(profiles[0]);
         }
+
+        public Profile[] Profiles {
+            get { return profiles; }
+        }
+
+        public Profile SelectedProfile { get; set; }
 
         public float FingerprintBerThreshold { get; set; }
 
@@ -39,7 +46,7 @@ namespace AudioAlign.Models {
                 throw new ArgumentNullException("profile must not be null");
             }
 
-            this.profile = profile;
+            SelectedProfile = profile;
             store = new FingerprintStore(profile);
         }
 
@@ -47,7 +54,7 @@ namespace AudioAlign.Models {
         /// Resets the model by clearing all data and configuring it with the current profile.
         /// </summary>
         public void Reset() {
-            Reset(profile);
+            Reset(SelectedProfile);
         }
 
         public void Fingerprint(List<AudioTrack> tracks, ProgressMonitor progressMonitor) {
@@ -62,7 +69,7 @@ namespace AudioAlign.Models {
                 track => {
                     var startTime = DateTime.Now;
                     var progressReporter = progressMonitor.BeginTask("Generating sub-fingerprints for " + track.FileInfo.Name, true);
-                    var generator = new FingerprintGenerator(profile);
+                    var generator = new FingerprintGenerator(SelectedProfile);
                     int subFingerprintsCalculated = 0;
 
                     generator.SubFingerprintCalculated += new EventHandler<SubFingerprintEventArgs>(delegate(object s2, SubFingerprintEventArgs e2) {
