@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace AudioAlign.Models {
     public class HaitsmaKalkerFingerprintingModel {
 
-        private IProfile[] profiles;
+        private Profile[] profiles;
         private FingerprintStore store;
 
         public event EventHandler FingerprintingFinished;
@@ -28,11 +28,11 @@ namespace AudioAlign.Models {
             Reset();
         }
 
-        public IProfile[] Profiles {
+        public Profile[] Profiles {
             get { return profiles; }
         }
 
-        public IProfile SelectedProfile { get; set; }
+        public Profile SelectedProfile { get; set; }
 
         public float FingerprintBerThreshold { get; set; }
 
@@ -42,7 +42,7 @@ namespace AudioAlign.Models {
         /// Resets the model by clearing all data and configuring it with a new profile.
         /// </summary>
         /// <param name="profile">the new profile to configure the model with</param>
-        public void Reset(IProfile profile) {
+        public void Reset(Profile profile) {
             if (profile == null) {
                 throw new ArgumentNullException("profile must not be null");
             }

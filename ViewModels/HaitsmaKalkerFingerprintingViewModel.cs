@@ -45,11 +45,11 @@ namespace AudioAlign.ViewModels {
             });
         }
 
-        public IProfile[] Profiles {
+        public Profile[] Profiles {
             get { return model.Profiles; }
         }
 
-        public IProfile SelectedProfile {
+        public Profile SelectedProfile {
             get { return model.SelectedProfile; }
             set { model.SelectedProfile = value; }
         }

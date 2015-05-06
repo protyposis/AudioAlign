@@ -15,14 +15,21 @@ using System.Threading.Tasks;
 namespace AudioAlign.Models {
     public class WangFingerprintingModel {
 
-        private Profile profile;
+        private Profile[] profiles;
         private FingerprintStore store;
 
         public event EventHandler FingerprintingFinished;
 
         public WangFingerprintingModel() {
-            Reset(new Profile());
+            profiles = FingerprintGenerator.GetProfiles();
+            Reset(profiles[0]);
         }
+
+        public Profile[] Profiles {
+            get { return profiles; }
+        }
+
+        public Profile SelectedProfile { get; set; }
 
         /// <summary>
         /// Resets the model by clearing all data and configuring it with a new profile.
@@ -33,7 +40,7 @@ namespace AudioAlign.Models {
                 throw new ArgumentNullException("profile must not be null");
             }
 
-            this.profile = profile;
+            SelectedProfile = profile;
             store = new FingerprintStore(profile);
         }
 
@@ -41,7 +48,7 @@ namespace AudioAlign.Models {
         /// Resets the model by clearing all data and configuring it with the current profile.
         /// </summary>
         public void Reset() {
-            Reset(profile);
+            Reset(SelectedProfile);
         }
 
         public void Fingerprint(List<AudioTrack> tracks, ProgressMonitor progressMonitor) {
@@ -56,7 +63,7 @@ namespace AudioAlign.Models {
                 track => {
                     var startTime = DateTime.Now;
                     var progressReporter = progressMonitor.BeginTask("Generating fingerprint hashes for " + track.FileInfo.Name, true);
-                    var generator = new FingerprintGenerator(profile);
+                    var generator = new FingerprintGenerator(SelectedProfile);
                     int hashesCalculated = 0;
 
                     generator.SubFingerprintsGenerated += delegate(object s, SubFingerprintsGeneratedEventArgs e) {
