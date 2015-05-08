@@ -2067,7 +2067,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
+<!--        <Style.Triggers>
             <Trigger Property="Selector.IsSelected" Value="True">
                 <Setter Property="Foreground" >
                     <Setter.Value>
@@ -2075,7 +2075,7 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
-        </Style.Triggers>
+        </Style.Triggers>-->
     </Style>
     <Style x:Key="NuclearSliderThumb" d:IsControlPart="True" TargetType="{x:Type Thumb}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
