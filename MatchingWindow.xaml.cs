@@ -56,6 +56,7 @@ namespace AudioAlign {
         public WangFingerprintingViewModel WangFingerprinting { get; set; }
         public EchoprintFingerprintingViewModel EchoprintFingerprinting { get; set; }
         public ChromaprintFingerprintingViewModel ChromaprintFingerprinting { get; set; }
+        public JikuToolsViewModel JikuTools { get; set; }
 
         public MatchingWindow(TrackList<AudioTrack> trackList, MultiTrackViewer multiTrackViewer) {
             // init non-dependency-property variables before InitializeComponent() is called
@@ -76,6 +77,7 @@ namespace AudioAlign {
             WangFingerprinting = new WangFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
             EchoprintFingerprinting = new EchoprintFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
             ChromaprintFingerprinting = new ChromaprintFingerprintingViewModel(progressMonitor, trackList, multiTrackViewer.Matches);
+            JikuTools = new JikuToolsViewModel(trackList, multiTrackViewer.Matches);
 
             InitializeComponent();
         }
@@ -674,82 +676,6 @@ namespace AudioAlign {
                     });
                 }
             }
-        }
-
-        private void jikuButton_Click(object sender, RoutedEventArgs e) {
-            JikuDatasetUtils.TimestampAlign(trackList, tracknameRegex.Text);
-        }
-
-        private void moveButton_Click(object sender, RoutedEventArgs e) {
-            try {
-                JikuDatasetUtils.Move(trackList, tracknameRegex.Text, TimeSpan.Parse(trackMoveTime.Text));
-            }
-            catch(Exception ex) {
-                Console.WriteLine("moving failed:");
-                Console.WriteLine(ex);
-            }
-        }
-
-        /// <summary>
-        /// Reads drift factors from a config file and applies them to all matches by scaling their 2 match positions by the drift factor.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void driftCorrectMatches_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-                dlg.DefaultExt = ".txt";
-                dlg.Filter = "Drift Config|*.txt";
-                dlg.Multiselect = false;
-
-                if (dlg.ShowDialog() == true)
-                {
-                    // read drift config
-                    Dictionary<string, double> mapping = new Dictionary<string, double>();
-                    using (StreamReader reader = File.OpenText(dlg.FileName))
-                    {
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            string[] parts = line.Split(';');
-                            mapping.Add(parts[0], Double.Parse(parts[1]));
-                        }
-                    }
-
-                    // adjust matching points
-                    foreach (Match m in matchGrid.Items)
-                    {
-                        foreach (string filePattern in mapping.Keys)
-                        {
-                            double factor = mapping[filePattern];
-                            string regex = "^" + filePattern.Replace(".", "\\.").Replace("*", ".+") + "$";
-
-                            if (Regex.IsMatch(m.Track1.FileInfo.Name, regex))
-                            {
-                                m.Track1Time = new TimeSpan((long)(m.Track1Time.Ticks * factor));
-                                Debug.WriteLine("adjusted " + m.Track1.Name);
-                            }
-                            if (Regex.IsMatch(m.Track2.FileInfo.Name, regex))
-                            {
-                                m.Track2Time = new TimeSpan((long)(m.Track2Time.Ticks * factor));
-                                Debug.WriteLine("adjusted " + m.Track2.Name);
-                            }
-                        }
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-            }
-        }
-
-        private void jikuEvaluateOffsets_Click(object sender, RoutedEventArgs e)
-        {
-            JikuDatasetUtils.EvaluateOffsets(trackList);
         }
     }
 }

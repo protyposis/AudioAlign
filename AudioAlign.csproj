@@ -145,6 +145,7 @@
     <Compile Include="ViewModels\ChromaprintFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\HaitsmaKalkerFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\EchoprintFingerprintingViewModel.cs" />
+    <Compile Include="ViewModels\JikuToolsViewModel.cs" />
     <Compile Include="ViewModels\WangFingerprintingViewModel.cs" />
     <Page Include="AlignmentGraphWindow.xaml">
       <SubType>Designer</SubType>
