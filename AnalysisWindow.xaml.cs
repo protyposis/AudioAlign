@@ -16,6 +16,7 @@ using AudioAlign.Audio.Matching;
 using AudioAlign.Audio;
 using System.Collections.ObjectModel;
 using System.Data;
+using AudioAlign.UI;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
