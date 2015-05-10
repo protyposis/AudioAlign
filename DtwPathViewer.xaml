@@ -1,15 +1,15 @@
 ﻿<Window x:Class="AudioAlign.DtwPathViewer"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:blubb="clr-namespace:AudioAlign"
+        xmlns:ui="clr-namespace:AudioAlign.UI"
         Title="DTW Matrix &amp; Path"
         Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" 
         ResizeMode="NoResize" SizeToContent="WidthAndHeight">
     <Grid>
-        <blubb:DtwPath x:Name="dtwPath" Width="600" Height="600">
-            <blubb:DtwPath.RenderTransform>
+        <ui:DtwPath x:Name="dtwPath" Width="600" Height="600">
+            <ui:DtwPath.RenderTransform>
                 <ScaleTransform CenterY="300" ScaleY="-1"/>
-            </blubb:DtwPath.RenderTransform>
-        </blubb:DtwPath>
+            </ui:DtwPath.RenderTransform>
+        </ui:DtwPath>
     </Grid>
 </Window>

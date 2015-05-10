@@ -197,7 +197,7 @@
     <Compile Include="CrossCorrelationResult.xaml.cs">
       <DependentUpon>CrossCorrelationResult.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DtwPath.cs" />
+    <Compile Include="UI\DtwPath.cs" />
     <Compile Include="DtwPathViewer.xaml.cs">
       <DependentUpon>DtwPathViewer.xaml</DependentUpon>
     </Compile>
