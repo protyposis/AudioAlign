@@ -5,7 +5,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ExpressionDark.xaml"/>
+                <ResourceDictionary Source="Themes/ExpressionDark.xaml"/>
                 <ResourceDictionary Source="/AudioAlign.WaveControls;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="ThemeCustomizations.xaml"/>
                 <ResourceDictionary Source="Resources/Images.xaml"/>
