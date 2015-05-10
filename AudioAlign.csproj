@@ -141,6 +141,15 @@
     <Compile Include="Models\EchoprintFingerprintingModel.cs" />
     <Compile Include="Models\WangFingerprintingModel.cs" />
     <Compile Include="RecentProjects.cs" />
+    <Compile Include="UI\CaretOverlay.cs" />
+    <Compile Include="UI\ChannelsToTextConverter.cs" />
+    <Compile Include="UI\ListBoxItemIndexConverter.cs" />
+    <Compile Include="UI\MultiplicationConverter.cs" />
+    <Compile Include="UI\MultiTrackConnectionAdorner.cs" />
+    <Compile Include="UI\MultiTrackListBox.cs" />
+    <Compile Include="UI\MultiTrackViewer.cs" />
+    <Compile Include="UI\ResizeDecorator.cs" />
+    <Compile Include="UI\UIUtil.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\ChromaprintFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\HaitsmaKalkerFingerprintingViewModel.cs" />
@@ -209,6 +218,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Bitmaps.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Images.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -224,6 +237,10 @@
     <Page Include="ThemeCustomizations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -290,7 +307,28 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\" />
+    <Resource Include="Resources\speakers.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrow_switch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\draw_wave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\key_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\key_s.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sound.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sound_mute.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

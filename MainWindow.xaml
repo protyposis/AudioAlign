@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
         xmlns:local="clr-namespace:AudioAlign"
+        xmlns:localui="clr-namespace:AudioAlign.UI"
         Title="AudioAlign" Height="602" Width="1024" FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" 
         Icon="{StaticResource IconWave}"
@@ -129,7 +130,7 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <my:MultiTrackViewer Name="multiTrackViewer1" VirtualViewportWidth="6000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" VirtualViewportMaxWidth="{Binding Path=TrackList.End, Converter={StaticResource TimeSpanTicksConverter}}" />
+                <localui:MultiTrackViewer x:Name="multiTrackViewer1" VirtualViewportWidth="6000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" VirtualViewportMaxWidth="{Binding Path=TrackList.End, Converter={StaticResource TimeSpanTicksConverter}}" />
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Style="{DynamicResource ToolBarStackPanel}" Margin="0,-1,0,0">
                     <Button Command="MediaCommands.Play" Width="20" Margin="2,2,0,2">
                         <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-start}"/>

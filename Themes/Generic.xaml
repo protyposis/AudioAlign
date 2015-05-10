@@ -1,0 +1,461 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:wavecontrols="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
+    xmlns:local="clr-namespace:AudioAlign.UI">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/AudioAlign.WaveControls;component/Themes/Generic.xaml"/>
+        <ResourceDictionary Source="../Resources/Bitmaps.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <local:MultiplicationConverter x:Key="MultiplicationConverter"/>
+    <local:ChannelsToTextConverter x:Key="ChannelsToTextConverter"/>
+    <local:ListBoxItemIndexConverter x:Key="ListBoxItemIndexConverter"/>
+
+    <Style TargetType="{x:Type local:CaretOverlay}">
+        <Setter Property="ClipToBounds" Value="True"/>
+        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:CaretOverlay}">
+                    <Grid>
+                        <ContentPresenter/>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <Canvas Name="CaretContainer" Visibility="{TemplateBinding CaretVisibility}">
+                                <Rectangle Name="PART_Caret"
+                                           Width="1" 
+                                           Fill="Black" 
+                                           Height="{Binding ElementName=CaretContainer, Path=ActualHeight}" 
+                                           Canvas.Left="{TemplateBinding PhysicalCaretOffset}"
+                                           IsHitTestVisible="False"/>
+                            </Canvas>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Name="CaretBlink">
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:01"
+                                                                    Storyboard.TargetName="PART_Caret"
+                                                                    Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                            <DiscreteColorKeyFrame KeyTime="00:00:00.5" Value="White"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="CaretBlink"/>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TimeScaleCaretOverlay" BasedOn="{StaticResource {x:Type local:CaretOverlay}}" TargetType="{x:Type local:CaretOverlay}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:CaretOverlay}">
+                    <Grid>
+                        <ContentPresenter/>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <Canvas Name="CaretContainer" Visibility="{TemplateBinding CaretVisibility}">
+                                <Thumb Name="PART_Caret" 
+                                       Width="1" 
+                                       Height="1" 
+                                       Canvas.Left="{TemplateBinding PhysicalCaretOffset}" 
+                                       Canvas.Bottom="0">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Canvas SnapsToDevicePixels="True">
+                                                <Path Data="M4.5,-11.5A1,1,0,0,0,3.5,-12.5L-3.5,-12.5A1,1,0,0,0,-4.5,-11.5L-4.5,-4 -0.5,0 0.5,0 4.5,-4z" Name="Background">
+                                                    <Path.Fill>
+                                                        <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
+                                                            <LinearGradientBrush.GradientStops>
+                                                                <GradientStop Color="#FFFFFFFF" Offset="0" />
+                                                                <GradientStop Color="#FFF0EFEF" Offset="0.4" />
+                                                                <GradientStop Color="#FFD6D5D5" Offset="0.8" />
+                                                            </LinearGradientBrush.GradientStops>
+                                                        </LinearGradientBrush>
+                                                    </Path.Fill>
+                                                </Path>
+                                                <Path Data="M3.5,-11.5L-3.5,-11.5 -3.5,-4.5 0,-1 3.5,-4.5z" Stroke="#FFFFFFFF" StrokeThickness="1" Name="InnerBorder" />
+                                                <Path Data="M4.5,-11.5A1,1,0,0,0,3.5,-12.5L-3.5,-12.5A1,1,0,0,0,-4.5,-11.5L-4.5,-4 -0.5,0 0.5,0 4.5,-4z" Stroke="#FF929292" StrokeThickness="1" Name="OuterBorder" />
+                                            </Canvas>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="UIElement.IsMouseOver">
+                                                    <Setter Property="Shape.Fill" TargetName="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
+                                                                <LinearGradientBrush.GradientStops>
+                                                                    <GradientStop Color="#FFFFFFFF" Offset="0" />
+                                                                    <GradientStop Color="#FFB8E2F9" Offset="0.5" />
+                                                                    <GradientStop Color="#FFB0DFF8" Offset="1" />
+                                                                </LinearGradientBrush.GradientStops>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Shape.Stroke" TargetName="OuterBorder">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush>#FF3C7FB1</SolidColorBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Trigger.Value>
+                                                        <s:Boolean>True</s:Boolean>
+                                                    </Trigger.Value>
+                                                </Trigger>
+                                                <Trigger Property="TextElement.Foreground">
+                                                    <Setter Property="Shape.Fill" TargetName="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
+                                                                <LinearGradientBrush.GradientStops>
+                                                                    <GradientStop Color="#FFFFFFFF" Offset="0" />
+                                                                    <GradientStop Color="#FFB8E2F9" Offset="0.5" />
+                                                                    <GradientStop Color="#FFB0DFF8" Offset="1" />
+                                                                </LinearGradientBrush.GradientStops>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Shape.Stroke" TargetName="OuterBorder">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush>#FF3C7FB1</SolidColorBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Trigger.Value>
+                                                        <SolidColorBrush>#FF0000FF</SolidColorBrush>
+                                                    </Trigger.Value>
+                                                </Trigger>
+                                                <Trigger Property="Thumb.IsDragging">
+                                                    <Setter Property="Shape.Fill" TargetName="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
+                                                                <LinearGradientBrush.GradientStops>
+                                                                    <GradientStop Color="#FFB8E4FA" Offset="0.25" />
+                                                                    <GradientStop Color="#FF5EB4E3" Offset="0.5" />
+                                                                    <GradientStop Color="#FF4C8BB4" Offset="1" />
+                                                                </LinearGradientBrush.GradientStops>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Shape.Stroke" TargetName="OuterBorder">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush>#FF2C628B</SolidColorBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Trigger.Value>
+                                                        <s:Boolean>True</s:Boolean>
+                                                    </Trigger.Value>
+                                                </Trigger>
+                                                <Trigger Property="UIElement.IsEnabled">
+                                                    <Setter Property="Shape.Fill" TargetName="Background">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush>#FFF4F4F4</SolidColorBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Shape.Stroke" TargetName="InnerBorder">
+                                                        <Setter.Value>
+                                                            <x:Null />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Path.Data" TargetName="OuterBorder">
+                                                        <Setter.Value>
+                                                            <StreamGeometry>M4.5,-8.5L-4.5,-8.5 -4.5,4.5 -0.5,8.5 0.5,8.5 4.5,4.5z</StreamGeometry>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Shape.Stroke" TargetName="OuterBorder">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush>#FFAEB1AF</SolidColorBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Trigger.Value>
+                                                        <s:Boolean>False</s:Boolean>
+                                                    </Trigger.Value>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Canvas>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:MultiTrackListBox}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="False"/> <!-- if set to True, smooth scrolling is disabled -->
+        <Setter Property="SelectionMode" Value="Extended"/>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Background="Transparent">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:ResizeDecorator Height="100">
+                        <Grid Name="trackGrid">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Border Name="titleBar" Grid.Row="0" BorderThickness="0,1" BorderBrush="Black" Background="DimGray" 
+                                    local:CaretOverlay.SuppressEvents="True" 
+                                    Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=TrackHeadersVisibility}">
+                                <DockPanel LastChildFill="False">
+                                    <DockPanel.Resources>
+                                        <Style TargetType="Label">
+                                            <Setter Property="FontSize" Value="9"/>
+                                            <Setter Property="Padding" Value="5,2"/>
+                                        </Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="FontSize" Value="9"/>
+                                            <Setter Property="Padding" Value="5,2"/>
+                                            <Setter Property="Focusable" Value="False"/>
+                                        </Style>
+                                        <Style TargetType="Slider">
+                                            <Setter Property="FontSize" Value="9"/>
+                                            <Setter Property="Padding" Value="5,2"/>
+                                            <Setter Property="Focusable" Value="False"/>
+                                        </Style>
+                                    </DockPanel.Resources>
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                        <Label Content="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                            AncestorType={x:Type ListBoxItem}}, 
+                                            Converter={StaticResource ListBoxItemIndexConverter}}" ToolTip="Track #"/>
+                                        <Label FontWeight="Bold" ToolTip="{Binding Path=Name}">
+                                            <Label.Content>
+                                                <TextBlock Text="{Binding Path=Name}" TextTrimming="CharacterEllipsis" Width="200" />
+                                            </Label.Content>
+                                        </Label>
+                                        <Label>
+                                            <Label.Content>
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} Hz / {1} bit">
+                                                            <Binding Path="SourceProperties.SampleRate" />
+                                                            <Binding Path="SourceProperties.BitDepth" />
+                                                         </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </Label.Content>
+                                        </Label>
+                                        <Label>
+                                            <Label.Content>
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} ch ({1})">
+                                                            <Binding Path="SourceProperties.Channels" />
+                                                            <Binding Path="SourceProperties.Channels" Converter="{StaticResource ChannelsToTextConverter}" />
+                                                         </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </Label.Content>
+                                        </Label>
+                                        <Label Content="{Binding Path=Offset}" ContentStringFormat="{}({0})" ToolTip="Offset"/>
+                                        <Label Content="{Binding Path=Length}" ToolTip="Length"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=ControlsVisibility}">
+                                        <wavecontrols:ExtendedSlider x:Name="balanceSlider" Width="80" Minimum="-1" Maximum="1" SmallChange="0.001" LargeChange="0.01" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="3" AutoToolTipFormat="{}Balance: {0}" Margin="1" Value="{Binding Path=Balance}" DefaultValue="0" Height="15"/>
+                                        <Label Name="balanceLabel" Content="{Binding ElementName=balanceSlider, Path=Value, FallbackValue=0}" ContentStringFormat="{}{0:0.00}" HorizontalAlignment="Right" Width="40"/>
+                                        <wavecontrols:ExtendedSlider x:Name="volumeSlider" Width="80" Minimum="0" Maximum="2" SmallChange="0.001" LargeChange="0.01" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="3" AutoToolTipFormat="{}Volume: {0}" Margin="1" Value="{Binding Path=Volume}" DefaultValue="1" Height="15"/>
+                                        <Label Name="decibelLabel" Content="{Binding ElementName=volumeSlider, Path=Value, FallbackValue=dB, Converter={StaticResource LinearDecibelStringConverter}}" HorizontalAlignment="Right" Width="40"/>
+                                        <ToggleButton IsChecked="{Binding Path=Mute, Mode=TwoWay}" Margin="1" Padding="0" Height="15" Width="{Binding Path=ActualHeight, RelativeSource={x:Static RelativeSource.Self}}" ToolTip="Mute">
+                                            <Image Source="{StaticResource IconSoundMute}" Width="12" Height="12" />
+                                        </ToggleButton>
+                                        <ToggleButton IsChecked="{Binding Path=Solo, Mode=TwoWay}" Margin="1" Padding="0" Height="15" Width="{Binding Path=ActualHeight, RelativeSource={x:Static RelativeSource.Self}}" ToolTip="Solo">
+                                            <Image Source="{StaticResource IconSound}" Width="12" Height="12" />
+                                        </ToggleButton>
+                                        <ToggleButton IsChecked="{Binding Path=InvertedPhase, Mode=TwoWay}" Margin="1" Padding="0" Height="15" Width="{Binding Path=ActualHeight, RelativeSource={x:Static RelativeSource.Self}}" ToolTip="Invert phase">
+                                            <Image Source="{StaticResource IconSwitch}" Width="12" Height="12" />
+                                        </ToggleButton>
+                                        <ToggleButton IsChecked="{Binding Path=MonoDownmix, Mode=TwoWay}" Margin="1" Padding="0" Height="15" Width="{Binding Path=ActualHeight, RelativeSource={x:Static RelativeSource.Self}}" ToolTip="Mono downmix">
+                                            <Image Source="{StaticResource IconSpeakers}" Width="12" Height="12" />
+                                        </ToggleButton>
+                                        <ToggleButton IsChecked="{Binding Path=Locked, Mode=TwoWay}" Margin="1" Padding="0" Height="15" Width="{Binding Path=ActualHeight, RelativeSource={x:Static RelativeSource.Self}}" ToolTip="Lock">
+                                            <Image Source="{StaticResource IconLock}" Width="12" Height="12" />
+                                        </ToggleButton>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                            <wavecontrols:WaveView AudioTrack="{Binding}" 
+                                            Grid.Row="1"
+                                            Margin="0,2" 
+                                            x:Name="waveView"
+                                            Selector.IsSelected="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}, Path=IsSelected}"
+                                            VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}"
+                                            TrackLength="{Binding Path=Length, Converter={StaticResource TimeSpanTicksConverter}}"
+                                            TrackOffset="{Binding Path=Offset, Mode=TwoWay, Converter={StaticResource TimeSpanTicksConverter}}"
+                                            WaveformLine="{Binding Path=Color, Mode=TwoWay}"/>
+                            <Border Grid.Row="1" Background="Black" Opacity="0.5" Name="muteIndicator" Visibility="Hidden" IsHitTestVisible="False"/>
+                            <Border Grid.Row="1" Background="Red" Opacity="0.1" Name="lockIndicator" Visibility="Hidden"/>
+                        </Grid>
+                    </local:ResizeDecorator>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=Mute}" Value="True">
+                            <Setter TargetName="muteIndicator" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Locked}" Value="True">
+                            <Setter TargetName="lockIndicator" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
+                            <Setter TargetName="titleBar" Property="Background" Value="{Binding Path=Color}"/>
+                            <Setter TargetName="trackGrid" Property="Background" Value="{Binding Path=Color}"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:MultiTrackListBox">
+                    <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
+                        <ScrollViewer.Template>
+                            <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                <!-- HACK: background needed for screenshot functionality -->
+                                <Grid Background="{Binding Background, RelativeSource={RelativeSource AncestorType=local:MultiTrackListBox}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <local:CaretOverlay VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}" 
+                                                        Style="{StaticResource TimeScaleCaretOverlay}">
+                                        <wavecontrols:TimeScale x:Name="PART_TimeScale" 
+                                                         VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}"/>
+                                    </local:CaretOverlay>
+
+                                    <local:CaretOverlay Grid.Row="1"
+                                                        VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}">
+                                        <Grid>
+                                            <Border Name="invisibleBorderToForceInputEvents" Background="Transparent"/> <!-- without this, the empty parts of the scroll viewer wouldn't provoke events -->
+                                            <ScrollContentPresenter/>
+                                        </Grid>
+                                    </local:CaretOverlay>
+
+                                    <ScrollBar Name="PART_VerticalScrollBar"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="1"
+                                               Value="{TemplateBinding VerticalOffset}"
+                                               Maximum="{TemplateBinding ScrollableHeight}"
+                                               ViewportSize="{TemplateBinding ViewportHeight}"
+                                               Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </ScrollViewer.Template>
+                        <StackPanel IsItemsHost="True" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:MultiTrackViewer}">
+        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#FF828790"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:MultiTrackViewer}">
+                    <Border BorderThickness="{TemplateBinding Border.BorderThickness}" 
+                            BorderBrush="{TemplateBinding Border.BorderBrush}" 
+                            Background="{TemplateBinding Panel.Background}" 
+                            Name="Bd" 
+                            SnapsToDevicePixels="True">
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto" MinWidth="{Binding ElementName=PART_TrackListBox, Path=MinWidth}"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <local:MultiTrackListBox x:Name="PART_TrackListBox" 
+                                                     Grid.Row="0" 
+                                                     Grid.Column="0" 
+                                                     Grid.ColumnSpan="2" 
+                                                     VirtualViewportWidth="{TemplateBinding VirtualViewportWidth}"/>
+
+                            <ScrollBar Orientation="Horizontal" 
+                                       Grid.Row="1" 
+                                       Grid.Column="0"
+                                       Value="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=VirtualViewportOffset}"
+                                       Minimum="0"
+                                       Maximum="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=VirtualViewportMaxWidth}"
+                                       SmallChange="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ViewportSize, Converter={StaticResource MultiplicationConverter}, ConverterParameter='0.2'}"
+                                       LargeChange="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ViewportSize}"
+                                       ViewportSize="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=VirtualViewportWidth}"/>
+                            
+                            <ScrollBar Name="hiddenPlaceHolderForCorrectColumnWidth" 
+                                       Grid.Row="0" 
+                                       Grid.Column="1" 
+                                       Visibility="Hidden"/>
+                        </Grid>
+                    </Border>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsEnabled">
+                            <Setter TargetName="Bd" Property="Panel.Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Trigger.Value>
+                                <s:Boolean>False</s:Boolean>
+                            </Trigger.Value>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:ResizeDecorator}">
+        <Setter Property="MinHeight" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ResizeDecorator}">
+                    <Grid>
+                        <ContentPresenter/>
+                        <Thumb Name="PART_ResizeThumb" HorizontalAlignment="Stretch" Height="3" VerticalAlignment="Bottom" SnapsToDevicePixels="True" Visibility="Visible" Opacity="0"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="PART_ResizeThumb" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_ResizeThumb" Property="Opacity" Value="1"/>
+                        </Trigger>
+                        <Trigger SourceName="PART_ResizeThumb" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_ResizeThumb" Property="Cursor" Value="SizeNS"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

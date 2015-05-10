@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <BitmapImage x:Key="IconSound" UriSource="../Resources/sound.png" />
+    <BitmapImage x:Key="IconSoundMute" UriSource="../Resources/sound_mute.png" />
+    <BitmapImage x:Key="IconKeyM" UriSource="../Resources/key_m.png" />
+    <BitmapImage x:Key="IconKeyS" UriSource="../Resources/key_s.png" />
+    <BitmapImage x:Key="IconSwitch" UriSource="../Resources/arrow_switch.png" />
+    <BitmapImage x:Key="IconWave" UriSource="../Resources/draw_wave.png" />
+    <BitmapImage x:Key="IconSpeakers" UriSource="../Resources/speakers.png" />
+    <BitmapImage x:Key="IconLock" UriSource="../Resources/lock.png" />
+</ResourceDictionary>

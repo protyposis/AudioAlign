@@ -1,8 +1,9 @@
 ﻿<Window x:Class="AudioAlign.MatchDetails"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
-        xmlns:local="clr-namespace:AudioAlign"
+        xmlns:local="clr-namespace:AudioAlign" 
+        xmlns:localui="clr-namespace:AudioAlign.UI" 
+        xmlns:waveControls="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
         Title="Match Details" Height="553.409" Width="996.591"
         FontSize="11" 
         Background="{StaticResource NormalBorderBrush}" WindowStyle="ToolWindow"
@@ -11,7 +12,7 @@
         <KeyBinding Key="Space" Command="local:Commands.PlayToggle" />
     </Window.InputBindings>
     <Window.Resources>
-        <my:TimeSpanConverter x:Key="TimeSpanConverter"/>
+        <waveControls:TimeSpanConverter x:Key="TimeSpanConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -22,7 +23,7 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <my:MultiTrackViewer Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" VirtualViewportMinWidth="1000" Margin="3" />
+        <localui:MultiTrackViewer x:Name="multiTrackViewer1" VirtualViewportWidth="5000000000" VirtualViewportOffset="0" VirtualViewportMinWidth="1000" Margin="3" />
 
         <Grid Grid.Column="1" Margin="3">
             <Grid.RowDefinitions>
@@ -34,10 +35,10 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <my:ExtendedSlider AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="3" Maximum="4" Name="volumeSlider" Orientation="Vertical" SmallChange="0.01" TickFrequency="0.1" TickPlacement="Both" Value="1" Width="30" LargeChange="0.1" DefaultValue="1" />
+                <waveControls:ExtendedSlider AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="3" Maximum="4" Name="volumeSlider" Orientation="Vertical" SmallChange="0.01" TickFrequency="0.1" TickPlacement="Both" Value="1" Width="30" LargeChange="0.1" DefaultValue="1" />
                 <Label Grid.Row="1" Name="decibelLabel" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding ElementName=volumeSlider, Path=Value, FallbackValue=dB, Converter={StaticResource LinearDecibelConverter}}" ContentStringFormat="{}{0:0.0}" FontSize="9" Padding="0" HorizontalAlignment="Center"/>
             </Grid>
-            <my:StereoVUMeter Margin="43,6,6,6" Name="stereoVUMeter1" Width="40" />
+            <waveControls:StereoVUMeter Margin="43,6,6,6" Name="stereoVUMeter1" Width="40" />
         </Grid>
 
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal"  Margin="3">

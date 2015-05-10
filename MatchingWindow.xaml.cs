@@ -26,6 +26,7 @@ using AudioAlign.Audio.Streams;
 using Match = AudioAlign.Audio.Matching.Match;
 using System.IO;
 using AudioAlign.Audio.DataStructures.Matrix;
+using AudioAlign.UI;
 using AudioAlign.ViewModels;
 
 namespace AudioAlign {
