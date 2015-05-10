@@ -7,8 +7,7 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AudioAlign")]
-[assembly: AssemblyDescription("AudioAlign Audio Synchronization and Analysis Library")]
+[assembly: AssemblyTitle("AudioAlign Audio Synchronization and Analysis Library")]
 [assembly: AssemblyCopyright("Copyright © 2010-2015 Mario Guggenberger")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
