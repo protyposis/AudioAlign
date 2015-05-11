@@ -36,11 +36,8 @@ namespace AudioAlign {
     public partial class MatchingWindow : Window {
 
         private ProgressMonitor progressMonitor;
-        private FingerprintStore fingerprintStore;
         private TrackList<AudioTrack> trackList;
         private MultiTrackViewer multiTrackViewer;
-
-        private volatile int numTasksRunning;
 
         private DtwPathViewer dtwPathViewer;
 
