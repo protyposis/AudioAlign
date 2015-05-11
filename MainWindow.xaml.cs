@@ -763,6 +763,10 @@ namespace AudioAlign {
             }
         }
 
+        private void CommandBinding_OpenAboutBox(object sender, ExecutedRoutedEventArgs e) {
+            new About() { Owner = this }.ShowDialog();
+        }
+
         /// <summary>
         /// Displays a status message in the status bar to provide the user feedback for operations
         /// without visible results. The message disappears automatically after a few seconds.

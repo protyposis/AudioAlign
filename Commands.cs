@@ -36,5 +36,6 @@ namespace AudioAlign {
         public static readonly RoutedUICommand TracksUnlockAll = new RoutedUICommand("Unlock All", "TracksUnlockAll", typeof(MainWindow));
         public static readonly RoutedUICommand TracksResetVolume = new RoutedUICommand("Reset Volume", "TracksResetVolume", typeof(MainWindow));
         public static readonly RoutedUICommand TracksResetColors = new RoutedUICommand("Reset Colors", "TracksResetColors", typeof(MainWindow));
+        public static readonly RoutedUICommand AboutBox = new RoutedUICommand("About", "AboutBox", typeof(MainWindow));
     }
 }

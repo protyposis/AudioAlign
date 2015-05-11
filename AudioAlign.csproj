@@ -133,6 +133,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ModalProgressWindow.xaml.cs">
       <DependentUpon>ModalProgressWindow.xaml</DependentUpon>
     </Compile>
@@ -156,6 +159,10 @@
     <Compile Include="ViewModels\EchoprintFingerprintingViewModel.cs" />
     <Compile Include="ViewModels\JikuToolsViewModel.cs" />
     <Compile Include="ViewModels\WangFingerprintingViewModel.cs" />
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AlignmentGraphWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

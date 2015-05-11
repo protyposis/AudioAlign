@@ -1,0 +1,16 @@
+﻿<Window x:Class="AudioAlign.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About AudioAlign" Height="340" Width="600"
+        Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" >
+    <Grid>
+        <TextBox Name="licenseTextBox" Padding="10" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="0,74,-0.4,0.2"/>
+        <TextBlock Margin="10,10,9.6,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="59" Foreground="White">
+            <Run>AudioAlign: Audio Synchronization and Analysis</Run>
+            <LineBreak/>
+            <Run>Copyright (c) 2010-2015 Mario Guggenberger &lt;mg@protyposis.net&gt;</Run>
+            <LineBreak/>
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://protyposis.net">http://protyposis.net</Hyperlink>
+        </TextBlock>
+    </Grid>
+</Window>
