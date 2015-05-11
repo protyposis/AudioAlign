@@ -12,7 +12,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <oxy:Plot Grid.Column="0" Name="plotter1" Margin="3"/>
-        <oxy:Plot Grid.Column="1" Name="plotter2" Margin="3"/>
+        <oxy:PlotView Grid.Column="0" Name="plotter1" Margin="3"/>
+        <oxy:PlotView Grid.Column="1" Name="plotter2" Margin="3"/>
     </Grid>
 </Window>

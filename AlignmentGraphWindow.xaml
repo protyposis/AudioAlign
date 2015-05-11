@@ -6,6 +6,6 @@
         FontSize="11" 
         Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" Loaded="Window_Loaded">
     <Grid>
-        <oxy:Plot Name="plotter"/>
+        <oxy:PlotView Name="plotter"/>
     </Grid>
 </Window>

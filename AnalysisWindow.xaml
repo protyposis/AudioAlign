@@ -81,7 +81,7 @@
                             <DataGridTextColumn Header="%" Binding="{Binding Score, StringFormat='{}{0:P3}'}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <oxy:Plot Grid.Column="1" Name="resultPlotter" Margin="3,0,0,0"/>
+                    <oxy:PlotView Grid.Column="1" Name="resultPlotter" Margin="3,0,0,0"/>
                 </Grid>
             </GroupBox>
         </Grid>
