@@ -1,7 +1,7 @@
-﻿using AudioAlign.Audio.Matching;
-using AudioAlign.Audio.Matching.Chromaprint;
-using AudioAlign.Audio.Project;
-using AudioAlign.Audio.TaskMonitor;
+﻿using Aurio.Audio.Matching;
+using Aurio.Audio.Matching.Chromaprint;
+using Aurio.Audio.Project;
+using Aurio.Audio.TaskMonitor;
 using AudioAlign.Models;
 using System;
 using System.Collections.Generic;

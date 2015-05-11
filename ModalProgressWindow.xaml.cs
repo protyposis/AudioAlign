@@ -1,5 +1,5 @@
-﻿using AudioAlign.Audio;
-using AudioAlign.Audio.TaskMonitor;
+﻿using Aurio.Audio;
+using Aurio.Audio.TaskMonitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;

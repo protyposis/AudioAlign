@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using AudioAlign.Audio.Matching;
+using Aurio.Audio.Matching;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Annotations;

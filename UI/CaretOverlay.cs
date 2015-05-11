@@ -11,7 +11,7 @@ using System.Threading;
 using System.Windows.Media;
 using System.ComponentModel;
 using System.Windows.Controls.Primitives;
-using AudioAlign.WaveControls;
+using Aurio.WaveControls;
 
 namespace AudioAlign.UI {
     [TemplatePart(Name = "PART_Caret", Type = typeof(UIElement))]

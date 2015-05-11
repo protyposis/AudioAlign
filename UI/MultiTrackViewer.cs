@@ -6,18 +6,18 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Data;
 using System.Diagnostics;
-using AudioAlign.Audio;
+using Aurio.Audio;
 using System.Windows.Documents;
-using AudioAlign.Audio.Project;
+using Aurio.Audio.Project;
 using System.Windows.Media;
 using System.Windows.Input;
-using AudioAlign.Audio.Matching;
+using Aurio.Audio.Matching;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.Collections;
 using System.Windows.Threading;
 using System.Windows.Controls.Primitives;
-using AudioAlign.WaveControls;
+using Aurio.WaveControls;
 
 namespace AudioAlign.UI {
     [TemplatePart(Name = "PART_TimeScale", Type = typeof(TimeScale))]

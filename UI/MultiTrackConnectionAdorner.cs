@@ -5,13 +5,13 @@ using System.Text;
 using System.Windows.Documents;
 using System.Windows;
 using System.Windows.Media;
-using AudioAlign.Audio.Project;
+using Aurio.Audio.Project;
 using System.Windows.Controls;
 using System.Diagnostics;
-using AudioAlign.Audio.Matching;
+using Aurio.Audio.Matching;
 using System.Collections.ObjectModel;
-using AudioAlign.Audio;
-using AudioAlign.WaveControls;
+using Aurio.Audio;
+using Aurio.WaveControls;
 
 namespace AudioAlign.UI {
     class MultiTrackConnectionAdorner : Adorner {

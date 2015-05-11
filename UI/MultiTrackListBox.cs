@@ -7,8 +7,8 @@ using System.Windows;
 using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using AudioAlign.Audio.Project;
-using AudioAlign.WaveControls;
+using Aurio.Audio.Project;
+using Aurio.WaveControls;
 
 namespace AudioAlign.UI {
     [TemplatePart(Name = "PART_VerticalScrollBar", Type = typeof(ScrollBar))]

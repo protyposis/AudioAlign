@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using AudioAlign.Audio.Project;
+using Aurio.Audio.Project;
 using AudioAlign.Models;
-using Match = AudioAlign.Audio.Matching.Match;
+using Match = Aurio.Audio.Matching.Match;
 
 namespace AudioAlign.ViewModels {
     public class JikuToolsViewModel {

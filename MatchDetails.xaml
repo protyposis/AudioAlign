@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:AudioAlign" 
         xmlns:localui="clr-namespace:AudioAlign.UI" 
-        xmlns:waveControls="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
+        xmlns:waveControls="clr-namespace:Aurio.WaveControls;assembly=Aurio.WaveControls"
         Title="Match Details" Height="553.409" Width="996.591"
         FontSize="11" 
         Background="{StaticResource NormalBorderBrush}" WindowStyle="ToolWindow"

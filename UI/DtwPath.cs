@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using AudioAlign.Audio.DataStructures.Matrix;
-using AudioAlign.Audio.Matching.Dixon2005;
-using AudioAlign.WaveControls;
+using Aurio.Audio.DataStructures.Matrix;
+using Aurio.Audio.Matching.Dixon2005;
+using Aurio.WaveControls;
 
 namespace AudioAlign.UI {
     public class DtwPath : Control {

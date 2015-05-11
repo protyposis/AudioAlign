@@ -1,8 +1,8 @@
-﻿using AudioAlign.Audio;
-using AudioAlign.Audio.Matching;
-using AudioAlign.Audio.Matching.Echoprint;
-using AudioAlign.Audio.Project;
-using AudioAlign.Audio.TaskMonitor;
+﻿using Aurio.Audio;
+using Aurio.Audio.Matching;
+using Aurio.Audio.Matching.Echoprint;
+using Aurio.Audio.Project;
+using Aurio.Audio.TaskMonitor;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

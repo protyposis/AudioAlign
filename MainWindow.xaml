@@ -1,7 +1,7 @@
 ﻿<Window x:Class="AudioAlign.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:my="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
+        xmlns:my="clr-namespace:Aurio.WaveControls;assembly=Aurio.WaveControls"
         xmlns:local="clr-namespace:AudioAlign"
         xmlns:localui="clr-namespace:AudioAlign.UI"
         Title="AudioAlign" Height="602" Width="1024" FontSize="11" 

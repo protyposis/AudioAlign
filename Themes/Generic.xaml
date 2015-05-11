@@ -2,10 +2,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
-    xmlns:wavecontrols="clr-namespace:AudioAlign.WaveControls;assembly=AudioAlign.WaveControls"
+    xmlns:wavecontrols="clr-namespace:Aurio.WaveControls;assembly=Aurio.WaveControls"
     xmlns:local="clr-namespace:AudioAlign.UI">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/AudioAlign.WaveControls;component/Themes/Generic.xaml"/>
+        <ResourceDictionary Source="/Aurio.WaveControls;component/Themes/Generic.xaml"/>
         <ResourceDictionary Source="../Resources/Bitmaps.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 

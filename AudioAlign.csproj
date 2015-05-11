@@ -281,29 +281,29 @@
       <Project>{C5D1B35F-272E-4509-9C4E-2D3DD2928809}</Project>
       <Name>SQLite-Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.Audio\AudioAlign.Audio.csproj">
+    <ProjectReference Include="..\Aurio.Audio\Aurio.Audio.csproj">
       <Project>{E868D91E-C5CF-46E4-BE2F-F95353ACB5E2}</Project>
-      <Name>AudioAlign.Audio</Name>
+      <Name>Aurio.Audio</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.FFmpeg\AudioAlign.FFmpeg.csproj">
+    <ProjectReference Include="..\Aurio.FFmpeg\Aurio.FFmpeg.csproj">
       <Project>{8a1a603c-7005-4cc0-9ab7-e6fd3f58f621}</Project>
       <Name>AudioAlign.FFmpeg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.FFTW\AudioAlign.FFTW.csproj">
+    <ProjectReference Include="..\Aurio.FFTW\Aurio.FFTW.csproj">
       <Project>{880F644B-5370-47D6-A4B6-F98338073631}</Project>
       <Name>AudioAlign.FFTW</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.PFFFT\AudioAlign.PFFFT.csproj">
+    <ProjectReference Include="..\Aurio.PFFFT\Aurio.PFFFT.csproj">
       <Project>{3960f81d-5aea-4f36-a26c-f295dff3fcb6}</Project>
       <Name>AudioAlign.PFFFT</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.Soxr\AudioAlign.Soxr.csproj">
+    <ProjectReference Include="..\Aurio.Soxr\Aurio.Soxr.csproj">
       <Project>{24228071-5e72-4ba8-90e3-89de331a718c}</Project>
       <Name>AudioAlign.Soxr</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioAlign.WaveControls\AudioAlign.WaveControls.csproj">
+    <ProjectReference Include="..\Aurio.WaveControls\Aurio.WaveControls.csproj">
       <Project>{FD0C6CC5-B509-4441-9AA2-E8B34BAD9F95}</Project>
-      <Name>AudioAlign.WaveControls</Name>
+      <Name>Aurio.WaveControls</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
