@@ -289,10 +289,6 @@
       <Project>{8a1a603c-7005-4cc0-9ab7-e6fd3f58f621}</Project>
       <Name>AudioAlign.FFmpeg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aurio.FFTW\Aurio.FFTW.csproj">
-      <Project>{880F644B-5370-47D6-A4B6-F98338073631}</Project>
-      <Name>AudioAlign.FFTW</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Aurio.PFFFT\Aurio.PFFFT.csproj">
       <Project>{3960f81d-5aea-4f36-a26c-f295dff3fcb6}</Project>
       <Name>AudioAlign.PFFFT</Name>
