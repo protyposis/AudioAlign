@@ -19,6 +19,8 @@ namespace AudioAlign {
     /// </summary>
     public partial class About : Window {
         public About() {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
             InitializeComponent();
             licenseTextBox.Text = Aurio.License.Info;
         }

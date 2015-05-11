@@ -2,15 +2,30 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="About AudioAlign" Height="340" Width="600"
-        Background="{StaticResource WindowBackgroundBrush}" WindowStyle="ToolWindow" >
+        WindowStyle="ToolWindow" >
     <Grid>
-        <TextBox Name="licenseTextBox" Padding="10" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="0,74,-0.4,0.2"/>
-        <TextBlock Margin="10,10,9.6,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="59" Foreground="White">
-            <Run>AudioAlign: Audio Synchronization and Analysis</Run>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height=".5*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" Background="{StaticResource WindowBackgroundBrush}" Padding="10" SnapsToDevicePixels="True">
+            <Run FontSize="15">AudioAlign: Audio Synchronization and Analysis Tool</Run>
             <LineBreak/>
-            <Run>Copyright (c) 2010-2015 Mario Guggenberger &lt;mg@protyposis.net&gt;</Run>
+            <Run>Copyright © 2010-2015 Mario Guggenberger &lt;mg@protyposis.net&gt;</Run>
             <LineBreak/>
-            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://protyposis.net">http://protyposis.net</Hyperlink>
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://protyposis.net">
+                <Hyperlink.Style>
+                    <Style TargetType="Hyperlink"
+                           BasedOn="{StaticResource {x:Type Hyperlink}}">
+                        <Setter Property="Foreground" Value="#00C"/>
+                    </Style>
+                </Hyperlink.Style>
+                http://protyposis.net
+            </Hyperlink>
+            <LineBreak/>
+            <LineBreak/>
+            <Run>AudioAlign uses icons from the Tango Icon Library and is powered by the Aurio library:</Run>
         </TextBlock>
+        <TextBox Name="licenseTextBox" Padding="10" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Grid.Row="1" BorderThickness="0" SnapsToDevicePixels="True"/>
     </Grid>
 </Window>
