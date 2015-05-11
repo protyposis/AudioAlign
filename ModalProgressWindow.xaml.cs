@@ -1,5 +1,5 @@
-﻿using Aurio.Audio;
-using Aurio.Audio.TaskMonitor;
+﻿using Aurio;
+using Aurio.TaskMonitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;

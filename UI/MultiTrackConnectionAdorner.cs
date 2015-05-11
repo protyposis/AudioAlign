@@ -5,12 +5,12 @@ using System.Text;
 using System.Windows.Documents;
 using System.Windows;
 using System.Windows.Media;
-using Aurio.Audio.Project;
+using Aurio.Project;
 using System.Windows.Controls;
 using System.Diagnostics;
-using Aurio.Audio.Matching;
+using Aurio.Matching;
 using System.Collections.ObjectModel;
-using Aurio.Audio;
+using Aurio;
 using Aurio.WaveControls;
 
 namespace AudioAlign.UI {

@@ -14,11 +14,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using Aurio.Audio;
-using Aurio.Audio.Matching;
-using Aurio.Audio.Project;
-using Aurio.Audio.Streams;
-using Aurio.Audio.TaskMonitor;
+using Aurio;
+using Aurio.Matching;
+using Aurio.Project;
+using Aurio.Streams;
+using Aurio.TaskMonitor;
 
 namespace AudioAlign {
     /// <summary>

@@ -1,8 +1,8 @@
-﻿using Aurio.Audio;
-using Aurio.Audio.Matching;
-using Aurio.Audio.Matching.Chromaprint;
-using Aurio.Audio.Project;
-using Aurio.Audio.TaskMonitor;
+﻿using Aurio;
+using Aurio.Matching;
+using Aurio.Matching.Chromaprint;
+using Aurio.Project;
+using Aurio.TaskMonitor;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

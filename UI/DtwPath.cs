@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Aurio.Audio.DataStructures.Matrix;
-using Aurio.Audio.Matching.Dixon2005;
+using Aurio.DataStructures.Matrix;
+using Aurio.Matching.Dixon2005;
 using Aurio.WaveControls;
 
 namespace AudioAlign.UI {

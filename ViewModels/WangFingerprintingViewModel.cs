@@ -1,6 +1,6 @@
-﻿using Aurio.Audio.Matching;
-using Aurio.Audio.Project;
-using Aurio.Audio.TaskMonitor;
+﻿using Aurio.Matching;
+using Aurio.Project;
+using Aurio.TaskMonitor;
 using AudioAlign.Models;
 using System;
 using System.Collections.Generic;

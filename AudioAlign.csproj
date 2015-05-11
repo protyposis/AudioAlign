@@ -281,9 +281,9 @@
       <Project>{C5D1B35F-272E-4509-9C4E-2D3DD2928809}</Project>
       <Name>SQLite-Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aurio.Audio\Aurio.Audio.csproj">
+    <ProjectReference Include="..\Aurio\Aurio.csproj">
       <Project>{E868D91E-C5CF-46E4-BE2F-F95353ACB5E2}</Project>
-      <Name>Aurio.Audio</Name>
+      <Name>Aurio</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aurio.FFmpeg\Aurio.FFmpeg.csproj">
       <Project>{8a1a603c-7005-4cc0-9ab7-e6fd3f58f621}</Project>
