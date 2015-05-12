@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +23,13 @@ namespace AudioAlign {
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             InitializeComponent();
+
+            var assembly = Assembly.GetEntryAssembly();
+            var assemblyInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            appName.Text = assemblyInfo.ProductName;
+            appVersion.Text = assemblyInfo.ProductVersion + " (" + assemblyInfo.FileVersion + " / " + assembly.GetName().Version + ")";
+            appCopyright.Text = assemblyInfo.LegalCopyright;
+
             licenseTextBox.Text = Aurio.License.Info;
         }
 

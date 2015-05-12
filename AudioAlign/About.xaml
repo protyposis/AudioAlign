@@ -9,9 +9,11 @@
             <RowDefinition Height=".5*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" Background="{StaticResource WindowBackgroundBrush}" Padding="10" SnapsToDevicePixels="True">
-            <Run FontSize="15">AudioAlign: Audio Synchronization and Analysis Tool</Run>
+            <Run Name="appName" FontSize="15">AudioAlign: Audio Synchronization and Analysis Tool</Run>
             <LineBreak/>
-            <Run>Copyright © 2010-2015 Mario Guggenberger &lt;mg@protyposis.net&gt;</Run>
+            <Run Name="appVersion"/>
+            <LineBreak/>
+            <Run Name="appCopyright">Copyright © 2010-2015 Mario Guggenberger &lt;mg@protyposis.net&gt;</Run>
             <LineBreak/>
             <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://protyposis.net">
                 <Hyperlink.Style>

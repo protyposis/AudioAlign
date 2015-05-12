@@ -8,6 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("AudioAlign: Audio Synchronization and Analysis Tool")]
+[assembly: AssemblyProduct("AudioAlign: Audio Synchronization and Analysis Tool")]
 [assembly: AssemblyCompany("Mario Guggenberger / protyposis.net")]
 [assembly: AssemblyCopyright("Copyright © 2010-2015 Mario Guggenberger")]
 
