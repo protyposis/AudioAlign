@@ -187,9 +187,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="..\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="AlignmentGraphWindow.xaml.cs">
       <DependentUpon>AlignmentGraphWindow.xaml</DependentUpon>
     </Compile>
@@ -284,29 +281,25 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SQLite-Net\SQLite-Net.csproj">
-      <Project>{C5D1B35F-272E-4509-9C4E-2D3DD2928809}</Project>
-      <Name>SQLite-Net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aurio\Aurio.csproj">
-      <Project>{E868D91E-C5CF-46E4-BE2F-F95353ACB5E2}</Project>
-      <Name>Aurio</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aurio.FFmpeg\Aurio.FFmpeg.csproj">
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.FFmpeg\Aurio.FFmpeg.csproj">
       <Project>{8a1a603c-7005-4cc0-9ab7-e6fd3f58f621}</Project>
-      <Name>AudioAlign.FFmpeg</Name>
+      <Name>Aurio.FFmpeg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aurio.PFFFT\Aurio.PFFFT.csproj">
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.PFFFT\Aurio.PFFFT.csproj">
       <Project>{3960f81d-5aea-4f36-a26c-f295dff3fcb6}</Project>
-      <Name>AudioAlign.PFFFT</Name>
+      <Name>Aurio.PFFFT</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aurio.Soxr\Aurio.Soxr.csproj">
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.Soxr\Aurio.Soxr.csproj">
       <Project>{24228071-5e72-4ba8-90e3-89de331a718c}</Project>
-      <Name>AudioAlign.Soxr</Name>
+      <Name>Aurio.Soxr</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aurio.WaveControls\Aurio.WaveControls.csproj">
-      <Project>{FD0C6CC5-B509-4441-9AA2-E8B34BAD9F95}</Project>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.WaveControls\Aurio.WaveControls.csproj">
+      <Project>{fd0c6cc5-b509-4441-9aa2-e8b34bad9f95}</Project>
       <Name>Aurio.WaveControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio\Aurio.csproj">
+      <Project>{e868d91e-c5cf-46e4-be2f-f95353acb5e2}</Project>
+      <Name>Aurio</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
