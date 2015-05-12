@@ -1,0 +1,10 @@
+bin/
+obj/
+*.suo
+*.sdf
+*.opensdf
+
+# NuGet
+**/packages/*
+
+licenseinfo.txt
