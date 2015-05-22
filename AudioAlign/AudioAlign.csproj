@@ -272,6 +272,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\NOTICE">
+      <Link>NOTICE</Link>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="AudioAlign.licenseheader" />
     <None Include="packages.config" />

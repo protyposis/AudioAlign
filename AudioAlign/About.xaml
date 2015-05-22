@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <Window x:Class="AudioAlign.About"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="About AudioAlign" Height="340" Width="600"
+        Title="About AudioAlign" Height="440" Width="600"
         WindowStyle="ToolWindow" >
     <Grid>
         <Grid.RowDefinitions>
@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </Hyperlink>
             <LineBreak/>
             <LineBreak/>
-            <Run>AudioAlign uses icons from the Tango Icon Library and is powered by the Aurio library:</Run>
+            <Run>AudioAlign license notices:</Run>
         </TextBlock>
         <TextBox Name="licenseTextBox" Padding="10" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Grid.Row="1" BorderThickness="0" SnapsToDevicePixels="True"/>
     </Grid>

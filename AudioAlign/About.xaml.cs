@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -47,12 +48,22 @@ namespace AudioAlign {
             appVersion.Text = assemblyInfo.ProductVersion + " (" + assemblyInfo.FileVersion + " / " + assembly.GetName().Version + ")";
             appCopyright.Text = assemblyInfo.LegalCopyright;
 
-            licenseTextBox.Text = Aurio.License.Info;
+            licenseTextBox.Text = ReadEmbeddedResourceFileText("AudioAlign.NOTICE") + Environment.NewLine +  Aurio.License.Info;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private static string ReadEmbeddedResourceFileText(string filename) {
+            string text = String.Empty;
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filename)) {
+                using (StreamReader reader = new StreamReader(stream)) {
+                    text = reader.ReadToEnd();
+                }
+            }
+            return text;
         }
     }
 }
