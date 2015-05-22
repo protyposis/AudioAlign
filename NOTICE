@@ -1,0 +1,24 @@
+AudioAlign: Audio Synchronization and Analysis Tool
+Copyright 2010-2015 Mario Guggenberger <mg@protyposis.net>
+Available under the GNU Affero General Public License Version 3 (AGPLv3)
+https://github.com/protyposis/AudioAlign
+
+-----------------------------------------------------------
+
+AudioAlign uses the following libraries and resources:
+
+OxyPlot
+http://oxyplot.org/
+Copyright (c) 2014 OxyPlot contributors
+Licensed under The MIT License (MIT)
+http://opensource.org/licenses/MIT
+
+Icons from the Tango Icon Library
+http://tango.freedesktop.org/Tango_Icon_Library
+Released into the Public Domain
+
+Aurio
+https://github.com/protyposis/Aurio
+Copyright 2010-2015 Mario Guggenberger
+Licensed under the GNU Affero General Public License Version 3 (AGPLv3)
+http://www.gnu.org/licenses/agpl-3.0
