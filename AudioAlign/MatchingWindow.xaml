@@ -91,7 +91,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <Label Content="Search Width:" Height="17" HorizontalAlignment="Left" Margin="180,6,0,0" VerticalAlignment="Top" />
                         <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="331,6,0,0" VerticalAlignment="Top" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="368,6,0,0">
-                            <RadioButton Name="timeWarpModeFirstTwoTracksRadioButton" Content="first two tracks" Margin="0,0,3,0"/>
+                            <RadioButton Name="timeWarpModeSelectedTracksRadioButton" Content="selected tracks" Margin="0,0,3,0"/>
                             <RadioButton Name="timeWarpModeBorderSectionsRadioButton" Content="border sections" Margin="0,0,3,0"/>
                             <RadioButton Name="timeWarpModeAllSectionsRadioButton" Content="all sections" Margin="0,0,3,0"/>
                         </StackPanel>

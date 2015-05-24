@@ -58,6 +58,11 @@ namespace AudioAlign {
 
         private DtwPathViewer dtwPathViewer;
 
+        public enum TimeWarpMode {
+            SelectedTracks,
+            BorderSections,
+            AllSections
+        }
         public TimeSpan MatchFilterWindowSize { get; set; }
         public int TimeWarpFilterSize { get; set; }
         public bool TimeWarpSmoothing { get; set; }
@@ -328,7 +333,7 @@ namespace AudioAlign {
                     type = TimeWarpType.OLTW;
                 }
 
-                TimeWarpMode mode = TimeWarpMode.FirstTwoTracks;
+                TimeWarpMode mode = TimeWarpMode.SelectedTracks;
                 if ((bool)timeWarpModeBorderSectionsRadioButton.IsChecked) {
                     mode = TimeWarpMode.BorderSections;
                 }
@@ -339,14 +344,23 @@ namespace AudioAlign {
                 bool calculateSimilarity = (bool)dtwSimilarityCheckBox.IsChecked;
                 bool normalizeSimilarity = (bool)dtwSimilarityNormalizationCheckBox.IsChecked;
 
-                if (mode == TimeWarpMode.FirstTwoTracks) {
+                if (mode == TimeWarpMode.SelectedTracks) {
                     if (trackList.Count > 1) {
+                        var masterTrack = (AudioTrack)multiTrackViewer.SelectedItem;
+                        var slaveTracks = new List<AudioTrack>(multiTrackViewer.SelectedItems.Cast<AudioTrack>());
+                        slaveTracks.Remove(masterTrack);
+
                         Task.Factory.StartNew(() => {
-                            TimeWarp(type,
-                                trackList[0], TimeSpan.Zero, trackList[0].Length,
-                                trackList[1], TimeSpan.Zero, trackList[1].Length,
-                                calculateSimilarity, normalizeSimilarity,
-                                false, false);
+                            Parallel.ForEach(slaveTracks, 
+                                new ParallelOptions { MaxDegreeOfParallelism = Math.Min(1, Environment.ProcessorCount - 1) }, 
+                                slaveTrack => {
+                                TimeWarp(type,
+                                    masterTrack, TimeSpan.Zero, masterTrack.Length,
+                                    slaveTrack, TimeSpan.Zero, slaveTrack.Length,
+                                    calculateSimilarity, normalizeSimilarity,
+                                    false, false);
+                            });
+                            
                         });
                     }
                 }
