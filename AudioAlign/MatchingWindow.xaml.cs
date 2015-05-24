@@ -352,7 +352,7 @@ namespace AudioAlign {
 
                         Task.Factory.StartNew(() => {
                             Parallel.ForEach(slaveTracks, 
-                                new ParallelOptions { MaxDegreeOfParallelism = Math.Min(1, Environment.ProcessorCount - 1) }, 
+                                new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount - 1) }, 
                                 slaveTrack => {
                                 TimeWarp(type,
                                     masterTrack, TimeSpan.Zero, masterTrack.Length,
