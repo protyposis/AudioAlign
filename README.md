@@ -5,7 +5,7 @@ AudioAlign is a tool written for research purposes to automatically synchronize 
 
 AudioAlign is basically a GUI for the [Aurio](https://github.com/protyposis/Aurio) library with a little bit of glue code in between.
 
-To see what AudioAlign can do, check the demo videos liked below.
+To see what AudioAlign can do, check the demo videos linked below.
 
 
 Use cases
