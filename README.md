@@ -13,7 +13,7 @@ Use cases
 
 AudioAlign has been developed for a research project with the goal to automatically synchronize audio and video recordings, recorded at the same time at the same event, e.g. a speech or a music concert. The idea was to synchronize all those videos taken from the crowd and combine them to
 
-* generate multicamera cuts by switching between perspectives ([video](https://www.youtube.com/watch?v=cB2_KhdZfME)),
+* generate multicamera cuts by switching between perspectives ([video](https://www.youtube.com/watch?v=QXQVPXjR3Lc)),
 * create videos with full or at least better event coverage,
 * replace bad quality audio or video tracks with better ones, or
 * detect interesting moments (where many recordings have been captured at the same time).
@@ -22,8 +22,8 @@ AudioAlign can be used for a lot more uses cases though, including
 
 * video mashups ([video](https://www.youtube.com/watch?v=cdv4-gOxxZ0))
 * comparison of live performances ([video](https://www.youtube.com/watch?v=4yUSLa4K3GE))
-* synchronization of different cover interpretations (video coming soon)
-* voice dubbing (video coming soon)
+* synchronization of different cover interpretations ([video](https://www.youtube.com/watch?v=Jo2XPXUmkK0))
+* voice dubbing ([video](https://www.youtube.com/watch?v=f89isFfLgvg))
 * ground truth creation ([website](http://protyposis.github.io/JikuMVD-SynchronizationGroundTruth/))
 * evaluation of fingerprinting algorithms
 * ...
