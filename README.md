@@ -1,7 +1,7 @@
 AudioAlign: Audio Synchronization And Analysis Tool
 ===================================================
 
-AudioAlign is a tool written for research purposes to automatically synchronize audio and video recordings that have either be recorded in parallel at the same event or contain the same aural information.
+AudioAlign is a tool written for research purposes to automatically synchronize audio and video recordings that have either been recorded in parallel at the same event or contain the same aural information.
 
 AudioAlign is basically a GUI for the [Aurio](https://github.com/protyposis/Aurio) library with a little bit of glue code in between.
 
