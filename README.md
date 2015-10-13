@@ -7,6 +7,8 @@ AudioAlign is basically a GUI for the [Aurio](https://github.com/protyposis/Auri
 
 To see what AudioAlign can do, check the demo videos linked below.
 
+![Screenshot of the GUI](audioalign1.png)
+
 
 Use cases
 ---------
