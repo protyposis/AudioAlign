@@ -50,5 +50,5 @@ Not available yet. If you have any questions, feel free to open an issue!
 License
 -------
 
-Copyright (C) 2010-2015 Mario Guggenberger <mg@protyposis.net>.
+Copyright (C) 2010-2016 Mario Guggenberger <mg@protyposis.net>.
 This project is released under the terms of the GNU Affero General Public License. See `LICENSE` for details.
