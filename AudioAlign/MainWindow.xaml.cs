@@ -534,8 +534,8 @@ namespace AudioAlign {
 
         private void CommandBinding_AddAudioFile(object sender, ExecutedRoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".wav";
-            dlg.Filter = "Wave files|*.wav";
+            dlg.DefaultExt = "wav";
+            dlg.Filter = "All files (*.*)|*.*|Wave files|*.wav";
             dlg.Multiselect = true;
 
             if (dlg.ShowDialog() == true) {
@@ -547,7 +547,7 @@ namespace AudioAlign {
 
         private void CommandBinding_FileExportAudioMix(object sender, ExecutedRoutedEventArgs e) {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".wav";
+            dlg.DefaultExt = "wav";
             dlg.Filter = "Wave files|*.wav";
 
             if (dlg.ShowDialog() == true) {
@@ -586,7 +586,7 @@ namespace AudioAlign {
             }
 
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".wav";
+            dlg.DefaultExt = "wav";
             dlg.Filter = "Wave files|*.wav";
             dlg.FileName = "AAexport {name}";
 
