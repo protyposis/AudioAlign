@@ -30,15 +30,24 @@ AudioAlign can be used for a lot more uses cases though, including
 * evaluation of fingerprinting algorithms
 * ...
 
+What's new
+----------
+
+### 2016-03-01 8539db8
+
+* Support for compressed audio and video file formats
+* Close file handles after use
+* see the [Aurio changes](https://github.com/protyposis/Aurio#2016-03-01-fe49ea5) for details
+
 
 Building & Running
 ------------------
 
-AudioAlign requires Visual Studio 2013 and the .NET Framework 4.0. It depends on Aurio, which is included as a Git submodule, and OxyPlot, which is automatically downloaded by Visual Studio through NuGet when compiling for the first time. Make sure that NuGet downloads are enabled by checking `Allow NuGet to download missing packages` in `Tools -> Options -> NuGet Package Manager`.
+AudioAlign requires Visual Studio 2013 or 2015 and the .NET Framework 4.0. It depends on Aurio, which is included as a Git submodule, and OxyPlot, which is automatically downloaded by Visual Studio through NuGet when compiling for the first time. Make sure that NuGet downloads are enabled by checking `Allow NuGet to download missing packages` in `Tools -> Options -> NuGet Package Manager`.
 
 1. Clone the repository and Aurio submodule: `git clone --recursive https://github.com/protyposis/AudioAlign.git`
 2. Setup FFmpeg dependencies, see `Aurio\libs\ffmpeg\ffmpeg-prepare.txt`
-3. Open `Aurio.sln` in Visual Studio and hit the Start button
+3. Open `AudioAlign.sln` in Visual Studio and hit the Start button
 
 
 Documentation
