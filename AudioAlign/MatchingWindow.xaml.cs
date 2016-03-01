@@ -561,6 +561,9 @@ namespace AudioAlign {
                     multiTrackViewer.Matches.Add(match);
                 }
             });
+
+            s1.Close();
+            s2.Close();
         }
 
         private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode) {
@@ -682,10 +685,11 @@ namespace AudioAlign {
                             }
 
                             CrossCorrelation.Result ccr;
-                            TimeSpan offset = CrossCorrelation.Calculate(
-                                localMP.Track1.CreateAudioStream(), t1Interval,
-                                localMP.Track2.CreateAudioStream(), t2Interval,
-                                progressMonitor, out ccr);
+                            IAudioStream s1 = localMP.Track1.CreateAudioStream();
+                            IAudioStream s2 = localMP.Track2.CreateAudioStream();
+                            TimeSpan offset = CrossCorrelation.Calculate(s1, t1Interval, s2, t2Interval, progressMonitor, out ccr);
+                            s1.Close();
+                            s2.Close();
                             // always apply a positive offset that moves the match position inside the corelation interval,
                             // else it can happen that a negative offset is applied to a match at the beginning of the stream
                             // which means that the matching point would be at a negative position in the audio stream
