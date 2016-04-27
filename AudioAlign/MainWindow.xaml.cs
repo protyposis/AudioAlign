@@ -122,14 +122,18 @@ namespace AudioAlign {
         private void multiTrackViewer1_Drop(object sender, DragEventArgs e) {
             // source: http://stackoverflow.com/questions/332859/detect-dragndrop-file-in-wpf
             if (e.Data is DataObject && ((DataObject)e.Data).ContainsFileDropList()) {
+                var fileInfos = new List<FileInfo>();
+
                 foreach (string filePath in ((DataObject)e.Data).GetFileDropList()) {
                     FileInfo fileInfo = new FileInfo(filePath);
-                    if ((fileInfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory) {
-                        AddDirectory(new DirectoryInfo(filePath));
-                    }
-                    else {
-                        AddFile(fileInfo);
-                    }
+                    CollectFiles(fileInfo, fileInfos);
+                }
+
+                if ((e.KeyStates & DragDropKeyStates.ShiftKey) > 0) {
+                    AddConcatenatedFiles(fileInfos);
+                }
+                else {
+                    fileInfos.ForEach(fi => AddFile(fi));
                 }
             }
         }
@@ -430,12 +434,21 @@ namespace AudioAlign {
             }
         }
 
-        private void AddDirectory(DirectoryInfo dirInfo) {
-            foreach (FileInfo fileInfo in dirInfo.EnumerateFiles()) {
-                AddFile(fileInfo);
+        private void AddConcatenatedFiles(List<FileInfo> fileInfos) {
+            if(fileInfos.Select(fi => AudioStreamFactory.IsSupportedFile(fi.FullName)).Count() == fileInfos.Count) {
+                AudioTrack audioTrack = new AudioTrack(fileInfos.ToArray());
+                trackList.Add(audioTrack);
             }
-            foreach (DirectoryInfo subDirInfo in dirInfo.EnumerateDirectories()) {
-                AddDirectory(subDirInfo);
+        }
+
+        private void CollectFiles(FileSystemInfo fileInfo, List<FileInfo> fileInfos) {
+            if ((fileInfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory) {
+                foreach (var fsi in new DirectoryInfo(fileInfo.FullName).EnumerateFileSystemInfos()) {
+                    CollectFiles(fsi, fileInfos);
+                }
+            }
+            else {
+                fileInfos.Add(new FileInfo(fileInfo.FullName));
             }
         }
 
