@@ -144,7 +144,6 @@
     <Compile Include="Models\EchoprintFingerprintingModel.cs" />
     <Compile Include="Models\WangFingerprintingModel.cs" />
     <Compile Include="RecentProjects.cs" />
-    <Compile Include="UI\CaretOverlay.cs" />
     <Compile Include="UI\ChannelsToTextConverter.cs" />
     <Compile Include="UI\ListBoxItemIndexConverter.cs" />
     <Compile Include="UI\MultiplicationConverter.cs" />

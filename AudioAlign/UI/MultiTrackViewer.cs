@@ -49,7 +49,7 @@ namespace AudioAlign.UI {
 
             VirtualCaretOffsetProperty = CaretOverlay.VirtualCaretOffsetProperty
                 .AddOwner(typeof(MultiTrackViewer), new FrameworkPropertyMetadata() { 
-                    Inherits = true, CoerceValueCallback = CaretOverlay.CoerceVirtualCaretOffset 
+                    Inherits = true, CoerceValueCallback = CoerceVirtualCaretOffset 
                 });
         }
 
@@ -321,6 +321,22 @@ namespace AudioAlign.UI {
         protected override void OnViewportWidthChanged(long oldValue, long newValue) {
             base.OnViewportWidthChanged(oldValue, newValue);
             RefreshAdornerLayer();
+        }
+
+        private static object CoerceVirtualCaretOffset(DependencyObject d, object value) {
+            long newValue = (long)value;
+
+            long lowerBound = 0L;
+            if (newValue < lowerBound) {
+                return lowerBound;
+            }
+
+            long upperBound = ((VirtualView)d).VirtualViewportMaxWidth;
+            if (newValue > upperBound) {
+                return upperBound;
+            }
+
+            return newValue;
         }
     }
 }

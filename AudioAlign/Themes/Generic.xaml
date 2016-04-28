@@ -30,12 +30,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <local:ChannelsToTextConverter x:Key="ChannelsToTextConverter"/>
     <local:ListBoxItemIndexConverter x:Key="ListBoxItemIndexConverter"/>
 
-    <Style TargetType="{x:Type local:CaretOverlay}">
+    <Style x:Key="CaretOverlay" TargetType="{x:Type wavecontrols:CaretOverlay}">
         <Setter Property="ClipToBounds" Value="True"/>
         <Setter Property="Focusable" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:CaretOverlay}">
+                <ControlTemplate TargetType="{x:Type wavecontrols:CaretOverlay}">
                     <Grid>
                         <ContentPresenter/>
                         <Border Background="{TemplateBinding Background}"
@@ -75,10 +75,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </Setter>
     </Style>
 
-    <Style x:Key="TimeScaleCaretOverlay" BasedOn="{StaticResource {x:Type local:CaretOverlay}}" TargetType="{x:Type local:CaretOverlay}">
+    <Style x:Key="TimeScaleCaretOverlay" BasedOn="{StaticResource {x:Type wavecontrols:CaretOverlay}}" TargetType="{x:Type wavecontrols:CaretOverlay}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:CaretOverlay}">
+                <ControlTemplate TargetType="{x:Type wavecontrols:CaretOverlay}">
                     <Grid>
                         <ContentPresenter/>
                         <Border Background="{TemplateBinding Background}"
@@ -239,7 +239,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Border Name="titleBar" Grid.Row="0" BorderThickness="0,1" BorderBrush="Black" Background="DimGray" 
-                                    local:CaretOverlay.SuppressEvents="True" 
+                                    wavecontrols:CaretOverlay.SuppressEvents="True" 
                                     Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=TrackHeadersVisibility}">
                                 <DockPanel LastChildFill="False">
                                     <DockPanel.Resources>
@@ -363,19 +363,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <local:CaretOverlay VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}" 
+                                    <wavecontrols:CaretOverlay VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}" 
                                                         Style="{StaticResource TimeScaleCaretOverlay}">
                                         <wavecontrols:TimeScale x:Name="PART_TimeScale" 
                                                          VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}"/>
-                                    </local:CaretOverlay>
+                                    </wavecontrols:CaretOverlay>
 
-                                    <local:CaretOverlay Grid.Row="1"
-                                                        VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}">
+                                    <wavecontrols:CaretOverlay Grid.Row="1"
+                                                        VirtualViewportWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MultiTrackListBox}}, Path=VirtualViewportWidth}"
+                                                        Style="{StaticResource CaretOverlay}">
                                         <Grid>
                                             <Border Name="invisibleBorderToForceInputEvents" Background="Transparent"/> <!-- without this, the empty parts of the scroll viewer wouldn't provoke events -->
                                             <ScrollContentPresenter/>
                                         </Grid>
-                                    </local:CaretOverlay>
+                                    </wavecontrols:CaretOverlay>
 
                                     <ScrollBar Name="PART_VerticalScrollBar"
                                                Grid.RowSpan="2"
