@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <ResourceDictionary Source="../Resources/Bitmaps.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <local:MultiplicationConverter x:Key="MultiplicationConverter"/>
+    <wavecontrols:MultiplicationConverter x:Key="MultiplicationConverter"/>
     <local:ChannelsToTextConverter x:Key="ChannelsToTextConverter"/>
     <local:ListBoxItemIndexConverter x:Key="ListBoxItemIndexConverter"/>
 

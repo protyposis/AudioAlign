@@ -146,7 +146,6 @@
     <Compile Include="RecentProjects.cs" />
     <Compile Include="UI\ChannelsToTextConverter.cs" />
     <Compile Include="UI\ListBoxItemIndexConverter.cs" />
-    <Compile Include="UI\MultiplicationConverter.cs" />
     <Compile Include="UI\MultiTrackConnectionAdorner.cs" />
     <Compile Include="UI\MultiTrackListBox.cs" />
     <Compile Include="UI\MultiTrackViewer.cs" />
