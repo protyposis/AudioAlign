@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:local="clr-namespace:AudioAlign.UI">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Aurio.WaveControls;component/Themes/Generic.xaml"/>
-        <ResourceDictionary Source="../Resources/Bitmaps.xaml"/>
+        <ResourceDictionary Source="/AudioAlign;component/Resources/Bitmaps.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <wavecontrols:MultiplicationConverter x:Key="MultiplicationConverter"/>
