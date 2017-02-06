@@ -30,14 +30,26 @@ AudioAlign can be used for a lot more uses cases though, including
 * evaluation of fingerprinting algorithms
 * ...
 
+
 What's new
 ----------
+
+### 2017-02-06 ec054a6
+
+* Concatenated tracks consisting of multiple files (hold `SHIFT` key when adding)
 
 ### 2016-03-01 8539db8
 
 * Support for compressed audio and video file formats
 * Close file handles after use
 * see the [Aurio changes](https://github.com/protyposis/Aurio#2016-03-01-fe49ea5) for details
+
+
+Support
+-------
+
+For questions and issues, please open an issue on the issue tracker. Commercial support, development
+and consultation is available through [Protyposis Multimedia Solutions](https://protyposis.com).
 
 
 Building & Running
@@ -54,6 +66,25 @@ Documentation
 -------------
 
 Not available yet. If you have any questions, feel free to open an issue!
+
+
+Controls & Shortcuts
+--------------------
+
+* Audio and video files can be drag & dropped into the timeline
+  * Multiple files will be added as multiple tracks
+  * Hold `SHIFT` to add the files as a single concatenated track
+* Navigating the multitrack view
+  * _Click anywhere_ or _drag the caret_ in the time scale to set the current (playback) position
+  * Press `SPACE` to start/pause playback
+  * Vertically _drag_ the bottom of a track to resize its height
+  * _Scroll the mouse wheel_ to scale the time resolution (zoom into/out of the timeline) at the current position 
+    * Hold `CTRL` to smoothly scroll the timeline
+    * Hold `CTRL + SHIFT` to page through the timeline 
+  * Select a track by _clicking_ its title bar
+    * Hold `CTRL` to select multiple tracks
+    * Hold `SHIFT` to select a range of tracks
+  * Move tracks on the timeline by _dragging_ them horizontally
 
 
 License
