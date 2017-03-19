@@ -710,5 +710,12 @@ namespace AudioAlign {
                 }
             }
         }
+
+        private void flipTracksButton_Click(object sender, RoutedEventArgs e) {
+            foreach (Match match in multiTrackViewer.Matches) {
+                match.SwapTracks();
+            }
+            matchGrid.Items.Refresh();
+        }
     }
 }
