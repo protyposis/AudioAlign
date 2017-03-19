@@ -124,15 +124,19 @@ namespace AudioAlign.Models {
             Task.Factory.StartNew(() => {
                 var progressReporter = progressMonitor.BeginTask("Matching hashes...", true);
 
+                Action<double> progressCallback = (progress) => {
+                    progressReporter.ReportProgress(progress);
+                };
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 store.Threshold = FingerprintBerThreshold;
                 store.FingerprintSize = FingerprintSize;
-                matches = store.FindAllMatches();
+                matches = store.FindAllMatches(progressCallback);
                 sw.Stop();
                 Debug.WriteLine(matches.Count + " matches found in {0}", sw.Elapsed);
 
-                matches = MatchProcessor.FilterDuplicateMatches(matches);
+                matches = MatchProcessor.FilterDuplicateMatches(matches, progressCallback);
                 Debug.WriteLine(matches.Count + " matches found (filtered)");
 
                 progressReporter.Finish();
