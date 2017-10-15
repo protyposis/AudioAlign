@@ -173,6 +173,15 @@ namespace AudioAlign {
             List<Match> newMatches = new List<Match>();
             List<MatchGroup> trackGroups = DetermineMatchGroups();
 
+            try {
+                MatchProcessor.ValidateMatches(trackGroups);
+            } catch (Exception ex) {
+                var message = "Invalid sequence of matches, cannot warp. " +
+                    "Please clean up the matches first (e.g. by filtering) to get rid of invalid mappings, e.g. overlapping/crossing matches.";
+                MessageBox.Show(this, message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             Task.Factory.StartNew(() => {
                 Parallel.ForEach(trackGroups, trackGroup => {
                     if (postProcessMatchingPoints) {
