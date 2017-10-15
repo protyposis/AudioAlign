@@ -428,9 +428,12 @@ namespace AudioAlign {
         }
 
         private void AddFile(FileInfo fileInfo) {
-            if (AudioStreamFactory.IsSupportedFile(fileInfo.FullName)) {
+            try {
+                AudioStreamFactory.IsSupportedFileOrThrow(fileInfo.FullName);
                 AudioTrack audioTrack = new AudioTrack(fileInfo);
                 trackList.Add(audioTrack);
+            } catch (Exception e) {
+                MessageBox.Show(this, e.Message, "Cannot open file: " + fileInfo.Name, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
