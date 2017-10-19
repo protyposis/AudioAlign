@@ -34,6 +34,12 @@ AudioAlign can be used for a lot more uses cases though, including
 What's new
 ----------
 
+### 2017-10-15 d87bb4e
+
+* Validate matches before executing aligment and show error message box if validation fails
+* Show error message box if added file cannot be read
+* Report progress during HK/CP match finding and filtering
+
 ### 2017-02-06 ec054a6
 
 * Concatenated tracks consisting of multiple files (hold `SHIFT` key when adding)
