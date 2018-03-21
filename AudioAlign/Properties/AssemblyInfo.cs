@@ -27,7 +27,7 @@ using System.Windows;
 [assembly: AssemblyTitle("AudioAlign: Audio Synchronization and Analysis Tool")]
 [assembly: AssemblyProduct("AudioAlign: Audio Synchronization and Analysis Tool")]
 [assembly: AssemblyCompany("Mario Guggenberger / protyposis.net")]
-[assembly: AssemblyCopyright("Copyright © 2010-2016 Mario Guggenberger")]
+[assembly: AssemblyCopyright("Copyright © 2010-2018 Mario Guggenberger")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AudioAlign</RootNamespace>
     <AssemblyName>AudioAlign</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -26,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +55,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -68,6 +72,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -85,6 +90,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
     <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -102,6 +108,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">
@@ -283,28 +290,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.FFmpeg\Aurio.FFmpeg.csproj">
-      <Project>{8a1a603c-7005-4cc0-9ab7-e6fd3f58f621}</Project>
-      <Name>Aurio.FFmpeg</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.PFFFT\Aurio.PFFFT.csproj">
-      <Project>{3960f81d-5aea-4f36-a26c-f295dff3fcb6}</Project>
-      <Name>Aurio.PFFFT</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.Soxr\Aurio.Soxr.csproj">
-      <Project>{24228071-5e72-4ba8-90e3-89de331a718c}</Project>
-      <Name>Aurio.Soxr</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.WaveControls\Aurio.WaveControls.csproj">
-      <Project>{fd0c6cc5-b509-4441-9aa2-e8b34bad9f95}</Project>
-      <Name>Aurio.WaveControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aurio\Aurio\Aurio\Aurio.csproj">
-      <Project>{e868d91e-c5cf-46e4-be2f-f95353acb5e2}</Project>
-      <Name>Aurio</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\speakers.png" />
   </ItemGroup>
   <ItemGroup>
@@ -327,6 +312,36 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\sound_mute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.FFmpeg\Aurio.FFmpeg.csproj">
+      <Project>{8a1a603c-7005-4cc0-9ab7-e6fd3f58f621}</Project>
+      <Name>Aurio.FFmpeg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.FFT\Aurio.FFT.csproj">
+      <Project>{87b62e89-2714-4ce9-948b-82fdeeb39ed1}</Project>
+      <Name>Aurio.FFT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.PFFFT\Aurio.PFFFT.csproj">
+      <Project>{3960f81d-5aea-4f36-a26c-f295dff3fcb6}</Project>
+      <Name>Aurio.PFFFT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.Resampler\Aurio.Resampler.csproj">
+      <Project>{90745e89-6c81-4372-8369-73269a168a83}</Project>
+      <Name>Aurio.Resampler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.Soxr\Aurio.Soxr.csproj">
+      <Project>{24228071-5e72-4ba8-90e3-89de331a718c}</Project>
+      <Name>Aurio.Soxr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio.WaveControls\Aurio.WaveControls.csproj">
+      <Project>{fd0c6cc5-b509-4441-9aa2-e8b34bad9f95}</Project>
+      <Name>Aurio.WaveControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aurio\Aurio\Aurio\Aurio.csproj">
+      <Project>{e868d91e-c5cf-46e4-be2f-f95353acb5e2}</Project>
+      <Name>Aurio</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

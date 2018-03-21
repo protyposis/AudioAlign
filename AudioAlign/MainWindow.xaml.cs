@@ -41,6 +41,8 @@ using Aurio.Streams;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Aurio.FFT;
+using Aurio.Resampler;
 
 namespace AudioAlign {
     /// <summary>
@@ -60,6 +62,11 @@ namespace AudioAlign {
         private int correlationConsumer;
 
         public MainWindow() {
+            // Use PFFFT as FFT implementation
+            FFTFactory.Factory = new Aurio.PFFFT.FFTFactory();
+            // Use Soxr as resampler implementation
+            ResamplerFactory.Factory = new Aurio.Soxr.ResamplerFactory();
+
             recentProjects = new RecentProjects();
 
             /*
