@@ -34,6 +34,11 @@ AudioAlign can be used for a lot more uses cases though, including
 What's new
 ----------
 
+### 2018-03-21 beb56f1
+
+* Update [Aurio](https://github.com/protyposis/Aurio#2018-03-21-a2e930d)
+* Requires Visual Studio 2017 (due to Aurio update to .NET Standard 2.0 / .NET Core 2.0)
+
 ### 2017-10-15 d87bb4e
 
 * Validate matches before executing aligment and show error message box if validation fails
@@ -61,7 +66,7 @@ and consultation is available through [Protyposis Multimedia Solutions](https://
 Building & Running
 ------------------
 
-AudioAlign requires Visual Studio 2013 or 2015 and the .NET Framework 4.0. It depends on Aurio, which is included as a Git submodule, and OxyPlot, which is automatically downloaded by Visual Studio through NuGet when compiling for the first time. Make sure that NuGet downloads are enabled by checking `Allow NuGet to download missing packages` in `Tools -> Options -> NuGet Package Manager`.
+AudioAlign requires Visual Studio 2017 and the .NET Framework 4.6.2. It depends on Aurio, which is included as a Git submodule, and OxyPlot, which is automatically downloaded by Visual Studio through NuGet when compiling for the first time. Make sure that NuGet downloads are enabled by checking `Allow NuGet to download missing packages` in `Tools -> Options -> NuGet Package Manager`.
 
 1. Clone the repository and Aurio submodule: `git clone --recursive https://github.com/protyposis/AudioAlign.git`
 2. Setup FFmpeg dependencies, see `Aurio\libs\ffmpeg\ffmpeg-prepare.txt`
@@ -96,5 +101,5 @@ Controls & Shortcuts
 License
 -------
 
-Copyright (C) 2010-2016 Mario Guggenberger <mg@protyposis.net>.
+Copyright (C) 2010-2018 Mario Guggenberger <mg@protyposis.net>.
 This project is released under the terms of the GNU Affero General Public License. See `LICENSE` for details.
