@@ -34,9 +34,9 @@ AudioAlign can be used for a lot more uses cases though, including
 What's new
 ----------
 
-### 2018-03-21 beb56f1
+### 2018-03-22 741d27c
 
-* Update [Aurio](https://github.com/protyposis/Aurio#2018-03-21-a2e930d)
+* Update [Aurio](https://github.com/protyposis/Aurio#2018-03-22-5af5339)
 * Requires Visual Studio 2017 (due to Aurio update to .NET Standard 2.0 / .NET Core 2.0)
 
 ### 2017-10-15 d87bb4e
