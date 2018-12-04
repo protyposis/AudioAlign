@@ -43,6 +43,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Aurio.FFT;
 using Aurio.Resampler;
+using Aurio.FFmpeg;
 
 namespace AudioAlign {
     /// <summary>
@@ -66,6 +67,8 @@ namespace AudioAlign {
             FFTFactory.Factory = new Aurio.PFFFT.FFTFactory();
             // Use Soxr as resampler implementation
             ResamplerFactory.Factory = new Aurio.Soxr.ResamplerFactory();
+            // Use FFmpeg for file reading/decoding
+            AudioStreamFactory.AddFactory(new FFmpegAudioStreamFactory());
 
             recentProjects = new RecentProjects();
 
