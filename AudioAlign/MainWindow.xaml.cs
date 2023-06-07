@@ -491,7 +491,12 @@ namespace AudioAlign {
             dlg.Multiselect = false;
 
             if (dlg.ShowDialog() == true) {
-                OpenProject(Project.Load(new FileInfo(dlg.FileName)), e.Command == ApplicationCommands.Open);
+                OpenProject(Project.Load(new FileInfo(dlg.FileName), (string fileName, Exception ex) =>
+                {
+                    var result = MessageBox.Show($"Error loading track '{fileName}' ({ex.Message}). Should this track be skipped?",
+                        "Track not found", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes);
+                    return result == MessageBoxResult.Yes;
+                }), e.Command == ApplicationCommands.Open);
             }
         }
 
