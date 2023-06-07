@@ -72,7 +72,7 @@ namespace AudioAlign {
             plotModel.Axes.Add(timeSpanAxis1);
             var timeSpanAxis2 = new MsecTimeSpanAxis();
             timeSpanAxis2.Title = "Offset";
-            timeSpanAxis2.StringFormat = "m:ss:msec";
+            timeSpanAxis2.StringFormat = "m:ss:fff";
             timeSpanAxis2.MajorGridlineStyle = LineStyle.Automatic;
             timeSpanAxis2.MinorGridlineStyle = LineStyle.Automatic;
             plotModel.Axes.Add(timeSpanAxis2);
