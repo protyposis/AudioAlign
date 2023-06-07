@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // AudioAlign: Audio Synchronization and Analysis Tool
 // Copyright (C) 2010-2015  Mario Guggenberger <mg@protyposis.net>
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -33,7 +33,10 @@ namespace AudioAlign
         /// </summary>
         /// <param name="trackList"></param>
         /// <param name="tracknameRegexFilterPattern">regex to restrict alignment to matching tracks</param>
-        public static void TimestampAlign(TrackList<AudioTrack> trackList, string tracknameRegexFilterPattern)
+        public static void TimestampAlign(
+            TrackList<AudioTrack> trackList,
+            string tracknameRegexFilterPattern
+        )
         {
             Dictionary<Track, long> offsets = new Dictionary<Track, long>(trackList.Count);
             long minOffset = long.MaxValue;
@@ -42,7 +45,8 @@ namespace AudioAlign
 
             foreach (Track t in trackList)
             {
-                if (t.Locked || (patternSelect && !Regex.IsMatch(t.Name, pattern))) continue;
+                if (t.Locked || (patternSelect && !Regex.IsMatch(t.Name, pattern)))
+                    continue;
                 System.Text.RegularExpressions.Match m = Regex.Match(t.Name, "[0-9]{10,}");
                 if (m.Success)
                 {
@@ -64,7 +68,11 @@ namespace AudioAlign
         /// <param name="trackList"></param>
         /// <param name="tracknameRegexFilterPattern"></param>
         /// <param name="moveTime"></param>
-        public static void Move(TrackList<AudioTrack> trackList, string tracknameRegexFilterPattern, TimeSpan moveTime)
+        public static void Move(
+            TrackList<AudioTrack> trackList,
+            string tracknameRegexFilterPattern,
+            TimeSpan moveTime
+        )
         {
             string pattern = tracknameRegexFilterPattern;
             TimeSpan offset = moveTime;
@@ -87,7 +95,8 @@ namespace AudioAlign
             // get synced offsets (right project file must be loaded)
             foreach (AudioTrack t in trackList)
             {
-                if (t.Volume == 0f) continue; // skip silenced tracks
+                if (t.Volume == 0f)
+                    continue; // skip silenced tracks
                 mapping.Add(t, t.Offset);
             }
 
@@ -107,7 +116,9 @@ namespace AudioAlign
             foreach (AudioTrack t in mapping.Keys)
             {
                 TimeSpan offset = t.Offset - mapping[t] - reference;
-                Console.WriteLine(t.Name + ";" + offset.Ticks + ";" + offset.ToString(timeFormat, numberFormat));
+                Console.WriteLine(
+                    t.Name + ";" + offset.Ticks + ";" + offset.ToString(timeFormat, numberFormat)
+                );
             }
         }
     }

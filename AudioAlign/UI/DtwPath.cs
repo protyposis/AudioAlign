@@ -1,17 +1,17 @@
-﻿// 
+﻿//
 // AudioAlign: Audio Synchronization and Analysis Tool
 // Copyright (C) 2010-2015  Mario Guggenberger <mg@protyposis.net>
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -25,18 +25,23 @@ using Aurio.DataStructures.Matrix;
 using Aurio.Matching.Dixon2005;
 using Aurio.WaveControls;
 
-namespace AudioAlign.UI {
-    public class DtwPath : Control {
-
+namespace AudioAlign.UI
+{
+    public class DtwPath : Control
+    {
         private WriteableBitmap writeableBitmap;
         private IMatrix<double> cellCostMatrix;
         private IMatrix<double> totalCostMatrix;
         private int size;
         private int[] pixels;
-        private int pathColor, minColor, maxColor, undefColor;
+        private int pathColor,
+            minColor,
+            maxColor,
+            undefColor;
         private int[] colorPalette;
 
-        public DtwPath() {
+        public DtwPath()
+        {
             ColorGradient gradient = new ColorGradient(0, 1);
             gradient.AddStop(Colors.Black, 0);
             gradient.AddStop(Colors.White, 1);
@@ -50,26 +55,32 @@ namespace AudioAlign.UI {
             ClipToBounds = true;
         }
 
-        public void Init(int size, IMatrix<double> cellCostMatrix, IMatrix<double> totalCostMatrix) {
+        public void Init(int size, IMatrix<double> cellCostMatrix, IMatrix<double> totalCostMatrix)
+        {
             this.cellCostMatrix = cellCostMatrix;
             this.totalCostMatrix = totalCostMatrix;
             this.size = (int)this.Width;
             InitializeBitmap(true);
         }
 
-        public void Refresh(int i, int j, int minI, int minJ) {
+        public void Refresh(int i, int j, int minI, int minJ)
+        {
             List<DTW.Pair> path = DTW.OptimalWarpingPath(totalCostMatrix, minI, minJ);
 
             int iOffset = i - writeableBitmap.PixelWidth;
             int jOffset = j - writeableBitmap.PixelHeight;
 
-            if(iOffset < 0) iOffset = 0;
-            if(jOffset < 0) jOffset = 0;
+            if (iOffset < 0)
+                iOffset = 0;
+            if (jOffset < 0)
+                jOffset = 0;
 
             // draw cost matrix
             int color;
-            for (int x = 0; x < writeableBitmap.PixelWidth; x++) {
-                for (int y = 0; y < writeableBitmap.PixelHeight; y++) {
+            for (int x = 0; x < writeableBitmap.PixelWidth; x++)
+            {
+                for (int y = 0; y < writeableBitmap.PixelHeight; y++)
+                {
                     double val = cellCostMatrix[iOffset + x, jOffset + y];
                     if (totalCostMatrix[iOffset + x, jOffset + y] == double.PositiveInfinity)
                         color = undefColor;
@@ -84,35 +95,54 @@ namespace AudioAlign.UI {
             }
 
             // draw path
-            foreach (DTW.Pair p in path) {
-                if (p.i1 <= iOffset || p.i2 <= jOffset) {
+            foreach (DTW.Pair p in path)
+            {
+                if (p.i1 <= iOffset || p.i2 <= jOffset)
+                {
                     break;
                 }
-                pixels[writeableBitmap.PixelWidth * (p.i2 - jOffset - 1) + (p.i1 - iOffset - 1)] = pathColor;
+                pixels[writeableBitmap.PixelWidth * (p.i2 - jOffset - 1) + (p.i1 - iOffset - 1)] =
+                    pathColor;
             }
 
             // paint
-            writeableBitmap.WritePixels(new Int32Rect(0, 0, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight),
-                pixels, writeableBitmap.PixelWidth*4, 0);
+            writeableBitmap.WritePixels(
+                new Int32Rect(0, 0, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight),
+                pixels,
+                writeableBitmap.PixelWidth * 4,
+                0
+            );
             InvalidateVisual();
         }
 
-        protected override void OnRender(System.Windows.Media.DrawingContext drawingContext) {
+        protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
+        {
             base.OnRender(drawingContext);
-            drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
-            if (writeableBitmap != null) {
-                drawingContext.DrawDrawing(new ImageDrawing(writeableBitmap,
-                    new Rect(0, 0, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)));
+            drawingContext.DrawRectangle(
+                Background,
+                null,
+                new Rect(0, 0, ActualWidth, ActualHeight)
+            );
+            if (writeableBitmap != null)
+            {
+                drawingContext.DrawDrawing(
+                    new ImageDrawing(
+                        writeableBitmap,
+                        new Rect(0, 0, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
+                    )
+                );
             }
         }
 
-        private void InitializeBitmap(bool sizeChanged) {
+        private void InitializeBitmap(bool sizeChanged)
+        {
             writeableBitmap = new WriteableBitmap(size, size, 96, 96, PixelFormats.Bgra32, null);
             pixels = new int[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight];
             InvalidateVisual();
         }
 
-        private static int GetColorValue(Color c) {
+        private static int GetColorValue(Color c)
+        {
             return c.A << 24 | c.R << 16 | c.G << 8 | c.B;
         }
     }
