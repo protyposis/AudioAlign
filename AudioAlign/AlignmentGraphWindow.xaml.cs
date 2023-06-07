@@ -84,7 +84,7 @@ namespace AudioAlign {
         /// <summary>
         /// Modifies OxyPlot's TimeSpanAxis calculation to display labels for smaller intervals. This
         /// is helpful on the Y-axis offset plotting to visualize offsets with higher precision. A min
-        /// interval of the default 1 second is to coarse to inspect offsets on the millisecond level.
+        /// interval of the default 1 second is too coarse to inspect offsets on the millisecond level.
         /// https://github.com/oxyplot/oxyplot/blob/v2014.1.546/Source/OxyPlot/Axes/TimeSpanAxis.cs
         /// </summary>
         class MsecTimeSpanAxis : TimeSpanAxis {
