@@ -126,7 +126,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <TextBlock Name="progressBarLabel" TextTrimming="CharacterEllipsis" />
                 </Label>
             </Grid>
-            <GroupBox Grid.Row="2" Header="Matching Points" Margin="0,3,0,0">
+            <GroupBox Grid.Row="2" Margin="0,3,0,0">
+                <GroupBox.Header>
+                    <TextBlock>
+                        <Span>Matching Points</Span>
+                        <Span>(</Span><Run Text="{Binding ElementName=matchGrid, Path=Items.Count, Mode=OneWay}"/><Span>)</Span>
+                    </TextBlock>
+                </GroupBox.Header>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
