@@ -329,23 +329,31 @@ namespace AudioAlign
         private void crossCorrelateButton_Click(object sender, RoutedEventArgs e)
         {
             List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
-            foreach (Match matchFE in matches)
-            {
-                Match match = matchFE; // needed as reference for async task
-                Task.Factory.StartNew(() =>
+
+            Task.Run(() =>
                 {
-                    Match ccm = CrossCorrelation.Adjust(match, progressMonitor);
-                    Dispatcher.BeginInvoke(
-                        (Action)
-                            delegate
+                    Parallel.ForEach(
+                        matches,
+                        match =>
+                        {
+                            Match ccm = CrossCorrelation.Adjust(match, progressMonitor);
+                            Dispatcher.BeginInvoke(() =>
                             {
                                 multiTrackViewer.Matches.Add(ccm);
-                                matchGrid.Items.Refresh();
-                                multiTrackViewer.RefreshAdornerLayer();
-                            }
+                            });
+                        }
                     );
-                });
-            }
+                })
+                .ContinueWith(
+                    (_) =>
+                    {
+                        Dispatcher.BeginInvoke(() =>
+                        {
+                            matchGrid.Items.Refresh();
+                            multiTrackViewer.RefreshAdornerLayer();
+                        });
+                    }
+                );
         }
 
         private void matchSyncButton_Click(object sender, RoutedEventArgs e)
