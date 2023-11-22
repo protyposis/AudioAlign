@@ -44,6 +44,7 @@ using System.ComponentModel;
 using Aurio.FFT;
 using Aurio.Resampler;
 using Aurio.FFmpeg;
+using Aurio.Windows;
 
 namespace AudioAlign
 {

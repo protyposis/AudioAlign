@@ -21,11 +21,12 @@
     <Resource Include="Resources\*.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.FFmpeg\Aurio.FFmpeg.csproj" />
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.PFFFT\Aurio.PFFFT.csproj" />
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.Soxr\Aurio.Soxr.csproj" />
-    <ProjectReference Include="..\Aurio\Aurio\Aurio.WaveControls\Aurio.WaveControls.csproj" />
-    <ProjectReference Include="..\Aurio\Aurio\Aurio\Aurio.csproj" />
+    <ProjectReference Include="..\Aurio\src\Aurio.FFmpeg\Aurio.FFmpeg.csproj" />
+    <ProjectReference Include="..\Aurio\src\Aurio.PFFFT\Aurio.PFFFT.csproj" />
+    <ProjectReference Include="..\Aurio\src\Aurio.Soxr\Aurio.Soxr.csproj" />
+    <ProjectReference Include="..\Aurio\src\Aurio.WaveControls\Aurio.WaveControls.csproj" />
+    <ProjectReference Include="..\Aurio\src\Aurio.Windows\Aurio.Windows.csproj" />
+    <ProjectReference Include="..\Aurio\src\Aurio\Aurio.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="OxyPlot.Wpf" Version="2.1.0" />

@@ -36,6 +36,7 @@ using Aurio.Matching;
 using Aurio.Project;
 using Aurio.Streams;
 using Aurio.TaskMonitor;
+using Aurio.Windows;
 
 namespace AudioAlign
 {
