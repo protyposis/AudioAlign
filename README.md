@@ -1,17 +1,13 @@
-AudioAlign: Audio Synchronization And Analysis Tool
-===================================================
+# AudioAlign: Audio Synchronization And Analysis Tool
 
-AudioAlign is a tool written for research purposes to automatically synchronize audio and video recordings that have either been recorded in parallel at the same event or contain the same aural information.
-
-AudioAlign is basically a GUI for the [Aurio](https://github.com/protyposis/Aurio) library with a little bit of glue code in between.
+AudioAlign is a research tool to investigate automatic synchronization of audio and video recordings that have either been recorded in parallel at the same event or contain the same aural information. It is designed as a GUI for the [Aurio](https://github.com/protyposis/Aurio) library.
 
 To see what AudioAlign can do, check the demo videos linked below.
 
 ![Screenshot of the GUI](audioalign1.png)
 
 
-Use cases
----------
+## Use cases
 
 AudioAlign has been developed for a research project with the goal to automatically synchronize audio and video recordings, recorded at the same time at the same event, e.g. a speech or a music concert. The idea was to synchronize all those videos taken from the crowd and combine them to
 
@@ -31,37 +27,20 @@ AudioAlign can be used for a lot more uses cases though, including
 * ...
 
 
-What's new
-----------
+## What's new
 
 See [CHANGELOG](CHANGELOG.md).
 
 
-Support
--------
+## Development Requirements
 
-For questions and issues, please open an issue on the issue tracker. Commercial support, development
-and consultation is available through [Protyposis Multimedia Solutions](https://protyposis.com).
-
-
-Building & Running
-------------------
-
-AudioAlign requires Visual Studio 2017 and the .NET Framework 4.6.2. It depends on Aurio, which is included as a Git submodule, and OxyPlot, which is automatically downloaded by Visual Studio through NuGet when compiling for the first time. Make sure that NuGet downloads are enabled by checking `Allow NuGet to download missing packages` in `Tools -> Options -> NuGet Package Manager`.
-
-1. Clone the repository and Aurio submodule: `git clone --recursive https://github.com/protyposis/AudioAlign.git`
-2. Setup FFmpeg dependencies, see `Aurio\libs\ffmpeg\ffmpeg-prepare.txt`
-3. Open `AudioAlign.sln` in Visual Studio and hit the Start button
+* Visual Studio 2022
+* .NET SDK 6.0
 
 
-Documentation
--------------
+## Documentation
 
-Not available yet. If you have any questions, feel free to open an issue!
-
-
-Controls & Shortcuts
---------------------
+### Controls & Shortcuts
 
 * Audio and video files can be drag & dropped into the timeline
   * Multiple files will be added as multiple tracks
@@ -78,9 +57,18 @@ Controls & Shortcuts
     * Hold `SHIFT` to select a range of tracks
   * Move tracks on the timeline by _dragging_ them horizontally
 
+## Publications
 
-License
--------
+> Mario Guggenberger, Mathias Lux, and Laszlo Böszörmenyi. 2012. [AudioAlign – Synchronization of A/V-Streams Based on Audio Data](http://protyposis.net/publications/). 2012 IEEE International Symposium on Multimedia. Irvine, CA, USA, 2012, pp. 382-383. DOI=http://dx.doi.org/10.1109/ISM.2012.79
 
-Copyright (C) 2010-2018 Mario Guggenberger <mg@protyposis.net>.
+> Mario Guggenberger. 2015. [Aurio: Audio Processing, Analysis and Retrieval](http://protyposis.net/publications/). In Proceedings of the 23rd ACM international conference on Multimedia (MM '15). ACM, New York, NY, USA, 705-708. DOI=http://dx.doi.org/10.1145/2733373.2807408
+
+## Support
+
+For questions and issues, please open an issue on the issue tracker. Commercial support, development
+and consultation is available through [Protyposis Multimedia Solutions](https://protyposis.com).
+
+## License
+
+Copyright (C) 2010-2023 Mario Guggenberger <mg@protyposis.net>.
 This project is released under the terms of the GNU Affero General Public License. See `LICENSE` for details.
