@@ -18,10 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows;
 using AudioAlign.Models;
 using Aurio.Matching;
 using Aurio.Matching.Chromaprint;

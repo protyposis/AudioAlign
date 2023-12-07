@@ -65,10 +65,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <Button Command="MediaCommands.Pause" Width="20" Margin="2,2,0,2">
                 <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-pause}"/>
             </Button>
-            <Button Content="Goto Match" Margin="2,2,0,2" Padding="5,2" Width="95" Click="btnViewMatch_Click"/>
-            <Button Content="Cross-correlate" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="crossCorrelateButton_Click" />
-            <Button Content="Sync" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="syncButton_Click" />
-            <Button Content="Sync CC" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="syncCCButton_Click" />
+            <Button Content="Goto Match" Margin="2,2,0,2" Padding="5,2" Width="95" Click="BtnViewMatch_Click"/>
+            <Button Content="Cross-correlate" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="CrossCorrelateButton_Click" />
+            <Button Content="Sync" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="SyncButton_Click" />
+            <Button Content="Sync CC" Height="23" Margin="2,2,0,2" Padding="5,2" Width="95" Click="SyncCCButton_Click" />
             <TextBox Text="{Binding ElementName=multiTrackViewer1, Path=VirtualCaretOffset, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}, ConverterParameter='d\\.hh\\.mm\\:ss\\.fffffff'}" Width="127" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0" />
             <ProgressBar Name="progressBar" Margin="2,2,0,2" HorizontalAlignment="Stretch" Width="200" />
         </StackPanel>

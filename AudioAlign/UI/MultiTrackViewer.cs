@@ -19,13 +19,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -243,10 +240,10 @@ namespace AudioAlign.UI
             targetHeight = Math.Max(targetHeight, minHeight);
             foreach (AudioTrack track in multiTrackListBox.Items)
             {
-                ListBoxItem listBoxItem =
+                if (
                     multiTrackListBox.ItemContainerGenerator.ContainerFromItem(track)
-                    as ListBoxItem;
-                if (listBoxItem != null)
+                    is ListBoxItem listBoxItem
+                )
                 {
                     ResizeDecorator resizeDecorator = UIUtil.FindVisualChild<ResizeDecorator>(
                         listBoxItem
@@ -268,13 +265,8 @@ namespace AudioAlign.UI
                     multiTrackListBox.ActualHeight + sv.ScrollableHeight
                 )
                 : multiTrackListBox.RenderSize;
-            RenderTargetBitmap rtb = new RenderTargetBitmap(
-                (int)size.Width,
-                (int)size.Height,
-                96,
-                96,
-                PixelFormats.Pbgra32
-            );
+            RenderTargetBitmap rtb =
+                new((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
             multiTrackListBox.Measure(size);
             multiTrackListBox.Arrange(new Rect(size));
             rtb.Render(multiTrackListBox);
@@ -296,7 +288,7 @@ namespace AudioAlign.UI
             // if the ctrl-key is held, we scroll the viewport
             if ((Keyboard.Modifiers & ModifierKeys.Control) > 0)
             {
-                long offset = 0;
+                long offset;
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
                 {
                     offset = (long)(VirtualViewportWidth * 0.9);

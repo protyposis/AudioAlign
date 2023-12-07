@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Aurio;
 using Aurio.Project;
@@ -38,7 +37,7 @@ namespace AudioAlign
             string tracknameRegexFilterPattern
         )
         {
-            Dictionary<Track, long> offsets = new Dictionary<Track, long>(trackList.Count);
+            Dictionary<Track, long> offsets = new(trackList.Count);
             long minOffset = long.MaxValue;
             string pattern = tracknameRegexFilterPattern;
             bool patternSelect = !(String.IsNullOrEmpty(pattern) || pattern.Trim().Equals("*"));
@@ -88,7 +87,7 @@ namespace AudioAlign
 
         public static void EvaluateOffsets(TrackList<AudioTrack> trackList)
         {
-            Dictionary<AudioTrack, TimeSpan> mapping = new Dictionary<AudioTrack, TimeSpan>();
+            Dictionary<AudioTrack, TimeSpan> mapping = new();
             string timeFormat = "G";
             IFormatProvider numberFormat = new CultureInfo("en-US");
 

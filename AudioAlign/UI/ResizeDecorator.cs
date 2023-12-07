@@ -16,10 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -44,24 +40,23 @@ namespace AudioAlign.UI
 
         private void ResizeDecorator_Loaded(object sender, RoutedEventArgs e)
         {
-            Thumb resizeThumb = GetTemplateChild("PART_ResizeThumb") as Thumb;
-            if (resizeThumb != null)
+            if (GetTemplateChild("PART_ResizeThumb") is Thumb resizeThumb)
             {
-                resizeThumb.DragDelta += new DragDeltaEventHandler(resizeThumb_DragDelta);
+                resizeThumb.DragDelta += new DragDeltaEventHandler(ResizeThumb_DragDelta);
                 resizeThumb.MouseDoubleClick += new System.Windows.Input.MouseButtonEventHandler(
-                    resizeThumb_MouseDoubleClick
+                    ResizeThumb_MouseDoubleClick
                 );
             }
         }
 
-        private void resizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             double newHeight = Math.Max(MinHeight, ActualHeight + e.VerticalChange);
             SetValue(HeightProperty, newHeight);
             e.Handled = true;
         }
 
-        void resizeThumb_MouseDoubleClick(
+        void ResizeThumb_MouseDoubleClick(
             object sender,
             System.Windows.Input.MouseButtonEventArgs e
         )

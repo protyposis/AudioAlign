@@ -15,10 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
@@ -35,7 +32,7 @@ namespace AudioAlign.UI
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
                 DependencyObject child = VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is childItem)
+                if (child is not null and childItem)
                     return (childItem)child;
                 else
                 {
@@ -53,7 +50,7 @@ namespace AudioAlign.UI
         public static List<T> GetVisualChildCollection<T>(object parent)
             where T : Visual
         {
-            List<T> visualCollection = new List<T>();
+            List<T> visualCollection = new();
             GetVisualChildCollection(parent as DependencyObject, visualCollection);
             return visualCollection;
         }

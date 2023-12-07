@@ -16,25 +16,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Aurio;
 using Aurio.Matching;
 using Aurio.Project;
-using Aurio.Streams;
 using Aurio.TaskMonitor;
 using Aurio.Windows;
 
@@ -65,19 +53,19 @@ namespace AudioAlign
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // INIT COMMAND BINDINGS
-            CommandBinding playBinding = new CommandBinding(MediaCommands.Play);
+            CommandBinding playBinding = new(MediaCommands.Play);
             CommandBindings.Add(playBinding);
-            playBinding.CanExecute += playCommandBinding_CanExecute;
-            playBinding.Executed += playCommandBinding_Executed;
+            playBinding.CanExecute += PlayCommandBinding_CanExecute;
+            playBinding.Executed += PlayCommandBinding_Executed;
 
-            CommandBinding pauseBinding = new CommandBinding(MediaCommands.Pause);
+            CommandBinding pauseBinding = new(MediaCommands.Pause);
             CommandBindings.Add(pauseBinding);
-            pauseBinding.CanExecute += pauseCommandBinding_CanExecute;
-            pauseBinding.Executed += pauseCommandBinding_Executed;
+            pauseBinding.CanExecute += PauseCommandBinding_CanExecute;
+            pauseBinding.Executed += PauseCommandBinding_Executed;
 
-            CommandBinding playToggleBinding = new CommandBinding(Commands.PlayToggle);
+            CommandBinding playToggleBinding = new(Commands.PlayToggle);
             CommandBindings.Add(playToggleBinding);
-            playToggleBinding.Executed += playToggleBinding_Executed;
+            playToggleBinding.Executed += PlayToggleBinding_Executed;
 
             // Execute the following code after window and controls are fully loaded and initialized
             // http://stackoverflow.com/a/1746975
@@ -161,43 +149,43 @@ namespace AudioAlign
             player.Dispose();
         }
 
-        private void btnViewMatch_Click(object sender, RoutedEventArgs e)
+        private void BtnViewMatch_Click(object sender, RoutedEventArgs e)
         {
             ZoomToMatch();
         }
 
-        private void playCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void PlayCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = player.CanPlay;
             e.Handled = true;
         }
 
-        private void pauseCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void PauseCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = player.CanPause;
             e.Handled = true;
         }
 
-        private void playCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void PlayCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             player.CurrentTime = new TimeSpan(multiTrackViewer1.VirtualCaretOffset);
             player.Play();
         }
 
-        private void pauseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void PauseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             player.Pause();
         }
 
-        private void playToggleBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void PlayToggleBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (player.CanPlay)
             {
-                playCommandBinding_Executed(sender, e);
+                PlayCommandBinding_Executed(sender, e);
             }
             else if (player.CanPause)
             {
-                pauseCommandBinding_Executed(sender, e);
+                PauseCommandBinding_Executed(sender, e);
             }
         }
 
@@ -212,7 +200,7 @@ namespace AudioAlign
             multiTrackViewer1.FitTracksVertically(50);
         }
 
-        private void crossCorrelateButton_Click(object sender, RoutedEventArgs e)
+        private void CrossCorrelateButton_Click(object sender, RoutedEventArgs e)
         {
             if (ccr == null)
             {
@@ -237,12 +225,12 @@ namespace AudioAlign
             }
         }
 
-        private void syncButton_Click(object sender, RoutedEventArgs e)
+        private void SyncButton_Click(object sender, RoutedEventArgs e)
         {
             MatchProcessor.Align(match);
         }
 
-        private void syncCCButton_Click(object sender, RoutedEventArgs e)
+        private void SyncCCButton_Click(object sender, RoutedEventArgs e)
         {
             if (multiTrackViewer1.Matches.Count > 1)
             {

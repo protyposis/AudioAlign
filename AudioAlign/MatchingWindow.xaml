@@ -77,7 +77,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </TabItem>
                 <TabItem Header="Dynamic Time Warping">
                     <Grid>
-                        <Button Content="Start" Height="23" Name="dtwButton" Width="75" Click="dtwButton_Click" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+                        <Button Content="Start" Height="23" Name="dtwButton" Width="75" Click="DtwButton_Click" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
                         <Label Content="Type:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" />
                         <RadioButton Content="DTW" Height="16" HorizontalAlignment="Left" Margin="63,6,0,0" Name="dtwRadioButton" VerticalAlignment="Top" />
                         <RadioButton Content="OLTW" Height="16" HorizontalAlignment="Left" Margin="112,6,0,0" Name="oltwRadioButton" VerticalAlignment="Top" />
@@ -106,7 +106,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <TextBox Height="23" HorizontalAlignment="Left" Margin="77,6,0,0" Text="{Binding Path=CorrelationWindowSize, Mode=TwoWay}" VerticalAlignment="Top" Width="54" />
                         <Label Content="Interval Size:" Height="20" HorizontalAlignment="Left" Margin="6,38,0,0" VerticalAlignment="Top" />
                         <TextBox Height="23" HorizontalAlignment="Left" Margin="77,35,0,0" Text="{Binding Path=CorrelationIntervalSize, Mode=TwoWay}" VerticalAlignment="Top" Width="54" />
-                        <Button Content="Start" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" Name="correlationButton" VerticalAlignment="Bottom" Width="75" Click="correlationButton_Click" />
+                        <Button Content="Start" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" Name="correlationButton" VerticalAlignment="Bottom" Width="75" Click="CorrelationButton_Click" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Jiku">
@@ -139,7 +139,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <DataGrid Name="matchGrid" Margin="0,3,0,0" SelectionUnit="FullRow" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" 
-                          HeadersVisibility="Column" CanUserAddRows="False" SelectionChanged="matchGrid_SelectionChanged" MouseDoubleClick="matchGrid_MouseDoubleClick">
+                          HeadersVisibility="Column" CanUserAddRows="False" SelectionChanged="MatchGrid_SelectionChanged" MouseDoubleClick="MatchGrid_MouseDoubleClick">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Track A" Binding="{Binding Track1.Name}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Track B" Binding="{Binding Track2.Name}" IsReadOnly="True"/>
@@ -152,10 +152,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </DataGrid>
                     <DockPanel Grid.Row="1" Margin="0,3,0,0">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                            <Button Name="clearMatchesButton" Content="Clear" Height="23" Width="85" Margin="0,0,3,0" Click="clearMatchesButton_Click" />
+                            <Button Name="clearMatchesButton" Content="Clear" Height="23" Width="85" Margin="0,0,3,0" Click="ClearMatchesButton_Click" />
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Content="Add from timeline..." Height="23" Name="addManualMatchButton" Width="110" Click="addManualMatchButton_Click" />
+                            <Button Content="Add from timeline..." Height="23" Name="addManualMatchButton" Width="110" Click="AddManualMatchButton_Click" />
                             <Popup Name="addManualMatchPopup" PlacementTarget="{Binding ElementName=addManualMatchButton}" Placement="Relative" VerticalOffset="{Binding ElementName=addManualMatchButton, Path=ActualHeight}" PopupAnimation="Slide" AllowsTransparency="True" StaysOpen="False">
                                 <Border Background="{StaticResource WindowBackgroundBrush}" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="1">
                                     <Grid Margin="3">
@@ -172,15 +172,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                         <Label Margin="3" Grid.Column="0" Grid.Row="1" Content="Track B:" VerticalAlignment="Center"/>
                                         <ComboBox Margin="3" Grid.Column="1" Grid.Row="0" Name="addManualMatchPopupComboBoxA" SelectionChanged="AddManualMatchPopupComboBoxA_OnSelectionChanged"/>
                                         <ComboBox Margin="3" Grid.Column="1" Grid.Row="1" Name="addManualMatchPopupComboBoxB" SelectionChanged="AddManualMatchPopupComboBoxB_OnSelectionChanged"/>
-                                        <Button Margin="3" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Content="Add" Height="23" Width="40" Click="addManualMatchPopupAddButton_Click"/>
+                                        <Button Margin="3" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Content="Add" Height="23" Width="40" Click="AddManualMatchPopupAddButton_Click"/>
                                     </Grid>
                                 </Border>
                             </Popup>
-                            <Button Name="crossCorrelateButton" Content="Cross-correlate selection" Height="23" Margin="3,0,0,0" Width="135" Click="crossCorrelateButton_Click" />
-                            <Button Name="matchSyncButton" Content="Sync match" Height="23" Margin="3,0,0,0" Width="73" Click="matchSyncButton_Click" VerticalAlignment="Bottom" />
-                            <Button Name="matchDetailsButton" Content="Match details" Height="23" Margin="3,0,0,0" Width="80" Click="matchDetailsButton_Click" />
-                            <Button Name="driftCalcButton" Content="Calculate drift" Height="23" Margin="3,0,0,0" Width="73" Click="driftCalcButton_Click" VerticalAlignment="Bottom" />
-                            <Button x:Name="flipTracks" Content="Flip tracks" Height="23" Margin="3,0,0,0" Width="62" Click="flipTracksButton_Click" />
+                            <Button Name="crossCorrelateButton" Content="Cross-correlate selection" Height="23" Margin="3,0,0,0" Width="135" Click="CrossCorrelateButton_Click" />
+                            <Button Name="matchSyncButton" Content="Sync match" Height="23" Margin="3,0,0,0" Width="73" Click="MatchSyncButton_Click" VerticalAlignment="Bottom" />
+                            <Button Name="matchDetailsButton" Content="Match details" Height="23" Margin="3,0,0,0" Width="80" Click="MatchDetailsButton_Click" />
+                            <Button Name="driftCalcButton" Content="Calculate drift" Height="23" Margin="3,0,0,0" Width="73" Click="DriftCalcButton_Click" VerticalAlignment="Bottom" />
+                            <Button x:Name="flipTracks" Content="Flip tracks" Height="23" Margin="3,0,0,0" Width="62" Click="FlipTracksButton_Click" />
                         </StackPanel>
                     </DockPanel>
                 </Grid>
@@ -190,8 +190,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <RadioButton Content="best" Height="16" Margin="43,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="bestMatchRadioButton" />
                     <RadioButton Content="last" Height="16" Margin="182,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="lastMatchRadioButton" />
                     <RadioButton Content="all *" Height="16" Margin="226,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="allMatchRadioButton" />
-                    <Button Name="alignTracksButton" Content="Align Tracks" Width="75" HorizontalAlignment="Right" Click="alignTracksButton_Click" Margin="0,50,0,0" />
-                    <Button Name="filterMatchesButton" Content="Filter Matches" Height="23" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="filterMatchesButton_Click" Margin="0,0,81,0" />
+                    <Button Name="alignTracksButton" Content="Align Tracks" Width="75" HorizontalAlignment="Right" Click="AlignTracksButton_Click" Margin="0,50,0,0" />
+                    <Button Name="filterMatchesButton" Content="Filter Matches" Height="23" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="FilterMatchesButton_Click" Margin="0,0,81,0" />
                     <TextBox Height="23" Margin="106,26,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Text="{Binding Path=MatchFilterWindowSize, Mode=TwoWay}" />
                     <RadioButton Content="first" Height="16" HorizontalAlignment="Left" Margin="91,6,0,0" VerticalAlignment="Top" Name="firstMatchRadioButton" />
                     <Label Content="Mode:" Height="17" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label1" VerticalAlignment="Top" />

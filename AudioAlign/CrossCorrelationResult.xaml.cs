@@ -18,15 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Aurio.Matching;
 using OxyPlot;
 using OxyPlot.Annotations;
@@ -83,7 +75,7 @@ namespace AudioAlign
         private void PlotResult(OxyPlot.Wpf.PlotView plotter, CrossCorrelation.Result ccr)
         {
             int[] xValues = new int[ccr.Correlations.Length];
-            List<DataPoint> values = new List<DataPoint>();
+            List<DataPoint> values = new();
             for (int i = 0; i < ccr.Correlations.Length; i++)
             {
                 xValues[i] = i;

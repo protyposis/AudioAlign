@@ -52,11 +52,14 @@ namespace AudioAlign.UI
                 mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
 
                 // Set Margins
-                NonClientRegionAPI.MARGINS margins = new NonClientRegionAPI.MARGINS();
-                margins.cxLeftWidth = -1;
-                margins.cxRightWidth = -1;
-                margins.cyTopHeight = -1;
-                margins.cyBottomHeight = -1;
+                NonClientRegionAPI.MARGINS margins =
+                    new()
+                    {
+                        cxLeftWidth = -1,
+                        cxRightWidth = -1,
+                        cyTopHeight = -1,
+                        cyBottomHeight = -1
+                    };
 
                 int hr = NonClientRegionAPI.DwmExtendFrameIntoClientArea(
                     mainWindowSrc.Handle,

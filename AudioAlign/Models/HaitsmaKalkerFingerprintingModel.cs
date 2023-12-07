@@ -18,11 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Aurio;
 using Aurio.Matching;
 using Aurio.Matching.HaitsmaKalker2002;
 using Aurio.Project;
@@ -63,12 +60,8 @@ namespace AudioAlign.Models
         /// <param name="profile">the new profile to configure the model with</param>
         public void Reset(Profile profile)
         {
-            if (profile == null)
-            {
-                throw new ArgumentNullException("profile must not be null");
-            }
-
-            SelectedProfile = profile;
+            SelectedProfile =
+                profile ?? throw new ArgumentNullException("profile must not be null");
             store = new FingerprintStore(profile);
         }
 
@@ -145,10 +138,7 @@ namespace AudioAlign.Models
                                 + " MB)"
                         );
 
-                        if (FingerprintingFinished != null)
-                        {
-                            FingerprintingFinished(selfReference, EventArgs.Empty);
-                        }
+                        FingerprintingFinished?.Invoke(selfReference, EventArgs.Empty);
                     },
                     TaskScheduler.FromCurrentSynchronizationContext()
                 );
@@ -175,12 +165,12 @@ namespace AudioAlign.Models
                             true
                         );
 
-                        Action<double> progressCallback = (progress) =>
+                        void progressCallback(double progress)
                         {
                             progressReporter.ReportProgress(progress);
-                        };
+                        }
 
-                        Stopwatch sw = new Stopwatch();
+                        Stopwatch sw = new();
                         sw.Start();
                         store.Threshold = FingerprintBerThreshold;
                         store.FingerprintSize = FingerprintSize;

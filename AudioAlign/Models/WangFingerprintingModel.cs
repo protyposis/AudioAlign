@@ -18,8 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Aurio;
@@ -56,12 +54,8 @@ namespace AudioAlign.Models
         /// <param name="profile">the new profile to configure the model with</param>
         public void Reset(Profile profile)
         {
-            if (profile == null)
-            {
-                throw new ArgumentNullException("profile must not be null");
-            }
-
-            SelectedProfile = profile;
+            SelectedProfile =
+                profile ?? throw new ArgumentNullException("profile must not be null");
             store = new FingerprintStore(profile);
         }
 
@@ -138,10 +132,7 @@ namespace AudioAlign.Models
                                 + " MB)"
                         );
 
-                        if (FingerprintingFinished != null)
-                        {
-                            FingerprintingFinished(selfReference, EventArgs.Empty);
-                        }
+                        FingerprintingFinished?.Invoke(selfReference, EventArgs.Empty);
                     },
                     TaskScheduler.FromCurrentSynchronizationContext()
                 );
@@ -168,15 +159,12 @@ namespace AudioAlign.Models
                             true
                         );
 
-                        EventHandler<ValueEventArgs<double>> progressHandler = delegate(
-                            object sender,
-                            ValueEventArgs<double> e
-                        )
+                        void progressHandler(object sender, ValueEventArgs<double> e)
                         {
                             progressReporter.ReportProgress(e.Value);
-                        };
+                        }
 
-                        Stopwatch sw = new Stopwatch();
+                        Stopwatch sw = new();
                         sw.Start();
                         store.MatchingProgress += progressHandler;
                         matches = store.FindAllMatches();

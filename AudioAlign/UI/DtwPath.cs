@@ -42,7 +42,7 @@ namespace AudioAlign.UI
 
         public DtwPath()
         {
-            ColorGradient gradient = new ColorGradient(0, 1);
+            ColorGradient gradient = new(0, 1);
             gradient.AddStop(Colors.Black, 0);
             gradient.AddStop(Colors.White, 1);
             colorPalette = gradient.GetGradient(256).Select(c => GetColorValue(c)).ToArray();

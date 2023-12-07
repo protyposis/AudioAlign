@@ -17,33 +17,22 @@
 //
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Aurio;
 using Aurio.FFT;
 using Aurio.FFmpeg;
 using Aurio.Matching;
-using Aurio.Matching.HaitsmaKalker2002;
 using Aurio.Project;
 using Aurio.Resampler;
 using Aurio.Streams;
 using Aurio.TaskMonitor;
-using Aurio.WaveControls;
 using Aurio.Windows;
 
 namespace AudioAlign
@@ -151,16 +140,16 @@ namespace AudioAlign
             get { return trackList; } // required for binding to the GUI
         }
 
-        private void multiTrackViewer1_Drop(object sender, DragEventArgs e)
+        private void MultiTrackViewer1_Drop(object sender, DragEventArgs e)
         {
             // source: http://stackoverflow.com/questions/332859/detect-dragndrop-file-in-wpf
-            if (e.Data is DataObject && ((DataObject)e.Data).ContainsFileDropList())
+            if (e.Data is DataObject dataObject && dataObject.ContainsFileDropList())
             {
                 var fileInfos = new List<FileInfo>();
 
-                foreach (string filePath in ((DataObject)e.Data).GetFileDropList())
+                foreach (string filePath in dataObject.GetFileDropList())
                 {
-                    FileInfo fileInfo = new FileInfo(filePath);
+                    FileInfo fileInfo = new(filePath);
                     CollectFiles(fileInfo, fileInfos);
                 }
 
@@ -177,29 +166,29 @@ namespace AudioAlign
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Title = Title + (Environment.Is64BitProcess ? " (x64)" : " (x86)");
+            Title += (Environment.Is64BitProcess ? " (x64)" : " (x86)");
 
             multiTrackViewer1.ItemsSource = trackList;
 
             // INIT COMMAND BINDINGS
-            CommandBinding playBinding = new CommandBinding(MediaCommands.Play);
+            CommandBinding playBinding = new(MediaCommands.Play);
             CommandBindings.Add(playBinding);
             playBinding.CanExecute += new CanExecuteRoutedEventHandler(
-                playCommandBinding_CanExecute
+                PlayCommandBinding_CanExecute
             );
-            playBinding.Executed += new ExecutedRoutedEventHandler(playCommandBinding_Executed);
+            playBinding.Executed += new ExecutedRoutedEventHandler(PlayCommandBinding_Executed);
 
-            CommandBinding pauseBinding = new CommandBinding(MediaCommands.Pause);
+            CommandBinding pauseBinding = new(MediaCommands.Pause);
             CommandBindings.Add(pauseBinding);
             pauseBinding.CanExecute += new CanExecuteRoutedEventHandler(
-                pauseCommandBinding_CanExecute
+                PauseCommandBinding_CanExecute
             );
-            pauseBinding.Executed += new ExecutedRoutedEventHandler(pauseCommandBinding_Executed);
+            pauseBinding.Executed += new ExecutedRoutedEventHandler(PauseCommandBinding_Executed);
 
-            CommandBinding playToggleBinding = new CommandBinding(Commands.PlayToggle);
+            CommandBinding playToggleBinding = new(Commands.PlayToggle);
             CommandBindings.Add(playToggleBinding);
             playToggleBinding.Executed += new ExecutedRoutedEventHandler(
-                playToggleBinding_Executed
+                PlayToggleBinding_Executed
             );
 
             //// INIT TRACKLIST STUFF
@@ -347,7 +336,7 @@ namespace AudioAlign
                             if (audioTrack != null)
                             {
                                 // 1. delete all related matches
-                                List<Match> deleteList = new List<Match>();
+                                List<Match> deleteList = new();
                                 // 1a find all related matches
                                 foreach (Match m in multiTrackViewer1.Matches)
                                 {
@@ -462,57 +451,50 @@ namespace AudioAlign
         private void Window_Closed(object sender, EventArgs e)
         {
             player.Dispose();
-            if (matchingWindow != null)
-            {
-                matchingWindow.Close();
-            }
-            if (analysisWindow != null)
-            {
-                analysisWindow.Close();
-            }
+            matchingWindow?.Close();
+            analysisWindow?.Close();
         }
 
-        private void playCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void PlayCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = player.CanPlay;
             e.Handled = true;
         }
 
-        private void pauseCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void PauseCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = player.CanPause;
             e.Handled = true;
         }
 
-        private void playCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void PlayCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             player.CurrentTime = new TimeSpan(multiTrackViewer1.VirtualCaretOffset);
             player.Play();
         }
 
-        private void pauseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void PauseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             player.Pause();
         }
 
-        private void playToggleBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void PlayToggleBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (player.CanPlay)
             {
-                playCommandBinding_Executed(sender, e);
+                PlayCommandBinding_Executed(sender, e);
             }
             else if (player.CanPause)
             {
-                pauseCommandBinding_Executed(sender, e);
+                PauseCommandBinding_Executed(sender, e);
             }
         }
 
-        private void btnFindMatches_Click(object sender, RoutedEventArgs e)
+        private void BtnFindMatches_Click(object sender, RoutedEventArgs e)
         {
             if (matchingWindow == null || !matchingWindow.IsLoaded)
             {
-                matchingWindow = new MatchingWindow(trackList, multiTrackViewer1);
-                matchingWindow.Owner = this;
+                matchingWindow = new MatchingWindow(trackList, multiTrackViewer1) { Owner = this };
                 matchingWindow.Show();
             }
             else
@@ -521,12 +503,11 @@ namespace AudioAlign
             }
         }
 
-        private void btnAnalyze_Click(object sender, RoutedEventArgs e)
+        private void BtnAnalyze_Click(object sender, RoutedEventArgs e)
         {
             if (analysisWindow == null || !analysisWindow.IsLoaded)
             {
-                analysisWindow = new AnalysisWindow(trackList);
-                analysisWindow.Owner = this;
+                analysisWindow = new AnalysisWindow(trackList) { Owner = this };
                 analysisWindow.Show();
             }
             else
@@ -535,18 +516,17 @@ namespace AudioAlign
             }
         }
 
-        private void btnAlignmentGraph_Click(object sender, RoutedEventArgs e)
+        private void BtnAlignmentGraph_Click(object sender, RoutedEventArgs e)
         {
             List<MatchPair> trackPairs = MatchProcessor.GetTrackPairs(trackList);
             MatchProcessor.AssignMatches(trackPairs, multiTrackViewer1.Matches);
-            AlignmentGraphWindow window = new AlignmentGraphWindow(trackPairs);
-            window.Owner = this;
+            AlignmentGraphWindow window = new(trackPairs) { Owner = this };
             window.Show();
         }
 
         private void SaveProject(FileInfo targetFile)
         {
-            Project p = new Project();
+            Project p = new();
             foreach (AudioTrack track in trackList)
             {
                 p.AudioTracks.Add(track);
@@ -608,7 +588,7 @@ namespace AudioAlign
             try
             {
                 AudioStreamFactory.IsSupportedFileOrThrow(fileInfo.FullName);
-                AudioTrack audioTrack = new AudioTrack(fileInfo);
+                AudioTrack audioTrack = new(fileInfo);
                 trackList.Add(audioTrack);
             }
             catch (Exception e)
@@ -630,7 +610,7 @@ namespace AudioAlign
                 == fileInfos.Count
             )
             {
-                AudioTrack audioTrack = new AudioTrack(fileInfos.ToArray());
+                AudioTrack audioTrack = new(fileInfos.ToArray());
                 trackList.Add(audioTrack);
             }
         }
@@ -674,10 +654,13 @@ namespace AudioAlign
 
         private void CommandBinding_Open(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".aap";
-            dlg.Filter = "AudioAlign Projects|*.aap";
-            dlg.Multiselect = false;
+            Microsoft.Win32.OpenFileDialog dlg =
+                new()
+                {
+                    DefaultExt = ".aap",
+                    Filter = "AudioAlign Projects|*.aap",
+                    Multiselect = false
+                };
 
             if (dlg.ShowDialog() == true)
             {
@@ -717,9 +700,8 @@ namespace AudioAlign
 
         private void CommandBinding_SaveAs(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".aap";
-            dlg.Filter = "AudioAlign Projects|*.aap";
+            Microsoft.Win32.SaveFileDialog dlg =
+                new() { DefaultExt = ".aap", Filter = "AudioAlign Projects|*.aap" };
 
             if (dlg.ShowDialog() == true)
             {
@@ -730,9 +712,8 @@ namespace AudioAlign
 
         private void CommandBinding_FileExportVegasEDL(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".txt";
-            dlg.Filter = "Sony Vegas EDL text file|*.txt";
+            Microsoft.Win32.SaveFileDialog dlg =
+                new() { DefaultExt = ".txt", Filter = "Sony Vegas EDL text file|*.txt" };
 
             if (dlg.ShowDialog() == true)
             {
@@ -743,13 +724,12 @@ namespace AudioAlign
 
         private void CommandBinding_FileExportSyncXML(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".xml";
-            dlg.Filter = "Sync XML|*.xml";
+            Microsoft.Win32.SaveFileDialog dlg =
+                new() { DefaultExt = ".xml", Filter = "Sync XML|*.xml" };
 
             if (dlg.ShowDialog() == true)
             {
-                Project p = new Project();
+                Project p = new();
                 foreach (AudioTrack track in trackList)
                 {
                     p.AudioTracks.Add(track);
@@ -765,9 +745,8 @@ namespace AudioAlign
 
         private void CommandBinding_FileExportMatchesCSV(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".csv";
-            dlg.Filter = "Matches CSV|*.csv";
+            Microsoft.Win32.SaveFileDialog dlg =
+                new() { DefaultExt = ".csv", Filter = "Matches CSV|*.csv" };
 
             if (dlg.ShowDialog() == true)
             {
@@ -778,10 +757,13 @@ namespace AudioAlign
 
         private void CommandBinding_AddAudioFile(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = "wav";
-            dlg.Filter = "All files (*.*)|*.*|Wave files|*.wav";
-            dlg.Multiselect = true;
+            Microsoft.Win32.OpenFileDialog dlg =
+                new()
+                {
+                    DefaultExt = "wav",
+                    Filter = "All files (*.*)|*.*|Wave files|*.wav",
+                    Multiselect = true
+                };
 
             if (dlg.ShowDialog() == true)
             {
@@ -794,9 +776,8 @@ namespace AudioAlign
 
         private void CommandBinding_FileExportAudioMix(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = "wav";
-            dlg.Filter = "Wave files|*.wav";
+            Microsoft.Win32.SaveFileDialog dlg =
+                new() { DefaultExt = "wav", Filter = "Wave files|*.wav" };
 
             if (dlg.ShowDialog() == true)
             {
@@ -806,8 +787,7 @@ namespace AudioAlign
                 ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
 
                 // progress window needs to be open before beginning a task (else progress bar init does not get called)
-                var modalProgress = new ModalProgressWindow(progressMonitor);
-                modalProgress.Owner = this;
+                var modalProgress = new ModalProgressWindow(progressMonitor) { Owner = this };
                 modalProgress.Show();
 
                 var progressReporter = progressMonitor.BeginTask("Rendering mix to file...", true);
@@ -844,10 +824,13 @@ namespace AudioAlign
                 return;
             }
 
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = "wav";
-            dlg.Filter = "Wave files|*.wav";
-            dlg.FileName = "AAexport {name}";
+            Microsoft.Win32.SaveFileDialog dlg =
+                new()
+                {
+                    DefaultExt = "wav",
+                    Filter = "Wave files|*.wav",
+                    FileName = "AAexport {name}"
+                };
 
             if (dlg.ShowDialog() == true)
             {
@@ -857,8 +840,7 @@ namespace AudioAlign
                 ProgressMonitor.GlobalInstance.AddChild(progressMonitor);
 
                 // progress window needs to be open before beginning a task (else progress bar init does not get called)
-                var modalProgress = new ModalProgressWindow(progressMonitor);
-                modalProgress.Owner = this;
+                var modalProgress = new ModalProgressWindow(progressMonitor) { Owner = this };
                 modalProgress.Show();
 
                 Task.Factory.StartNew(() =>
@@ -969,8 +951,8 @@ namespace AudioAlign
                 false,
                 TimeSpan.Zero
             );
-            List<AudioTrack> currentOrder = new List<AudioTrack>(trackList);
-            List<AudioTrack> targetOrder = new List<AudioTrack>();
+            List<AudioTrack> currentOrder = new(trackList);
+            List<AudioTrack> targetOrder = new();
 
             foreach (MatchGroup matchGroup in matchGroups)
             {
@@ -1150,8 +1132,7 @@ namespace AudioAlign
             statusLabel.Content =
                 (displayTime ? DateTime.Now.ToShortTimeString() + " " : " ") + text;
             statusLabel.Visibility = System.Windows.Visibility.Visible;
-            var timer = statusLabel.Tag as DispatcherTimer;
-            if (timer == null)
+            if (statusLabel.Tag is not DispatcherTimer timer)
             {
                 statusLabel.Tag = timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 3) };
                 timer.Tick += delegate(object sender, EventArgs e)

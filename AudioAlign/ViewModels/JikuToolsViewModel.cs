@@ -20,11 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows;
-using AudioAlign.Models;
 using Aurio.Project;
 using Match = Aurio.Matching.Match;
 
@@ -91,7 +87,7 @@ namespace AudioAlign.ViewModels
                 if (dialog.ShowDialog() == true)
                 {
                     // read drift config
-                    Dictionary<string, double> mapping = new Dictionary<string, double>();
+                    Dictionary<string, double> mapping = new();
                     using (StreamReader reader = File.OpenText(dialog.FileName))
                     {
                         string line;

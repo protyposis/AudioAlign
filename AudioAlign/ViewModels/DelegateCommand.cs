@@ -16,9 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 
 namespace AudioAlign.ViewModels
@@ -59,8 +56,7 @@ namespace AudioAlign.ViewModels
 
         public void RaiseCanExecuteChanged()
         {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, EventArgs.Empty);
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 

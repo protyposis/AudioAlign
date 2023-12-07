@@ -63,7 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <ComboBoxItem>96000</ComboBoxItem>
                         <ComboBoxItem>192000</ComboBoxItem>
                     </ComboBox>
-                    <Button Name="analyzeButton" Content="Analyze" Height="23" Width="75" Click="analyzeButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+                    <Button Name="analyzeButton" Content="Analyze" Height="23" Width="75" Click="AnalyzeButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
                 </Grid>
             </GroupBox>
             <Grid Grid.Row="1" Margin="0,3,0,0" Height="25">

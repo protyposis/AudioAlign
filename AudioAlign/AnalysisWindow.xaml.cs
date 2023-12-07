@@ -16,19 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using AudioAlign.UI;
 using Aurio;
 using Aurio.Matching;
@@ -83,15 +73,15 @@ namespace AudioAlign
 
             var graphStyles = new Tuple<OxyColor, MarkerType>[]
             {
-                new Tuple<OxyColor, MarkerType>(OxyColors.YellowGreen, MarkerType.Cross), // down
-                new Tuple<OxyColor, MarkerType>(OxyColors.YellowGreen, MarkerType.Plus), // up
-                new Tuple<OxyColor, MarkerType>(OxyColors.Magenta, MarkerType.Plus), // up
-                new Tuple<OxyColor, MarkerType>(OxyColors.Magenta, MarkerType.Cross), // down
-                new Tuple<OxyColor, MarkerType>(OxyColors.Magenta, MarkerType.Circle),
-                new Tuple<OxyColor, MarkerType>(OxyColors.Cyan, MarkerType.Plus), // up
-                new Tuple<OxyColor, MarkerType>(OxyColors.Cyan, MarkerType.Cross), // down
-                new Tuple<OxyColor, MarkerType>(OxyColors.Cyan, MarkerType.Circle),
-                new Tuple<OxyColor, MarkerType>(OxyColors.Red, MarkerType.Circle)
+                new(OxyColors.YellowGreen, MarkerType.Cross), // down
+                new(OxyColors.YellowGreen, MarkerType.Plus), // up
+                new(OxyColors.Magenta, MarkerType.Plus), // up
+                new(OxyColors.Magenta, MarkerType.Cross), // down
+                new(OxyColors.Magenta, MarkerType.Circle),
+                new(OxyColors.Cyan, MarkerType.Plus), // up
+                new(OxyColors.Cyan, MarkerType.Cross), // down
+                new(OxyColors.Cyan, MarkerType.Circle),
+                new(OxyColors.Red, MarkerType.Circle)
             };
 
             var plotModel = new PlotModel();
@@ -234,19 +224,19 @@ namespace AudioAlign
                 );
         }
 
-        private void analyzeButton_Click(object sender, RoutedEventArgs e)
+        private void AnalyzeButton_Click(object sender, RoutedEventArgs e)
         {
-            Analysis analysis = new Analysis(
-                AnalysisMode,
-                trackList,
-                AnalysisWindowSize,
-                AnalysisIntervalLength,
-                AnalysisSampleRate,
-                progressMonitor
-            );
+            Analysis analysis =
+                new(
+                    AnalysisMode,
+                    trackList,
+                    AnalysisWindowSize,
+                    AnalysisIntervalLength,
+                    AnalysisSampleRate,
+                    progressMonitor
+                );
 
-            ObservableCollection<AnalysisEventArgs> windowResults =
-                new ObservableCollection<AnalysisEventArgs>();
+            ObservableCollection<AnalysisEventArgs> windowResults = new();
             analysisResultsGrid.ItemsSource = windowResults;
 
             dataTable.Clear();

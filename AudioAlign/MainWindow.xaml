@@ -159,9 +159,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <Button Command="MediaCommands.Pause" Width="20" Margin="2,2,0,2">
                         <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-pause}"/>
                     </Button>
-                    <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnFindMatches_Click" />
-                    <Button Content="Alignment Analysis" Name="btnAnalyze" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnAnalyze_Click" />
-                    <Button Content="Alignment Graph" Name="btnAlignmentGraph" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="btnAlignmentGraph_Click" />
+                    <Button Content="Match &amp; Align" Name="btnFindMatches" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="BtnFindMatches_Click" />
+                    <Button Content="Alignment Analysis" Name="btnAnalyze" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="BtnAnalyze_Click" />
+                    <Button Content="Alignment Graph" Name="btnAlignmentGraph" Padding="8,2" MinWidth="75" Margin="2,2,0,2" Click="BtnAlignmentGraph_Click" />
                 </StackPanel>
             </Grid>
         </Grid>

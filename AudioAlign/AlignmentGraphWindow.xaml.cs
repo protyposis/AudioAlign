@@ -17,17 +17,8 @@
 //
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Aurio.Matching;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -59,9 +50,11 @@ namespace AudioAlign
 
         private void AddGraphLine(OxyPlot.PlotModel plotModel, MatchPair matchPair)
         {
-            var lineSeries = new LineSeries();
-            lineSeries.Title = matchPair.Track1.Name + " <-> " + matchPair.Track2.Name;
-            lineSeries.TrackerFormatString = "{0}\n{1}: {2}\n{3}: {4}"; // bugfix https://github.com/oxyplot/oxyplot/issues/265
+            var lineSeries = new LineSeries
+            {
+                Title = matchPair.Track1.Name + " <-> " + matchPair.Track2.Name,
+                TrackerFormatString = "{0}\n{1}: {2}\n{3}: {4}" // bugfix https://github.com/oxyplot/oxyplot/issues/265
+            };
             matchPair
                 .Matches
                 .OrderBy(match => match.Track1Time)
@@ -86,15 +79,15 @@ namespace AudioAlign
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var plotModel = new OxyPlot.PlotModel();
-            var timeSpanAxis1 = new TimeSpanAxis();
-            timeSpanAxis1.Title = "Time";
-            timeSpanAxis1.Position = AxisPosition.Bottom;
+            var timeSpanAxis1 = new TimeSpanAxis { Title = "Time", Position = AxisPosition.Bottom };
             plotModel.Axes.Add(timeSpanAxis1);
-            var timeSpanAxis2 = new MsecTimeSpanAxis();
-            timeSpanAxis2.Title = "Offset";
-            timeSpanAxis2.StringFormat = "m:ss:fff";
-            timeSpanAxis2.MajorGridlineStyle = LineStyle.Automatic;
-            timeSpanAxis2.MinorGridlineStyle = LineStyle.Automatic;
+            var timeSpanAxis2 = new MsecTimeSpanAxis
+            {
+                Title = "Offset",
+                StringFormat = "m:ss:fff",
+                MajorGridlineStyle = LineStyle.Automatic,
+                MinorGridlineStyle = LineStyle.Automatic
+            };
             plotModel.Axes.Add(timeSpanAxis2);
             FillGraph(plotModel);
             plotModel.IsLegendVisible = false;

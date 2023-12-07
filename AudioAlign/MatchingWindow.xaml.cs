@@ -17,33 +17,20 @@
 //
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using AudioAlign.UI;
 using AudioAlign.ViewModels;
 using Aurio;
-using Aurio.DataStructures.Graph;
 using Aurio.DataStructures.Matrix;
 using Aurio.Matching;
 using Aurio.Matching.Dixon2005;
-using Aurio.Matching.HaitsmaKalker2002;
 using Aurio.Project;
 using Aurio.Streams;
 using Aurio.TaskMonitor;
-using Aurio.WaveControls;
 using Match = Aurio.Matching.Match;
 
 namespace AudioAlign
@@ -148,10 +135,7 @@ namespace AudioAlign
             progressMonitor.ProcessingFinished -= Instance_ProcessingFinished;
             multiTrackViewer.SelectedMatch = null;
 
-            if (dtwPathViewer != null)
-            {
-                dtwPathViewer.Close();
-            }
+            dtwPathViewer?.Close();
         }
 
         private void Instance_ProcessingStarted(object sender, EventArgs e)
@@ -197,7 +181,7 @@ namespace AudioAlign
                 );
         }
 
-        private void filterMatchesButton_Click(object sender, RoutedEventArgs e)
+        private void FilterMatchesButton_Click(object sender, RoutedEventArgs e)
         {
             List<MatchGroup> trackGroups = DetermineMatchGroups();
             multiTrackViewer.Matches.Clear();
@@ -213,13 +197,13 @@ namespace AudioAlign
             }
         }
 
-        private void alignTracksButton_Click(object sender, RoutedEventArgs e)
+        private void AlignTracksButton_Click(object sender, RoutedEventArgs e)
         {
             bool postProcessMatchingPoints = (bool)postProcessMatchingPointsCheckBox.IsChecked;
             bool removeUnusedMatchingPoints = (bool)removeUnusedMatchingPointsCheckBox.IsChecked;
 
-            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
-            List<Match> newMatches = new List<Match>();
+            List<Match> matches = new(multiTrackViewer.Matches);
+            List<Match> newMatches = new();
             List<MatchGroup> trackGroups = DetermineMatchGroups();
 
             try
@@ -277,7 +261,7 @@ namespace AudioAlign
                                 multiTrackViewer.Matches.Clear();
                             }
 
-                            TrackList<AudioTrack> alignedTracks = new TrackList<AudioTrack>();
+                            TrackList<AudioTrack> alignedTracks = new();
                             TimeSpan componentStartTime = TimeSpan.Zero;
 
                             string[] colors =
@@ -332,9 +316,9 @@ namespace AudioAlign
             });
         }
 
-        private void crossCorrelateButton_Click(object sender, RoutedEventArgs e)
+        private void CrossCorrelateButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
+            List<Match> matches = new(matchGrid.SelectedItems.Cast<Match>());
 
             Task.Run(() =>
                 {
@@ -362,27 +346,27 @@ namespace AudioAlign
                 );
         }
 
-        private void matchSyncButton_Click(object sender, RoutedEventArgs e)
+        private void MatchSyncButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
+            List<Match> matches = new(matchGrid.SelectedItems.Cast<Match>());
             foreach (Match match in matches)
             {
                 MatchProcessor.Align(match);
             }
         }
 
-        private void matchDetailsButton_Click(object sender, RoutedEventArgs e)
+        private void MatchDetailsButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
+            List<Match> matches = new(matchGrid.SelectedItems.Cast<Match>());
             foreach (Match match in matches)
             {
                 new MatchDetails(match) { Owner = this }.Show();
             }
         }
 
-        private void driftCalcButton_Click(object sender, RoutedEventArgs e)
+        private void DriftCalcButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Match> matches = new List<Match>(matchGrid.SelectedItems.Cast<Match>());
+            List<Match> matches = new(matchGrid.SelectedItems.Cast<Match>());
             if (
                 matches.Count != 2
                 || new HashSet<AudioTrack>
@@ -426,7 +410,7 @@ namespace AudioAlign
             );
         }
 
-        private void matchGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MatchGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // TODO check for performance / how often it gets called
             foreach (Match m in e.RemovedItems)
@@ -439,15 +423,14 @@ namespace AudioAlign
             }
         }
 
-        private void clearMatchesButton_Click(object sender, RoutedEventArgs e)
+        private void ClearMatchesButton_Click(object sender, RoutedEventArgs e)
         {
             multiTrackViewer.Matches.Clear();
         }
 
-        private void matchGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void MatchGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Match match = matchGrid.SelectedItem as Match;
-            if (match != null)
+            if (matchGrid.SelectedItem is Match match)
             {
                 TimeSpan t1 = match.Track1.Offset + match.Track1Time;
                 TimeSpan t2 = match.Track2.Offset + match.Track2Time;
@@ -480,7 +463,7 @@ namespace AudioAlign
             }
         }
 
-        private void dtwButton_Click(object sender, RoutedEventArgs e)
+        private void DtwButton_Click(object sender, RoutedEventArgs e)
         {
             if (trackList.Count > 1)
             {
@@ -742,7 +725,7 @@ namespace AudioAlign
             int smoothingWidth = Math.Max(1, Math.Min(filterSize / 10, filterSize));
             bool inOutCue = TimeWarpInOutCue;
             TimeSpan inOutCueSpan = TimeWarpSearchWidth;
-            List<Match> matches = new List<Match>();
+            List<Match> matches = new();
             float maxSimilarity = 0; // needed for normalization
             IProgressReporter progressReporter = progressMonitor.BeginTask(
                 "post-process resulting path...",
@@ -806,16 +789,14 @@ namespace AudioAlign
                 }
                 else
                 {
-                    List<TimeSpan> offsets = new List<TimeSpan>(
-                        smoothingSection.Select(t => t.Item2 - t.Item1).OrderBy(t => t)
-                    );
+                    List<TimeSpan> offsets =
+                        new(smoothingSection.Select(t => t.Item2 - t.Item1).OrderBy(t => t));
                     int middle = offsets.Count / 2;
 
                     // calculate median
                     // http://en.wikiversity.org/wiki/Primary_mathematics/Average,_median,_and_mode#Median
-                    TimeSpan smoothedDriftTime = new TimeSpan(
-                        (offsets[middle - 1] + offsets[middle]).Ticks / 2
-                    );
+                    TimeSpan smoothedDriftTime =
+                        new((offsets[middle - 1] + offsets[middle]).Ticks / 2);
                     match = new Tuple<TimeSpan, TimeSpan>(
                         match.Item1,
                         match.Item1 + smoothedDriftTime
@@ -864,7 +845,7 @@ namespace AudioAlign
             // add last match if it hasn't been added
             if (path.Count > 0 && path.Count % filterSize != 1)
             {
-                Tuple<TimeSpan, TimeSpan> lastMatch = path[path.Count - 1];
+                Tuple<TimeSpan, TimeSpan> lastMatch = path[^1];
                 matches.Add(
                     new Match()
                     {
@@ -902,7 +883,7 @@ namespace AudioAlign
 
         private List<MatchGroup> DetermineMatchGroups(MatchFilterMode matchFilterMode)
         {
-            List<Match> matches = new List<Match>(multiTrackViewer.Matches);
+            List<Match> matches = new(multiTrackViewer.Matches);
             return MatchProcessor.DetermineMatchGroups(
                 matchFilterMode,
                 trackList,
@@ -936,9 +917,9 @@ namespace AudioAlign
             return DetermineMatchGroups(matchFilterMode);
         }
 
-        private void addManualMatchButton_Click(object sender, RoutedEventArgs e)
+        private void AddManualMatchButton_Click(object sender, RoutedEventArgs e)
         {
-            TimeSpan position = new TimeSpan(multiTrackViewer.VirtualCaretOffset);
+            TimeSpan position = new(multiTrackViewer.VirtualCaretOffset);
 
             // remove selections to force update of the displayed text
             addManualMatchPopupComboBoxA.SelectedItem = null;
@@ -992,22 +973,24 @@ namespace AudioAlign
             }
         }
 
-        private void addManualMatchPopupAddButton_Click(object sender, RoutedEventArgs e)
+        private void AddManualMatchPopupAddButton_Click(object sender, RoutedEventArgs e)
         {
-            TimeSpan position = new TimeSpan(multiTrackViewer.VirtualCaretOffset);
-            AudioTrack t1 = addManualMatchPopupComboBoxA.SelectedItem as AudioTrack;
-            AudioTrack t2 = addManualMatchPopupComboBoxB.SelectedItem as AudioTrack;
-            if (t1 != null && t2 != null)
+            TimeSpan position = new(multiTrackViewer.VirtualCaretOffset);
+            if (
+                addManualMatchPopupComboBoxA.SelectedItem is AudioTrack t1
+                && addManualMatchPopupComboBoxB.SelectedItem is AudioTrack t2
+            )
             {
-                Match match = new Match
-                {
-                    Track1 = t1,
-                    Track1Time = position - t1.Offset,
-                    Track2 = t2,
-                    Track2Time = position - t2.Offset,
-                    Similarity = 1,
-                    Source = "User"
-                };
+                Match match =
+                    new()
+                    {
+                        Track1 = t1,
+                        Track1Time = position - t1.Offset,
+                        Track2 = t2,
+                        Track2Time = position - t2.Offset,
+                        Similarity = 1,
+                        Source = "User"
+                    };
                 multiTrackViewer.Matches.Add(match);
                 matchGrid.SelectedItem = match;
                 matchGrid.ScrollIntoView(match);
@@ -1015,7 +998,7 @@ namespace AudioAlign
             }
         }
 
-        private void correlationButton_Click(object sender, RoutedEventArgs e)
+        private void CorrelationButton_Click(object sender, RoutedEventArgs e)
         {
             List<MatchGroup> trackGroups = DetermineMatchGroups();
             foreach (MatchGroup trackGroup in trackGroups)
@@ -1049,21 +1032,23 @@ namespace AudioAlign
                         TimeSpan interval = CorrelationIntervalSize;
                         TimeSpan window = CorrelationWindowSize;
 
-                        List<Match> computedMatches = new List<Match>();
+                        List<Match> computedMatches = new();
                         for (
                             TimeSpan position = TimeSpan.Zero;
                             position < length;
                             position += interval
                         )
                         {
-                            Interval t1Interval = new Interval(
-                                (t1Offset + position).Ticks,
-                                (t1Offset + position + window).Ticks
-                            );
-                            Interval t2Interval = new Interval(
-                                (t2Offset + position).Ticks,
-                                (t2Offset + position + window).Ticks
-                            );
+                            Interval t1Interval =
+                                new(
+                                    (t1Offset + position).Ticks,
+                                    (t1Offset + position + window).Ticks
+                                );
+                            Interval t2Interval =
+                                new(
+                                    (t2Offset + position).Ticks,
+                                    (t2Offset + position + window).Ticks
+                                );
 
                             if (
                                 t1Interval.TimeTo >= localMP.Track1.Length
@@ -1074,7 +1059,6 @@ namespace AudioAlign
                                 break;
                             }
 
-                            CrossCorrelation.Result ccr;
                             IAudioStream s1 = localMP.Track1.CreateAudioStream();
                             IAudioStream s2 = localMP.Track2.CreateAudioStream();
                             TimeSpan offset = CrossCorrelation.Calculate(
@@ -1083,7 +1067,7 @@ namespace AudioAlign
                                 s2,
                                 t2Interval,
                                 progressMonitor,
-                                out ccr
+                                out CrossCorrelation.Result ccr
                             );
                             s1.Close();
                             s2.Close();
@@ -1124,7 +1108,7 @@ namespace AudioAlign
             }
         }
 
-        private void flipTracksButton_Click(object sender, RoutedEventArgs e)
+        private void FlipTracksButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (Match match in multiTrackViewer.Matches)
             {

@@ -18,9 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -51,7 +49,7 @@ namespace AudioAlign.UI
             selectedMatches = new ObservableCollection<Match>();
             selectedMatches.CollectionChanged += Matches_CollectionChanged;
 
-            ColorGradient gradient = new ColorGradient(0, 1);
+            ColorGradient gradient = new(0, 1);
             gradient.AddStop(Colors.DarkRed, 0);
             gradient.AddStop(Colors.Red, 0.5f);
             gradient.AddStop(Colors.Yellow, 0.65f);
@@ -102,8 +100,7 @@ namespace AudioAlign.UI
             }
 
             // NOTE the dictionary needs to be built every time because the ListBox.items.CollectionChanged event is inaccessible (protected)
-            Dictionary<AudioTrack, WaveView> waveViewMappings =
-                new Dictionary<AudioTrack, WaveView>();
+            Dictionary<AudioTrack, WaveView> waveViewMappings = new();
             foreach (AudioTrack audioTrack in multiTrackListBox.ItemsSource)
             {
                 ListBoxItem item = (ListBoxItem)
@@ -117,13 +114,11 @@ namespace AudioAlign.UI
                 waveViewMappings.Add(audioTrack, waveView);
             }
 
-            Point p1,
-                p2;
             foreach (Match match in Matches)
             {
                 WaveView waveView1 = waveViewMappings[match.Track1];
                 WaveView waveView2 = waveViewMappings[match.Track2];
-                if (!CalculatePoints(match, waveViewMappings, out p1, out p2))
+                if (!CalculatePoints(match, waveViewMappings, out Point p1, out Point p2))
                 {
                     continue;
                 }
@@ -248,11 +243,11 @@ namespace AudioAlign.UI
             Point start = origin;
             LineSegment[] segments = new LineSegment[]
             {
-                new LineSegment(new Point(origin.X - size, origin.Y + size), true),
-                new LineSegment(new Point(origin.X + size, origin.Y + size), true)
+                new(new Point(origin.X - size, origin.Y + size), true),
+                new(new Point(origin.X + size, origin.Y + size), true)
             };
-            PathFigure figure = new PathFigure(start, segments, true);
-            PathGeometry geo = new PathGeometry(new PathFigure[] { figure });
+            PathFigure figure = new(start, segments, true);
+            PathGeometry geo = new(new PathFigure[] { figure });
             drawingContext.DrawGeometry(brush, null, geo);
         }
     }
