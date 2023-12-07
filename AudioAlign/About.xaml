@@ -30,16 +30,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <LineBreak/>
             <Run Name="appVersion"/>
             <LineBreak/>
-            <Run Name="appCopyright">Copyright © 2010-2015 Mario Guggenberger &lt;mg@protyposis.net&gt;</Run>
+            <Run Name="appCopyright">Copyright © 2010-2023 Mario Guggenberger &lt;mg@protyposis.net&gt;</Run>
             <LineBreak/>
-            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://protyposis.net">
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://protyposis.net">
                 <Hyperlink.Style>
                     <Style TargetType="Hyperlink"
                            BasedOn="{StaticResource {x:Type Hyperlink}}">
                         <Setter Property="Foreground" Value="#00C"/>
                     </Style>
                 </Hyperlink.Style>
-                http://protyposis.net
+                https://protyposis.net
             </Hyperlink>
             <LineBreak/>
             <LineBreak/>
