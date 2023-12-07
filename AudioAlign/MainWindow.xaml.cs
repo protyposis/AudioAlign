@@ -42,9 +42,9 @@ namespace AudioAlign
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RecentProjects recentProjects;
+        private readonly RecentProjects recentProjects;
         private Project project;
-        private TrackList<AudioTrack> trackList;
+        private readonly TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
         private FFTAnalyzer fftAnalyzer;
         private MatchingWindow matchingWindow;
@@ -534,7 +534,7 @@ namespace AudioAlign
             p.Matches.AddRange(multiTrackViewer1.Matches);
             p.MasterVolume = (float)volumeSlider.Value;
             Project.Save(p, targetFile);
-            this.project = p;
+            project = p;
 
             recentProjects.Add(targetFile.FullName);
             recentProjects.Save();
@@ -615,7 +615,7 @@ namespace AudioAlign
             }
         }
 
-        private void CollectFiles(FileSystemInfo fileInfo, List<FileInfo> fileInfos)
+        private static void CollectFiles(FileSystemInfo fileInfo, List<FileInfo> fileInfos)
         {
             if ((fileInfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
             {

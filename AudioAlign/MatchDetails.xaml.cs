@@ -33,11 +33,11 @@ namespace AudioAlign
     /// </summary>
     public partial class MatchDetails : Window
     {
-        private Match match;
-        private TrackList<AudioTrack> trackList;
+        private readonly Match match;
+        private readonly TrackList<AudioTrack> trackList;
         private MultitrackPlayer player;
         private CrossCorrelation.Result ccr;
-        private ProgressMonitor progressMonitor;
+        private readonly ProgressMonitor progressMonitor;
 
         public MatchDetails(Match match)
         {
@@ -77,7 +77,7 @@ namespace AudioAlign
                         multiTrackViewer1.ItemsSource = trackList;
                         multiTrackViewer1.Matches.Add(match);
                         multiTrackViewer1.SelectedMatch = match;
-                        this.Focus();
+                        Focus();
                     }
                 )
             );

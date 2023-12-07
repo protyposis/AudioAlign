@@ -31,7 +31,7 @@ namespace AudioAlign
     /// </summary>
     public partial class AlignmentGraphWindow : Window
     {
-        private List<MatchPair> matchPairs;
+        private readonly List<MatchPair> matchPairs;
 
         public AlignmentGraphWindow(List<MatchPair> matchPairs)
         {
@@ -48,7 +48,7 @@ namespace AudioAlign
             }
         }
 
-        private void AddGraphLine(OxyPlot.PlotModel plotModel, MatchPair matchPair)
+        private static void AddGraphLine(OxyPlot.PlotModel plotModel, MatchPair matchPair)
         {
             var lineSeries = new LineSeries
             {
@@ -107,7 +107,7 @@ namespace AudioAlign
                 double maxIntervalSize
             )
             {
-                double range = Math.Abs(this.ActualMinimum - this.ActualMaximum);
+                double range = Math.Abs(ActualMinimum - ActualMaximum);
                 double interval = 0.001;
                 var goodIntervals = new[]
                 {

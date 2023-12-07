@@ -35,9 +35,9 @@ namespace AudioAlign
     /// </summary>
     public partial class AnalysisWindow : Window
     {
-        private ProgressMonitor progressMonitor;
-        private TrackList<AudioTrack> trackList;
-        private DataTable dataTable;
+        private readonly ProgressMonitor progressMonitor;
+        private readonly TrackList<AudioTrack> trackList;
+        private readonly DataTable dataTable;
 
         public AnalysisMode AnalysisMode { get; set; }
         public TimeSpan AnalysisWindowSize { get; set; }

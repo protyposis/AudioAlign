@@ -65,7 +65,7 @@ namespace AudioAlign.UI
 
         public MultiTrackViewer()
         {
-            this.Loaded += new RoutedEventHandler(MultiTrackViewer_Loaded);
+            Loaded += new RoutedEventHandler(MultiTrackViewer_Loaded);
         }
 
         public override void OnApplyTemplate()

@@ -35,7 +35,7 @@ namespace AudioAlign.UI
 
         public ResizeDecorator()
         {
-            this.Loaded += new RoutedEventHandler(ResizeDecorator_Loaded);
+            Loaded += new RoutedEventHandler(ResizeDecorator_Loaded);
         }
 
         private void ResizeDecorator_Loaded(object sender, RoutedEventArgs e)

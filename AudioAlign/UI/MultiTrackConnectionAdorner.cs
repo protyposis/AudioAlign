@@ -32,10 +32,10 @@ namespace AudioAlign.UI
 {
     class MultiTrackConnectionAdorner : Adorner
     {
-        private MultiTrackListBox multiTrackListBox;
-        private ObservableCollection<Match> matches;
-        private ObservableCollection<Match> selectedMatches;
-        private Color[] colors;
+        private readonly MultiTrackListBox multiTrackListBox;
+        private readonly ObservableCollection<Match> matches;
+        private readonly ObservableCollection<Match> selectedMatches;
+        private readonly Color[] colors;
 
         public MultiTrackConnectionAdorner(
             UIElement adornedElement,

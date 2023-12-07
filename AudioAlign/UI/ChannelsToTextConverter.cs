@@ -23,7 +23,7 @@ namespace AudioAlign.UI
 {
     class ChannelsToTextConverter : IValueConverter
     {
-        private static Dictionary<int, string> channelTexts =
+        private static readonly Dictionary<int, string> channelTexts =
             new()
             {
                 { 1, "mono" },

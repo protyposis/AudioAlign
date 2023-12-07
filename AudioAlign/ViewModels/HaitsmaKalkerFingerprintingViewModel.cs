@@ -28,10 +28,9 @@ namespace AudioAlign.ViewModels
 {
     public class HaitsmaKalkerFingerprintingViewModel
     {
-        private ProgressMonitor progressMonitor;
-        private TrackList<AudioTrack> trackList;
-        private Collection<Match> matchCollection;
-        private HaitsmaKalkerFingerprintingModel model;
+        private readonly ProgressMonitor progressMonitor;
+        private readonly Collection<Match> matchCollection;
+        private readonly HaitsmaKalkerFingerprintingModel model;
 
         private readonly DelegateCommand fingerprintCommand;
         private readonly DelegateCommand findMatchesCommand;
@@ -44,7 +43,6 @@ namespace AudioAlign.ViewModels
         )
         {
             this.progressMonitor = progressMonitor;
-            this.trackList = trackList;
             this.matchCollection = matchCollection;
 
             model = new HaitsmaKalkerFingerprintingModel();

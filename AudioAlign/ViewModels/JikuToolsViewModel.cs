@@ -73,7 +73,7 @@ namespace AudioAlign.ViewModels
         /// Reads drift factors from a config file and applies them to all matches by scaling
         /// their 2 match positions by the drift factor.
         /// </summary>
-        private void DriftCorrect(Collection<Match> matchCollection)
+        private static void DriftCorrect(Collection<Match> matchCollection)
         {
             try
             {

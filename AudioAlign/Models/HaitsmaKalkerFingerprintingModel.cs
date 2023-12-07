@@ -29,7 +29,7 @@ namespace AudioAlign.Models
 {
     public class HaitsmaKalkerFingerprintingModel
     {
-        private Profile[] profiles;
+        private readonly Profile[] profiles;
         private FingerprintStore store;
 
         public event EventHandler FingerprintingFinished;
@@ -60,8 +60,7 @@ namespace AudioAlign.Models
         /// <param name="profile">the new profile to configure the model with</param>
         public void Reset(Profile profile)
         {
-            SelectedProfile =
-                profile ?? throw new ArgumentNullException("profile must not be null");
+            SelectedProfile = profile ?? throw new ArgumentNullException(nameof(profile));
             store = new FingerprintStore(profile);
         }
 

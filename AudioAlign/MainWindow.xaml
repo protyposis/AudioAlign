@@ -151,7 +151,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <localui:MultiTrackViewer x:Name="multiTrackViewer1" VirtualViewportWidth="6000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="multiTrackViewer1_Drop" VirtualViewportMinWidth="1000" VirtualViewportMaxWidth="{Binding Path=TrackList.End, Converter={StaticResource TimeSpanTicksConverter}}" />
+                <localui:MultiTrackViewer x:Name="multiTrackViewer1" VirtualViewportWidth="6000000000" VirtualViewportOffset="0" AllowDrop="True" Drop="MultiTrackViewer1_Drop" VirtualViewportMinWidth="1000" VirtualViewportMaxWidth="{Binding Path=TrackList.End, Converter={StaticResource TimeSpanTicksConverter}}" />
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Style="{DynamicResource ToolBarStackPanel}" Margin="0,-1,0,0">
                     <Button Command="MediaCommands.Play" Width="20" Margin="2,2,0,2">
                         <Image Stretch="Uniform" Height="14" Source="{StaticResource media-playback-start}"/>

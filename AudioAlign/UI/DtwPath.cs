@@ -34,11 +34,11 @@ namespace AudioAlign.UI
         private IMatrix<double> totalCostMatrix;
         private int size;
         private int[] pixels;
-        private int pathColor,
+        private readonly int pathColor,
             minColor,
             maxColor,
             undefColor;
-        private int[] colorPalette;
+        private readonly int[] colorPalette;
 
         public DtwPath()
         {
@@ -55,12 +55,12 @@ namespace AudioAlign.UI
             ClipToBounds = true;
         }
 
-        public void Init(int size, IMatrix<double> cellCostMatrix, IMatrix<double> totalCostMatrix)
+        public void Init(IMatrix<double> cellCostMatrix, IMatrix<double> totalCostMatrix)
         {
             this.cellCostMatrix = cellCostMatrix;
             this.totalCostMatrix = totalCostMatrix;
-            this.size = (int)this.Width;
-            InitializeBitmap(true);
+            size = (int)Width;
+            InitializeBitmap();
         }
 
         public void Refresh(int i, int j, int minI, int minJ)
@@ -134,7 +134,7 @@ namespace AudioAlign.UI
             }
         }
 
-        private void InitializeBitmap(bool sizeChanged)
+        private void InitializeBitmap()
         {
             writeableBitmap = new WriteableBitmap(size, size, 96, 96, PixelFormats.Bgra32, null);
             pixels = new int[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight];

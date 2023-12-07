@@ -40,9 +40,9 @@ namespace AudioAlign
     /// </summary>
     public partial class MatchingWindow : Window
     {
-        private ProgressMonitor progressMonitor;
-        private TrackList<AudioTrack> trackList;
-        private MultiTrackViewer multiTrackViewer;
+        private readonly ProgressMonitor progressMonitor;
+        private readonly TrackList<AudioTrack> trackList;
+        private readonly MultiTrackViewer multiTrackViewer;
 
         private DtwPathViewer dtwPathViewer;
 
@@ -661,7 +661,7 @@ namespace AudioAlign
 
             if (TimeWarpDisplay)
             {
-                this.Dispatcher.BeginInvoke(
+                Dispatcher.BeginInvoke(
                     (Action)
                         delegate
                         {
@@ -683,9 +683,7 @@ namespace AudioAlign
                                 (Action)
                                     delegate
                                     {
-                                        dtwPathViewer
-                                            .DtwPath
-                                            .Init(windowSize, cellCostMatrix, totalCostMatrix);
+                                        dtwPathViewer.DtwPath.Init(cellCostMatrix, totalCostMatrix);
                                     }
                             );
                     }

@@ -72,7 +72,7 @@ namespace AudioAlign
             };
         }
 
-        private void PlotResult(OxyPlot.Wpf.PlotView plotter, CrossCorrelation.Result ccr)
+        private static void PlotResult(OxyPlot.Wpf.PlotView plotter, CrossCorrelation.Result ccr)
         {
             int[] xValues = new int[ccr.Correlations.Length];
             List<DataPoint> values = new();

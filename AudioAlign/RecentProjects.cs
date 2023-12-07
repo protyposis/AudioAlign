@@ -26,7 +26,7 @@ namespace AudioAlign
         public const string ClearCommand = "clear";
         public const int MaxEntries = 10;
 
-        private ObservableCollection<RecentEntry> observableRecentProjects;
+        private readonly ObservableCollection<RecentEntry> observableRecentProjects;
         private StringCollection recentProjects;
 
         public RecentProjects()

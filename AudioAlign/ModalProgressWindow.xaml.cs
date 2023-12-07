@@ -38,7 +38,7 @@ namespace AudioAlign
         [DllImport("user32.dll")]
         private static extern bool EnableWindow(IntPtr hWnd, bool bEnable);
 
-        private ProgressMonitor progressMonitor;
+        private readonly ProgressMonitor progressMonitor;
         private IntPtr ownerWindowHandle;
         private bool blockClosing;
 
