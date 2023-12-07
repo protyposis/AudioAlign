@@ -7,9 +7,8 @@
 	<Product>AudioAlign: Audio Synchronization and Analysis Tool</Product>
 	<Company>Mario Guggenberger / protyposis.net</Company>
 	<Copyright>Copyright © 2010-2023 Mario Guggenberger</Copyright>
-	<AssemblyVersion>1.0.0.0</AssemblyVersion>
-	<FileVersion>1.0.0.0</FileVersion>
-	<InformationalVersion>Snapshot</InformationalVersion>
+	<Version>1.0.0</Version>
+	<NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\NOTICE">
@@ -21,14 +20,12 @@
     <Resource Include="Resources\*.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aurio\src\Aurio.FFmpeg\Aurio.FFmpeg.csproj" />
-    <ProjectReference Include="..\Aurio\src\Aurio.PFFFT\Aurio.PFFFT.csproj" />
-    <ProjectReference Include="..\Aurio\src\Aurio.Soxr\Aurio.Soxr.csproj" />
-    <ProjectReference Include="..\Aurio\src\Aurio.WaveControls\Aurio.WaveControls.csproj" />
-    <ProjectReference Include="..\Aurio\src\Aurio.Windows\Aurio.Windows.csproj" />
-    <ProjectReference Include="..\Aurio\src\Aurio\Aurio.csproj" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="Aurio" Version="4.0.0" />
+    <PackageReference Include="Aurio.FFmpeg" Version="4.0.0" />
+    <PackageReference Include="Aurio.PFFFT" Version="4.0.0" />
+    <PackageReference Include="Aurio.Soxr" Version="4.0.0" />
+    <PackageReference Include="Aurio.WaveControls" Version="4.0.0" />
+    <PackageReference Include="Aurio.Windows" Version="4.0.0" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.1.0" />
     <PackageReference Include="CSharpier.MsBuild" Version="0.26.4">
       <PrivateAssets>all</PrivateAssets>
