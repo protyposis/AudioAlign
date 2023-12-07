@@ -34,26 +34,7 @@ AudioAlign can be used for a lot more uses cases though, including
 What's new
 ----------
 
-### 2018-03-22 741d27c
-
-* Update [Aurio](https://github.com/protyposis/Aurio#2018-03-22-5af5339)
-* Requires Visual Studio 2017 (due to Aurio update to .NET Standard 2.0 / .NET Core 2.0)
-
-### 2017-10-15 d87bb4e
-
-* Validate matches before executing aligment and show error message box if validation fails
-* Show error message box if added file cannot be read
-* Report progress during HK/CP match finding and filtering
-
-### 2017-02-06 ec054a6
-
-* Concatenated tracks consisting of multiple files (hold `SHIFT` key when adding)
-
-### 2016-03-01 8539db8
-
-* Support for compressed audio and video file formats
-* Close file handles after use
-* see the [Aurio changes](https://github.com/protyposis/Aurio#2016-03-01-fe49ea5) for details
+See [CHANGELOG](CHANGELOG.md).
 
 
 Support
