@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.0 (2023-12-07)
+
+### Features
+
+* allow skipping of missing project assets on load
+* improve scheduling of many CC operations
+* display number of matches
+* bump Aurio to 4.0.0 (incl. FFmpeg 6.0)
+
 ## 2018-03-22 741d27c
 
 * Update Aurio to [v5af5339](https://github.com/protyposis/Aurio/blob/main/CHANGELOG.md#2018-03-22-5af5339)
