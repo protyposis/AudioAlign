@@ -15,11 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-using Aurio;
-using Aurio.Matching;
-using Aurio.Matching.Echoprint;
-using Aurio.Project;
-using Aurio.TaskMonitor;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +22,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Aurio;
+using Aurio.Matching;
+using Aurio.Matching.Echoprint;
+using Aurio.Project;
+using Aurio.TaskMonitor;
 
 namespace AudioAlign.Models
 {

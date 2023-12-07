@@ -30,7 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="OxyPlot.Wpf" Version="2.1.0" />
-    <PackageReference Include="CSharpier.MsBuild" Version="0.24.2">
+    <PackageReference Include="CSharpier.MsBuild" Version="0.26.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

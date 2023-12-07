@@ -17,17 +17,17 @@
 //
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Windows.Documents;
 using System.Windows;
-using System.Windows.Media;
-using Aurio.Project;
 using System.Windows.Controls;
-using System.Diagnostics;
-using Aurio.Matching;
-using System.Collections.ObjectModel;
+using System.Windows.Documents;
+using System.Windows.Media;
 using Aurio;
+using Aurio.Matching;
+using Aurio.Project;
 using Aurio.WaveControls;
 
 namespace AudioAlign.UI

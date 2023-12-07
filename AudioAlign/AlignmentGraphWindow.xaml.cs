@@ -17,6 +17,7 @@
 //
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -28,10 +29,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Aurio.Matching;
+using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using OxyPlot;
-using System.IO;
 
 namespace AudioAlign
 {
@@ -62,20 +62,23 @@ namespace AudioAlign
             var lineSeries = new LineSeries();
             lineSeries.Title = matchPair.Track1.Name + " <-> " + matchPair.Track2.Name;
             lineSeries.TrackerFormatString = "{0}\n{1}: {2}\n{3}: {4}"; // bugfix https://github.com/oxyplot/oxyplot/issues/265
-            matchPair.Matches
+            matchPair
+                .Matches
                 .OrderBy(match => match.Track1Time)
                 .ToList()
                 .ForEach(
                     match =>
-                        lineSeries.Points.Add(
-                            new DataPoint(
-                                DateTimeAxis.ToDouble(match.Track1.Offset + match.Track1Time),
-                                DateTimeAxis.ToDouble(
-                                    (match.Track1.Offset + match.Track1Time)
-                                        - (match.Track2.Offset + match.Track2Time)
+                        lineSeries
+                            .Points
+                            .Add(
+                                new DataPoint(
+                                    DateTimeAxis.ToDouble(match.Track1.Offset + match.Track1Time),
+                                    DateTimeAxis.ToDouble(
+                                        (match.Track1.Offset + match.Track1Time)
+                                            - (match.Track2.Offset + match.Track2Time)
+                                    )
                                 )
                             )
-                        )
                 );
             plotModel.Series.Add(lineSeries);
         }

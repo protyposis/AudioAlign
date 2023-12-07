@@ -113,28 +113,30 @@ namespace AudioAlign
                 );
 
             player.CurrentTimeChanged += (sender2, e2) =>
-                multiTrackViewer1.Dispatcher.BeginInvoke(
-                    (Action)(
-                        () =>
-                        {
-                            multiTrackViewer1.VirtualCaretOffset = e2.Value.Ticks;
-                            // autoscroll
-                            if (
-                                multiTrackViewer1.VirtualViewportInterval.To
-                                <= multiTrackViewer1.VirtualCaretOffset
-                            )
+                multiTrackViewer1
+                    .Dispatcher
+                    .BeginInvoke(
+                        (Action)(
+                            () =>
                             {
-                                multiTrackViewer1.VirtualViewportOffset =
-                                    multiTrackViewer1.VirtualCaretOffset;
+                                multiTrackViewer1.VirtualCaretOffset = e2.Value.Ticks;
+                                // autoscroll
+                                if (
+                                    multiTrackViewer1.VirtualViewportInterval.To
+                                    <= multiTrackViewer1.VirtualCaretOffset
+                                )
+                                {
+                                    multiTrackViewer1.VirtualViewportOffset =
+                                        multiTrackViewer1.VirtualCaretOffset;
+                                }
                             }
-                        }
-                    )
-                );
+                        )
+                    );
 
             player.PlaybackStateChanged += (sender2, e2) =>
-                multiTrackViewer1.Dispatcher.BeginInvoke(
-                    (Action)CommandManager.InvalidateRequerySuggested
-                );
+                multiTrackViewer1
+                    .Dispatcher
+                    .BeginInvoke((Action)CommandManager.InvalidateRequerySuggested);
 
             volumeSlider.ValueChanged += (sender2, e2) => player.Volume = (float)e2.NewValue;
 
@@ -265,15 +267,17 @@ namespace AudioAlign
 
         private void Instance_ProcessingFinished(object sender, EventArgs e)
         {
-            progressBar.Dispatcher.BeginInvoke(
-                (Action)(
-                    () =>
-                    {
-                        progressBar.Value = 0;
-                        progressBar.IsEnabled = false;
-                    }
-                )
-            );
+            progressBar
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)(
+                        () =>
+                        {
+                            progressBar.Value = 0;
+                            progressBar.IsEnabled = false;
+                        }
+                    )
+                );
         }
     }
 }

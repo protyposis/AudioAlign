@@ -16,24 +16,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Windows.Controls;
 using System.Windows;
-using System.Windows.Data;
-using System.Diagnostics;
-using Aurio;
-using System.Windows.Documents;
-using Aurio.Project;
-using System.Windows.Media;
-using System.Windows.Input;
-using Aurio.Matching;
-using System.Collections.ObjectModel;
-using System.Windows.Media.Imaging;
-using System.Collections;
-using System.Windows.Threading;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using Aurio;
+using Aurio.Matching;
+using Aurio.Project;
 using Aurio.WaveControls;
 
 namespace AudioAlign.UI
@@ -51,14 +51,16 @@ namespace AudioAlign.UI
                 new FrameworkPropertyMetadata(typeof(MultiTrackViewer))
             );
 
-            VirtualCaretOffsetProperty = CaretOverlay.VirtualCaretOffsetProperty.AddOwner(
-                typeof(MultiTrackViewer),
-                new FrameworkPropertyMetadata()
-                {
-                    Inherits = true,
-                    CoerceValueCallback = CoerceVirtualCaretOffset
-                }
-            );
+            VirtualCaretOffsetProperty = CaretOverlay
+                .VirtualCaretOffsetProperty
+                .AddOwner(
+                    typeof(MultiTrackViewer),
+                    new FrameworkPropertyMetadata()
+                    {
+                        Inherits = true,
+                        CoerceValueCallback = CoerceVirtualCaretOffset
+                    }
+                );
         }
 
         private MultiTrackListBox multiTrackListBox;
@@ -421,9 +423,9 @@ namespace AudioAlign.UI
                     // Refocus on the moved selected item because it loses focus during the move
                     // http://stackoverflow.com/a/10463162
                     ListBoxItem listBoxItem = (ListBoxItem)
-                        multiTrackListBox.ItemContainerGenerator.ContainerFromItem(
-                            multiTrackListBox.SelectedItem
-                        );
+                        multiTrackListBox
+                            .ItemContainerGenerator
+                            .ContainerFromItem(multiTrackListBox.SelectedItem);
                     listBoxItem.Focus();
 
                     RefreshAdornerLayer();

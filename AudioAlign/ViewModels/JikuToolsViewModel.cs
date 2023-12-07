@@ -24,8 +24,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using Aurio.Project;
 using AudioAlign.Models;
+using Aurio.Project;
 using Match = Aurio.Matching.Match;
 
 namespace AudioAlign.ViewModels

@@ -29,9 +29,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Aurio.Matching;
 using OxyPlot;
-using OxyPlot.Series;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace AudioAlign
 {
@@ -93,78 +93,92 @@ namespace AudioAlign
             var plotModel = new PlotModel();
 
             // setup plotter axes and viewport
-            plotModel.Axes.Add(
-                new LinearAxis()
-                {
-                    Position = AxisPosition.Bottom,
-                    Minimum = 0,
-                    Maximum = xValues.Length
-                }
-            );
-            plotModel.Axes.Add(
-                new LinearAxis()
-                {
-                    Minimum = -1,
-                    Maximum = 2,
-                    MajorGridlineStyle = LineStyle.Automatic,
-                    MinorGridlineStyle = LineStyle.Automatic
-                }
-            );
+            plotModel
+                .Axes
+                .Add(
+                    new LinearAxis()
+                    {
+                        Position = AxisPosition.Bottom,
+                        Minimum = 0,
+                        Maximum = xValues.Length
+                    }
+                );
+            plotModel
+                .Axes
+                .Add(
+                    new LinearAxis()
+                    {
+                        Minimum = -1,
+                        Maximum = 2,
+                        MajorGridlineStyle = LineStyle.Automatic,
+                        MinorGridlineStyle = LineStyle.Automatic
+                    }
+                );
 
             // correlation series
-            plotModel.Series.Add(
-                new LineSeries
-                {
-                    ItemsSource = values,
-                    Color = OxyColors.CornflowerBlue,
-                    Title = "Correlation"
-                }
-            );
+            plotModel
+                .Series
+                .Add(
+                    new LineSeries
+                    {
+                        ItemsSource = values,
+                        Color = OxyColors.CornflowerBlue,
+                        Title = "Correlation"
+                    }
+                );
 
             // distinct values
-            plotModel.Annotations.Add(
-                new LineAnnotation
-                {
-                    Type = LineAnnotationType.Horizontal,
-                    Y = ccr.MaxValue,
-                    Color = OxyColors.Green,
-                    ClipByXAxis = false
-                }
-            );
+            plotModel
+                .Annotations
+                .Add(
+                    new LineAnnotation
+                    {
+                        Type = LineAnnotationType.Horizontal,
+                        Y = ccr.MaxValue,
+                        Color = OxyColors.Green,
+                        ClipByXAxis = false
+                    }
+                );
 
-            plotModel.Annotations.Add(
-                new PointAnnotation
-                {
-                    X = ccr.MaxIndex,
-                    Y = ccr.MaxValue,
-                    Fill = OxyColors.Red,
-                    Text = "Max"
-                }
-            );
+            plotModel
+                .Annotations
+                .Add(
+                    new PointAnnotation
+                    {
+                        X = ccr.MaxIndex,
+                        Y = ccr.MaxValue,
+                        Fill = OxyColors.Red,
+                        Text = "Max"
+                    }
+                );
 
             var avg = ccr.Correlations.Average();
-            plotModel.Annotations.Add(
-                new LineAnnotation
-                {
-                    Type = LineAnnotationType.Horizontal,
-                    Y = avg,
-                    Color = OxyColors.Red,
-                    ClipByXAxis = false,
-                    Text = "Avg"
-                }
-            );
+            plotModel
+                .Annotations
+                .Add(
+                    new LineAnnotation
+                    {
+                        Type = LineAnnotationType.Horizontal,
+                        Y = avg,
+                        Color = OxyColors.Red,
+                        ClipByXAxis = false,
+                        Text = "Avg"
+                    }
+                );
 
             var absavg = ccr.Correlations.Average(f => Math.Abs(f));
-            plotModel.Annotations.Add(
-                new LineAnnotation
-                {
-                    Type = LineAnnotationType.Horizontal,
-                    Y = absavg,
-                    Color = OxyColors.Orange,
-                    ClipByXAxis = false,
-                    Text = "Abs Avg"
-                }
-            );
+            plotModel
+                .Annotations
+                .Add(
+                    new LineAnnotation
+                    {
+                        Type = LineAnnotationType.Horizontal,
+                        Y = absavg,
+                        Color = OxyColors.Orange,
+                        ClipByXAxis = false,
+                        Text = "Abs Avg"
+                    }
+                );
 
             plotModel.IsLegendVisible = false;
             plotter.Model = plotModel;

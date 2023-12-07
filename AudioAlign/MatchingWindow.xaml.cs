@@ -17,34 +17,34 @@
 //
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Aurio.TaskMonitor;
-using Aurio;
-using Aurio.Matching.HaitsmaKalker2002;
-using Aurio.WaveControls;
-using Aurio.Project;
-using Aurio.Matching;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Interop;
-using Aurio.DataStructures.Graph;
-using Aurio.Matching.Dixon2005;
-using Aurio.Streams;
-using Match = Aurio.Matching.Match;
-using System.IO;
-using Aurio.DataStructures.Matrix;
 using AudioAlign.UI;
 using AudioAlign.ViewModels;
+using Aurio;
+using Aurio.DataStructures.Graph;
+using Aurio.DataStructures.Matrix;
+using Aurio.Matching;
+using Aurio.Matching.Dixon2005;
+using Aurio.Matching.HaitsmaKalker2002;
+using Aurio.Project;
+using Aurio.Streams;
+using Aurio.TaskMonitor;
+using Aurio.WaveControls;
+using Match = Aurio.Matching.Match;
 
 namespace AudioAlign
 {
@@ -156,39 +156,45 @@ namespace AudioAlign
 
         private void Instance_ProcessingStarted(object sender, EventArgs e)
         {
-            progressBar.Dispatcher.BeginInvoke(
-                (Action)
-                    delegate
-                    {
-                        progressBar.IsEnabled = true;
-                        progressBarLabel.Text = progressMonitor.StatusMessage;
-                    }
-            );
+            progressBar
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)
+                        delegate
+                        {
+                            progressBar.IsEnabled = true;
+                            progressBarLabel.Text = progressMonitor.StatusMessage;
+                        }
+                );
         }
 
         private void Instance_ProcessingProgressChanged(object sender, ValueEventArgs<float> e)
         {
-            progressBar.Dispatcher.BeginInvoke(
-                (Action)
-                    delegate
-                    {
-                        progressBar.Value = e.Value;
-                        progressBarLabel.Text = progressMonitor.StatusMessage;
-                    }
-            );
+            progressBar
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)
+                        delegate
+                        {
+                            progressBar.Value = e.Value;
+                            progressBarLabel.Text = progressMonitor.StatusMessage;
+                        }
+                );
         }
 
         private void Instance_ProcessingFinished(object sender, EventArgs e)
         {
-            progressBar.Dispatcher.BeginInvoke(
-                (Action)
-                    delegate
-                    {
-                        progressBar.Value = 0;
-                        progressBar.IsEnabled = false;
-                        progressBarLabel.Text = "";
-                    }
-            );
+            progressBar
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)
+                        delegate
+                        {
+                            progressBar.Value = 0;
+                            progressBar.IsEnabled = false;
+                            progressBarLabel.Text = "";
+                        }
+                );
         }
 
         private void filterMatchesButton_Click(object sender, RoutedEventArgs e)
@@ -551,7 +557,8 @@ namespace AudioAlign
                         {
                             foreach (MatchPair trackPair in trackGroup.MatchPairs)
                             {
-                                List<Match> matches = trackPair.Matches
+                                List<Match> matches = trackPair
+                                    .Matches
                                     .OrderBy(match => match.Track1Time)
                                     .ToList();
                                 Match first = matches.First();
@@ -687,17 +694,17 @@ namespace AudioAlign
                         IMatrix<double> totalCostMatrix
                     )
                     {
-                        dtwPathViewer.Dispatcher.BeginInvoke(
-                            (Action)
-                                delegate
-                                {
-                                    dtwPathViewer.DtwPath.Init(
-                                        windowSize,
-                                        cellCostMatrix,
-                                        totalCostMatrix
-                                    );
-                                }
-                        );
+                        dtwPathViewer
+                            .Dispatcher
+                            .BeginInvoke(
+                                (Action)
+                                    delegate
+                                    {
+                                        dtwPathViewer
+                                            .DtwPath
+                                            .Init(windowSize, cellCostMatrix, totalCostMatrix);
+                                    }
+                            );
                     }
                 );
                 bool drawing = false;
@@ -706,15 +713,17 @@ namespace AudioAlign
                     {
                         if (!drawing || force)
                         {
-                            dtwPathViewer.Dispatcher.BeginInvoke(
-                                (Action)
-                                    delegate
-                                    {
-                                        drawing = true;
-                                        dtwPathViewer.DtwPath.Refresh(i, j, minI, minJ);
-                                        drawing = false;
-                                    }
-                            );
+                            dtwPathViewer
+                                .Dispatcher
+                                .BeginInvoke(
+                                    (Action)
+                                        delegate
+                                        {
+                                            drawing = true;
+                                            dtwPathViewer.DtwPath.Refresh(i, j, minI, minJ);
+                                            drawing = false;
+                                        }
+                                );
                         }
                     }
                 );
@@ -870,20 +879,22 @@ namespace AudioAlign
             }
             progressReporter.Finish();
 
-            multiTrackViewer.Dispatcher.BeginInvoke(
-                (Action)
-                    delegate
-                    {
-                        foreach (Match match in matches)
+            multiTrackViewer
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)
+                        delegate
                         {
-                            if (normalizeSimilarity)
+                            foreach (Match match in matches)
                             {
-                                match.Similarity /= maxSimilarity; // normalize to 1
+                                if (normalizeSimilarity)
+                                {
+                                    match.Similarity /= maxSimilarity; // normalize to 1
+                                }
+                                multiTrackViewer.Matches.Add(match);
                             }
-                            multiTrackViewer.Matches.Add(match);
                         }
-                    }
-            );
+                );
 
             s1.Close();
             s2.Close();

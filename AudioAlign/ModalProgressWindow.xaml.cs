@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-using Aurio;
-using Aurio.TaskMonitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +30,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AudioAlign.UI;
+using Aurio;
+using Aurio.TaskMonitor;
 
 namespace AudioAlign
 {
@@ -96,40 +96,46 @@ namespace AudioAlign
 
         private void Instance_ProcessingStarted(object sender, EventArgs e)
         {
-            progressBar.Dispatcher.BeginInvoke(
-                (Action)
-                    delegate
-                    {
-                        progressBar.IsEnabled = true;
-                        progressBarLabel.Text = progressMonitor.StatusMessage;
-                    }
-            );
+            progressBar
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)
+                        delegate
+                        {
+                            progressBar.IsEnabled = true;
+                            progressBarLabel.Text = progressMonitor.StatusMessage;
+                        }
+                );
             blockClosing = true;
         }
 
         private void Instance_ProcessingProgressChanged(object sender, ValueEventArgs<float> e)
         {
-            progressBar.Dispatcher.BeginInvoke(
-                (Action)
-                    delegate
-                    {
-                        progressBar.Value = e.Value;
-                        progressBarLabel.Text = progressMonitor.StatusMessage;
-                    }
-            );
+            progressBar
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)
+                        delegate
+                        {
+                            progressBar.Value = e.Value;
+                            progressBarLabel.Text = progressMonitor.StatusMessage;
+                        }
+                );
         }
 
         private void Instance_ProcessingFinished(object sender, EventArgs e)
         {
-            progressBar.Dispatcher.BeginInvoke(
-                (Action)
-                    delegate
-                    {
-                        progressBar.Value = 0;
-                        progressBar.IsEnabled = false;
-                        progressBarLabel.Text = "";
-                    }
-            );
+            progressBar
+                .Dispatcher
+                .BeginInvoke(
+                    (Action)
+                        delegate
+                        {
+                            progressBar.Value = 0;
+                            progressBar.IsEnabled = false;
+                            progressBarLabel.Text = "";
+                        }
+                );
             blockClosing = false;
         }
 
