@@ -20,12 +20,12 @@
     <Resource Include="Resources\*.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aurio" Version="4.0.0" />
-    <PackageReference Include="Aurio.FFmpeg" Version="4.0.0" />
-    <PackageReference Include="Aurio.PFFFT" Version="4.0.0" />
-    <PackageReference Include="Aurio.Soxr" Version="4.0.0" />
-    <PackageReference Include="Aurio.WaveControls" Version="4.0.0" />
-    <PackageReference Include="Aurio.Windows" Version="4.0.0" />
+    <PackageReference Include="Aurio" Version="4.1.0" />
+    <PackageReference Include="Aurio.FFmpeg" Version="4.1.0" />
+    <PackageReference Include="Aurio.PFFFT" Version="4.1.0" />
+    <PackageReference Include="Aurio.Soxr" Version="4.1.0" />
+    <PackageReference Include="Aurio.WaveControls" Version="4.1.0" />
+    <PackageReference Include="Aurio.Windows" Version="4.1.0" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.1.0" />
     <PackageReference Include="CSharpier.MsBuild" Version="0.26.4">
       <PrivateAssets>all</PrivateAssets>
