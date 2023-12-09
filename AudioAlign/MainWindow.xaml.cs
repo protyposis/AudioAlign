@@ -55,12 +55,25 @@ namespace AudioAlign
 
         public MainWindow()
         {
-            // Use PFFFT as FFT implementation
-            FFTFactory.Factory = new Aurio.PFFFT.FFTFactory();
-            // Use Soxr as resampler implementation
-            ResamplerFactory.Factory = new Aurio.Soxr.ResamplerFactory();
-            // Use FFmpeg for file reading/decoding
-            AudioStreamFactory.AddFactory(new FFmpegAudioStreamFactory());
+            try
+            {
+                // Use PFFFT as FFT implementation
+                FFTFactory.Factory = new Aurio.PFFFT.FFTFactory();
+                // Use Soxr as resampler implementation
+                ResamplerFactory.Factory = new Aurio.Soxr.ResamplerFactory();
+                // Use FFmpeg for file reading/decoding
+                AudioStreamFactory.AddFactory(new FFmpegAudioStreamFactory());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(
+                    e.Message,
+                    "AudioAlign startup error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error,
+                    MessageBoxResult.Yes
+                );
+            }
 
             recentProjects = new RecentProjects();
 
