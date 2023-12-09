@@ -1,5 +1,14 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [1.5.1](https://github.com/protyposis/AudioAlign/compare/v1.5.0...v1.5.1) (2023-12-09)
+
+
+### Bug Fixes
+
+* silent startup crash on missing native dependency ([fa11c05](https://github.com/protyposis/AudioAlign/commit/fa11c053be5bbb4f030ca4a8882280878b9a8c0b))
+
 ## 1.5.0 (2023-12-07)
 
 ### Features
