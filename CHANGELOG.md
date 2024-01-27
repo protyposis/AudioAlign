@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.6.0](https://github.com/protyposis/AudioAlign/compare/v1.5.1...v1.6.0) (2024-01-27)
+
+
+### Features
+
+* bump Aurio to 4.2.0 ([#16](https://github.com/protyposis/AudioAlign/issues/16)) ([caf5540](https://github.com/protyposis/AudioAlign/commit/caf554085f3754ff269f65244a0e3fcd64211fea))
+
 ## [1.5.1](https://github.com/protyposis/AudioAlign/compare/v1.5.0...v1.5.1) (2023-12-09)
 
 
