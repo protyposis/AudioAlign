@@ -152,6 +152,28 @@ namespace AudioAlign
                     interval = nextInterval;
                 }
             }
+
+            /// <summary>
+            /// Adds missing negative signs to axis labels when a custom format is used.
+            ///
+            /// The axis formatter converts the `double`-parameter to a `TimeSpan` and formats
+            /// it with `string.Format`. By default, when no custom format is specified, it adds
+            /// the negative sign to negative time spans.
+            /// When specifying a custom format, the negative sign is no longer added (only to time
+            /// spans; it is still added to other types), so it needs to be additionally added
+            /// to the formatted string.
+            /// </summary>
+            protected override string FormatValueOverride(double x)
+            {
+                var format = base.FormatValueOverride(x);
+
+                if (StringFormat != null && x < 0)
+                {
+                    format = "-" + format;
+                }
+
+                return format;
+            }
         }
     }
 }
