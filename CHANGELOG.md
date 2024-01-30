@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.6.1](https://github.com/protyposis/AudioAlign/compare/v1.6.0...v1.6.1) (2024-01-30)
+
+
+### Bug Fixes
+
+* bump Aurio to 4.2.1 ([#21](https://github.com/protyposis/AudioAlign/issues/21)) ([5eb2a68](https://github.com/protyposis/AudioAlign/commit/5eb2a686c920c47fee83fd8ecf09add95999ac11))
+* missing sign on alignment graph offset axis ([#20](https://github.com/protyposis/AudioAlign/issues/20)) ([49896e2](https://github.com/protyposis/AudioAlign/commit/49896e258b7db6e3a09cca80f4d66801755bdbd3))
+
 ## [1.6.0](https://github.com/protyposis/AudioAlign/compare/v1.5.1...v1.6.0) (2024-01-27)
 
 
