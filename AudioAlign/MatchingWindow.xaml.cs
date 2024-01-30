@@ -1108,10 +1108,19 @@ namespace AudioAlign
 
         private void FlipTracksButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Match match in multiTrackViewer.Matches)
+            List<Match> matchesToFlip = new();
+
+            if (matchGrid.SelectedItems.Count > 0)
             {
-                match.SwapTracks();
+                matchesToFlip.AddRange(matchGrid.SelectedItems.Cast<Match>());
             }
+            else
+            {
+                matchesToFlip.AddRange(multiTrackViewer.Matches);
+            }
+
+            matchesToFlip.ForEach(m => m.SwapTracks());
+
             matchGrid.Items.Refresh();
         }
     }
