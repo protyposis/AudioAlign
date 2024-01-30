@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.7.0](https://github.com/protyposis/AudioAlign/compare/v1.6.1...v1.7.0) (2024-01-30)
+
+
+### Features
+
+* selective match flipping ([#22](https://github.com/protyposis/AudioAlign/issues/22)) ([4f5430a](https://github.com/protyposis/AudioAlign/commit/4f5430ac419ed6000b8ea70bbaddcbb0c80fb3d7))
+
+
+### Bug Fixes
+
+* alignment graph plots offsets incorrectly ([#23](https://github.com/protyposis/AudioAlign/issues/23)) ([5e05417](https://github.com/protyposis/AudioAlign/commit/5e05417db44af98dca417350d0284bc600508f98))
+
 ## [1.6.1](https://github.com/protyposis/AudioAlign/compare/v1.6.0...v1.6.1) (2024-01-30)
 
 
