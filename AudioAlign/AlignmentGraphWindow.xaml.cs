@@ -57,6 +57,18 @@ namespace AudioAlign
             };
             matchPair
                 .Matches
+                .Select(m =>
+                {
+                    // Create copies to avoid unexpected swapping in match list
+                    var copy = new Match(m);
+
+                    if (copy.Track1 != matchPair.Track1)
+                    {
+                        copy.SwapTracks();
+                    }
+
+                    return copy;
+                })
                 .OrderBy(match => match.Track1Time)
                 .ToList()
                 .ForEach(
